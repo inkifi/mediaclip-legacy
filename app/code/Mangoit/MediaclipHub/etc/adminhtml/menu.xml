@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Mangoit. All rights reserved.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Backend/etc/menu.xsd">
+    <menu>
+        <add id="Mangoit_MediaclipHub::mangoit_modules_index" title="Mediaclip" module="Mangoit_MediaclipHub"  sortOrder="20" dependsOnModule="Mangoit_MediaclipHub"  resource="Mangoit_MediaclipHub::mangoit_modules_index"/>
+    	<add id="Mangoit_MediaclipHub::mangoit_modules" title="Manage Modules" parent="Mangoit_MediaclipHub::mangoit_modules_index" module="Mangoit_MediaclipHub" sortOrder="20" dependsOnModule="Mangoit_MediaclipHub" action="mediacliphub/modules/index" resource="Mangoit_MediaclipHub::mangoit_modules"/>
+    	<add id="Mangoit_MediaclipHub::mangoit_product_index" title="Manage Products" module="Mangoit_MediaclipHub"  sortOrder="20" dependsOnModule="Mangoit_MediaclipHub" parent="Mangoit_MediaclipHub::mangoit_modules_index" action="mediacliphub/product/index" resource="Mangoit_MediaclipHub::mangoit_product_index"/>
+    	<add id="Mangoit_MediaclipHub::mangoit_theme_index" title="Manage Themes" module="Mangoit_MediaclipHub"  sortOrder="20" dependsOnModule="Mangoit_MediaclipHub" parent="Mangoit_MediaclipHub::mangoit_modules_index" action="mediacliphub/theme/index" resource="Mangoit_MediaclipHub::mangoit_theme_index"/>
+    	<add id="Mangoit_MediaclipHub::mangoit_supplier_index" title="Manage Suppliers" module="Mangoit_MediaclipHub"  sortOrder="20" dependsOnModule="Mangoit_MediaclipHub" parent="Mangoit_MediaclipHub::mangoit_modules_index" action="mediacliphub/supplier/index" resource="Mangoit_MediaclipHub::mangoit_supplier_index"/>
+    	<add id="Mangoit_MediaclipHub::mangoit_configuration_index" title="Configuration" module="Mangoit_MediaclipHub"  sortOrder="20" dependsOnModule="Mangoit_MediaclipHub" parent="Mangoit_MediaclipHub::mangoit_modules_index" action="adminhtml/system_config/edit/section/configuration" resource="Mangoit_MediaclipHub::mangoit_config_index"/>
+    </menu>
+</config>

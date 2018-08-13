@@ -1,0 +1,46 @@
+<!--Mediaclip Hub Javascript Api-->
+<!-- <script src="//code.jquery.com/jquery-3.2.1.min.js"></script> -->
+<!-- <script src="https://api.mediacliphub.com/scripts/hub.min.js" crossorigin="anonymous"></script> -->
+<?php 
+// Error: Mediaclip Hub's Javascript Launcher requires jQuery >= v1.5. Please see https://code.jquery.com/
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$helper = $objectManager->create('Mangoit\MediaclipHub\Helper\Data'); 
+
+
+?>
+<?php 
+    $token = $helper->getMediaClipUserToken(); 
+?>
+
+<script type="text/javascript">
+require([
+        'jquery',        
+        ], function ($) {
+        var script  = document.createElement( 'script' );
+        script.src  = 'https://api.mediacliphub.com/scripts/hub.min.js';
+        document.getElementsByTagName( 'head' )[0].appendChild( script );
+        jQuery(document).ready(function(){
+
+            setTimeout(getMediaClip, 2000);
+            
+        });
+        function getMediaClip(){
+            window.mediaclip.hub.init({ storeUserToken: "<?php echo $token; ?>" });
+            jQuery(".hub-project-thumbnail").each(function(){
+                var that = jQuery(this);
+                var projectId = that.attr("data-hub-project-id");
+                if (projectId != 0) {
+                    window.mediaclip.hub.getProjectThumbnailSrc(projectId)
+                        .done(function(imgSrc){
+                            that.attr("src", imgSrc);
+                            //that.width(160);
+                            that.height(160);
+                        })
+                        .fail(function(jqXhr, textStatus, errorThrown){
+                            //console.log("error", jqXhr, textStatus, errorThrown);
+                        });
+                }
+            });
+        }
+    });
+</script>

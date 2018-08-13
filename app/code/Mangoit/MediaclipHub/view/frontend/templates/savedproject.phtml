@@ -1,0 +1,77 @@
+<?php //$projects = $this->getProjects();
+
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$hubHelper = $objectManager->create('Mangoit\MediaclipHub\Helper\Data');
+
+$customerSession = $objectManager->get('Magento\Customer\Model\Session');
+if($customerSession->isLoggedIn()) {
+   $storeUserId = $customerSession->getCustomer()->getId();
+}
+
+$projects = $hubHelper->getMediaClipProjects($storeUserId); 
+//echo "<pre>"; print_r($projects->projects);
+$projects = $projects->projects;
+if($_SERVER["REMOTE_ADDR"]=='103.231.46.197'){
+	//$projects = $hubHelper->getMediaClipProjectsTest($storeUserId); 
+}
+
+
+
+?>
+<?php if(empty($projects)): ?>
+<h4><?php echo __('No Projects Found.'); ?></h4>
+<?php else: ?>
+	
+	<?php $total = count($projects); ?>
+    <p>Total <?php echo $total; ?> Records Found.</p>
+
+    <?php $recordsPerPage = 20; ?>
+	<?php $projectsArray = array_chunk($projects, $recordsPerPage); ?>
+    <?php $pages = count($projectsArray); ?>
+
+    <?php $class = '';//($class > 1) ? '' : 'no-display'; ?>
+
+    <ul class="pagination pagination-lg <?php echo $class; ?>">
+    	<?php
+    	for ($i=1; $i <= $pages; $i++) {
+    		?>
+    		<li><a href="javascript:void(0)" onclick=showTab("<?php echo $i; ?>")><?php echo $i; ?></a></li>
+    		<?php
+    	}
+    	?>
+    </ul>
+
+	<?php $i = $j = 1; ?>
+	<?php foreach ($projectsArray as $value): ?>
+		<div style="display: none;" id="list<?php echo $i; ?>">
+			<div id="projects-list" class="row">
+				<?php foreach ($value as $k => $v): ?>
+					<?php $projectUrl = $this->getProjectEditUrl($v->id); ?>
+					<div class="project-block">
+	                    <div class="thumbnail">
+	                        <a href="<?php echo $projectUrl; ?>" target="_blank">
+	                            <img class="img-rounded" src="<?php echo $v->urlThumb; ?>" alt="Project#<?php echo $j ?>" style="width:100%; height:150px">
+	                        </a>
+	                    </div>
+	                </div>
+				<?php $j++; endforeach; ?>
+			</div>
+		</div>
+	<?php $i++; endforeach; ?>
+<?php endif; ?>
+
+<script type="text/javascript">
+	var mysavedprojectstabid = 1;
+	showTab(mysavedprojectstabid);
+	function showTab(id){
+		hidePrevious();
+		var tabId = "list"+id;
+		document.getElementById(tabId).style.display = "block";
+		mysavedprojectstabid = id;
+	}
+
+	function hidePrevious(){
+		var tabId = "list"+mysavedprojectstabid;
+		document.getElementById(tabId).style.display = "none";
+	}
+</script>

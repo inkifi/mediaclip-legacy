@@ -1,0 +1,200 @@
+<?php $add_dust_jacket_prompt = 0; ?>
+
+<?php
+$dustjacket_options = array();
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$storeManager = $objectManager->get('\Magento\Store\Model\StoreManagerInterface');
+$store = $storeManager->getStore();
+$getBaseUrl = $store->getBaseUrl();
+$formKey =  $objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey();
+
+for ($i=1; $i <= 6; $i++) {
+
+    $configValuePopup = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('configuration/configurationpopup/dust_jacket_'.$i);
+
+    $configValueBlock = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('configuration/configurationpopup/block_popup_'.$i);
+
+    if ($configValuePopup) {
+
+        $configValuePopup = explode(',', $configValuePopup);
+        $product = array();
+
+        $j = 1;
+        foreach ($configValuePopup as $key => $_sku){
+           
+            if ($j <= 3){
+                $_product = $objectManager->create('\Magento\Catalog\Model\Product')->loadByAttribute('sku',$_sku);
+            
+                if ($_product){
+                    if ($_product->getAttributeSetId() != 4){
+                        $p['name'] = $_product->getName();
+                        $p['url'] = $getBaseUrl.'checkout/cart/add/product/'.$_product->getId().'/form_key/'.$formKey;
+                        $product[] = $p;
+                    }
+                    $j++;
+                }
+            }
+        }
+
+        if (!empty($product)) {
+            $options['products'] = $product;
+            $options['label'] = 'dust_jacket_'.$i;
+            $options['block'] = ($configValueBlock) ? $configValueBlock : 'dust_jacket';
+            $dustjacket_options[] = $options;
+        }
+    }
+}
+
+if (!empty($dustjacket_options)) {
+    
+    $add_dust_jacket_prompt = 1;
+    
+    ?>
+    <div id="dust_jacket_product_prompts" style="display: none;">        
+        <?php
+        foreach ($dustjacket_options as $_value) {
+            
+            ?>
+            <div id="<?php echo $_value['label']; ?>" style="display: none; text-align: center;">
+                <div class="content">
+                    <?php 
+                        $blockId = $_value['block']; 
+                        echo $this->getLayout()->createBlock('Magento\Cms\Block\Block')->setBlockId($blockId)->toHtml(); 
+                    ?>
+                    <?php echo getContent($_value['products']); ?>
+                </div>
+            </div>
+            <?php
+        }
+
+        $session = $objectManager->get('Magento\Customer\Model\Session');
+        //$session->setShowMediaclubSuggestDustJacketPrompt('dust_jacket_product_popup_2');
+        if ($session->getShowMediaclubSuggestDustJacketPrompt()) {
+            ?>
+            <script type="text/javascript">
+            require([
+            'jquery',        
+        ], function ($) {
+                jQuery(document).ready(function() {
+                    promptDustJacket('<?php echo $session->getShowMediaclubSuggestDustJacketPrompt(); ?>');
+                });
+            });
+            </script>
+            <?php
+            $session->unsShowMediaclubSuggestDustJacketPrompt();
+        }
+        ?>
+    </div>
+    <?php
+}
+
+function getContent($_products){
+    
+    $response = getHorizontalDivider();
+
+    $response .= "<div><ul>";
+    
+    foreach ($_products as $_product) {
+        $response .= getProductLink($_product['name'], $_product['url']);
+    }
+
+    $response .= "<li>OR</li>";
+
+    $response .= "<li><a style='color:#81c89d; text-transform:uppercase;' data-role='action' href='javascript:void(0)'>No Jacket</a></li>";
+
+    $response .= "</ul></div>";
+
+    $response .= getHorizontalDivider();
+
+    return $response;
+}
+
+function getProductLink($_name, $_url){
+    
+    $link = "<li> <a style='color:#81c89d; text-transform:uppercase;' href='".$_url."'>".$_name."</a></li>";
+
+    return $link;
+}
+
+function getHorizontalDivider(){
+    $hr = '<hr style="border: 0; height: 0; border-top: 1px solid rgba(0, 0, 0, 0.1); border-bottom: 1px solid rgba(255, 255, 255, 0.3); margin-bottom: 10px; text-align: center;" />';
+    return $hr;
+}
+
+?>
+
+<script type="text/javascript">
+    function promptDustJacket(promptElementId){
+        var add_dust_jacket_prompt = "<?php echo $add_dust_jacket_prompt; ?>";
+        require(
+        [
+            'jquery',
+            'Magento_Ui/js/modal/modal'
+        ],
+        function(
+            $,
+            modal
+        ) {
+        
+            /*if ($('#'+promptElementId).length == 0) {
+                return false;
+             }*/
+            if (add_dust_jacket_prompt == 1) {
+                console.log(add_dust_jacket_prompt);
+                var options = {
+                type: 'popup',
+                responsive: true,
+                innerScroll: true,
+                /*title: '',*/
+                buttons: [{
+                    text: $.mage.__('Continue'),
+                    class: '',
+                    click: function () {
+                        this.closeModal();
+                    }
+                }]
+            };
+
+            var popup = modal(options, $('#'+promptElementId));
+                $('#'+promptElementId).modal("openModal");
+            } else {
+                return false;
+            }
+        });
+    }
+</script>
+<script type="text/javascript">
+    require([
+    'jquery',
+    'Magento_Ui/js/modal/modal'
+    ],  function ($, modal){
+
+        //console.log('here');
+        var options = {
+            type: 'popup',
+            responsive: true,
+            innerScroll: true,
+            /*title: 'Title',*/
+            buttons: [{
+                text: $.mage.__('Proceed'),
+                class: '',
+                click: function () {
+                /* some stuff */
+                    this.closeModal();
+                }
+            }]
+        };
+        $(document).on('click','.newClass',function(e){
+            //alert('here');
+            e.preventDefault();
+            promptElementId = $(this).data('mediaclipid');
+            var popup = modal(options,$('#'+promptElementId));            
+            $('#'+promptElementId).modal('openModal');
+        });
+        $(document).on('click','.closeModal',function(e){
+            e.preventDefault();
+            var popup = modal(options,$('#'+promptElementId));            
+            $('#'+promptElementId).modal('closeModal');
+        });
+    });
+</script>

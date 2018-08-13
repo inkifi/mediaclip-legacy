@@ -1,0 +1,81 @@
+<?php 
+
+$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+$session = $objectManager->get('Magento\Customer\Model\Session'); ?>
+<?php $add_prints_prompt = ($session->getCanAddMoreMediaclipPrintsPrompt()) ? $session->getCanAddMoreMediaclipPrintsPrompt() : 0; ?>
+<?php 
+$storeManager = $objectManager->get('\Magento\Store\Model\StoreManagerInterface');
+$store = $storeManager->getStore();
+$getBaseUrl = $store->getBaseUrl();
+?>
+<?php if($add_prints_prompt): ?>
+    <?php
+        $prints_detail = $session->getAddMoreMediaclipPrints();
+        $product_id = $prints_detail['product_id'];
+        $project_id = $prints_detail['project_id'];
+        $qty = $prints_detail['diff'];
+
+        $url = $getBaseUrl.'mediacliphub/product/edit/product/'.$product_id.'/mode/editCartProject/projectId/'.$project_id;
+        
+    ?>
+
+    
+
+    <div id="prints_prompt" style="display: none;">
+        <div>You can have <?php echo $qty; ?> more prints for the same amount with the product you purchased right now, <a style="color: #81c89d;" target="_blank" href="<?php echo $url; ?>">click here</a> to update number of prints. </div>
+    </div>
+    <script type="text/javascript">
+    require([
+    'jquery',
+    'Magento_Ui/js/modal/modal'
+    ],  function ($, modal){
+
+		jQuery(document).ready(function() {    
+	        var add_prints_prompt = "<?php echo $add_prints_prompt; ?>";
+            if (jQuery('#prints_prompt').length === 0) {
+                return false;
+            }
+            if (add_prints_prompt == 1) {
+                var options = {
+                    type: 'popup',
+                    responsive: true,
+                    innerScroll: true,
+                    /*title: '',*/
+                    buttons: [{
+                        text: $.mage.__('Continue'),
+                        class: '',
+                        click: function () {
+                            this.closeModal();
+                        }
+                    }]
+                };
+
+                var popup = modal(options, $('#prints_prompt'));
+                $("#prints_prompt").modal("openModal");
+            }else {
+                return false;
+        }
+	        //promptPrints(add_prints_prompt);
+        });        
+	});        
+    </script>
+    <?php $session->unsCanAddMoreMediaclipPrintsPrompt(); ?>
+<?php endif; ?>
+<!-- <script type="text/javascript">
+    function promptPrints(add_prints_prompt){
+        if (jQuery('#prints_prompt').length === 0) {
+            return false;
+        }
+        if (add_prints_prompt == 1) {
+            jQuery.fancybox({ 
+                content     : jQuery('#prints_prompt').html(),
+                padding     : 10,
+                openEffect  : 'elastic',
+                closeBtn    : true,
+                //modal       : true,
+            });
+        } else {
+            return false;
+        }
+    }
+</script> -->

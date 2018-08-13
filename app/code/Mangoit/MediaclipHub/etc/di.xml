@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+	<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+	    <preference for="Magento\Checkout\Controller\Cart\Add" type="Mangoit\MediaclipHub\Controller\Cart\Add" />
+	    <preference for="Magento\Checkout\Block\Cart\Item\Renderer" type="Mangoit\MediaclipHub\Block\Cart\Item\Renderer"/>
+	    <preference for="Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit" type="Mangoit\MediaclipHub\Block\Cart\Item\Renderer\Actions\Edit"/>
+	    <type name="Magento\Quote\Model\Quote\Item\ToOrderItem">
+        	<plugin name="Mangoit_to_order_item" type="Mangoit\MediaclipHub\Model\Plugin\Quote\QuoteToOrderItem"/>
+		</type>
+	</config>

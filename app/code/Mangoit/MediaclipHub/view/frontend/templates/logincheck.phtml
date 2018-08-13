@@ -1,0 +1,83 @@
+<script type="text/javascript" src="<?php echo $block->getViewFileUrl('js/jquery.fancybox.pack.js',['_secure' => true]); ?>"></script>
+<link rel="stylesheet" href="<?php echo $block->getViewFileUrl('css/jquery.fancybox.css',['_secure' => true]);?>" />
+<div id="thanks-popup" style="display: none;">
+    <h4 style='text-transform:uppercase;'>Thank you your project will be saved in the <a style='color:#81c89d; text-transform:uppercase;' target="_blank" href="<?php echo $this->getBaseUrl().'mediacliphub/projects'; ?>">My saved projects</a> area of your account</h4>
+</div>
+<!-- <a id="login-popup" href="#">clickme</a>
+<script type="text/javascript">
+	require([
+		'jquery',
+		'Magento_Ui/js/modal/modal'
+		],
+	function($, modal) {
+	var options = {
+		type: 'popup',
+		responsive: true,
+		innerScroll: true,
+		modalClass: 'custom-block-customer-login',
+		buttons: false,
+	};
+	$('#login-popup').click(function(){
+	var popup = modal(options, $('#popup-modal'));
+	$('#popup-modal').modal('openModal');
+	});
+	console.log('modal');
+	function newfunction() {
+		alert('here');
+	}
+});
+
+</script> -->
+<script type="text/javascript">
+    function customerLoginRegister() {
+    	
+        jQuery.ajax({
+            url: "<?php echo $this->getUrl('mediacliphub/customer/logincheck') ?>",
+            type: "GET",
+            success: function(customerLogin) {
+            	console.log(customerLogin);
+
+                //var customerLogin = "<?php //echo $this->checkCustomerLoggedIn(); ?>";
+                console.log('customerLogin '+customerLogin);
+                if (customerLogin) {
+                    return true;
+                }
+                else {
+                	
+                	//newfunction();
+                    jQuery.fancybox({
+                        'type' : 'iframe', 
+                        'closeBtn' : true, 
+                        helpers   : { 
+                           overlay : {closeClick: true} 
+                        },
+                        'href': '/mediacliphub/customer/account',
+                        afterClose: function() {                           
+                        }
+                    });
+                }
+            },
+            error: function(data){
+                return true;
+            }
+        });
+    }
+
+    function setMediaclipUserToken(userToken) {
+        console.log('userToken - '+userToken);
+        window.setTimeout('open2()',100);
+        window.mediaclip.hub.updateStoreUserToken(userToken);
+    }
+
+    function open2(){
+        var pop2 = jQuery('#thanks-popup').html();
+        jQuery.fancybox({
+            showCloseButton: true, 
+            helpers   : { 
+               overlay : {closeClick: true} 
+            },
+            content : pop2,
+        });
+    }
+</script>
+

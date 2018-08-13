@@ -1,0 +1,71 @@
+﻿html {
+	position: relative;
+	min-height: 100%;
+}
+
+.container {
+	width: auto;
+	max-width: 920px;
+	padding: 0 15px;
+}
+
+li {
+	margin-bottom: 0.5em;
+}
+
+body {
+	margin: 0;
+	height: 100%;
+	background: none repeat scroll 0 0 #e8ebee;
+	line-height: normal;
+	color: #5C5B5B;
+}
+
+#designer-page {
+	overflow: hidden;
+	font-family: Helvetica,Arial,sans-serif;
+	font-size: 12px;
+	text-align: center;
+}
+
+td.line-item-cell {
+	vertical-align: middle !important;
+}
+
+.mediaclip-designer-wrapper {
+	top: 50px;
+}
+
+.mediaclip-loading-section {
+  color: #111125;
+  width: 100%;
+  height: 100%;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  -ms-flex-direction: column;
+  flex-direction: column;
+  -webkit-align-items: center;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.mediaclip-preloader-large {
+	background-image: url('../images/preloader-large.gif');
+	background-color: #fff;
+	width: 64px;
+	height: 64px;
+	margin-left: -32px;
+	margin-top: -32px;
+	border-radius: 32px;
+	margin: 0;
+	padding: 0;
+	background-repeat: no-repeat;
+	background-position: 50%;
+}

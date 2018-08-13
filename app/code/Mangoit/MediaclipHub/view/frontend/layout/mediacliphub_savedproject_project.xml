@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd"> 
+<update handle="customer_account"/>
+<head>
+	<css src="css/customer_saved_projects.css"/>
+	<title>My Saved Projects</title>
+</head> 
+<body> 
+    <referenceBlock name="page.main.title"> 
+            <action method="setPageTitle"> 
+                <argument translate="true" name="title" xsi:type="string">My Saved Projects</argument> 
+            </action> 
+     </referenceBlock> 
+     <referenceContainer name="content"> 
+        <block class="Mangoit\MediaclipHub\Block\Mediaclip\Projects" name="saved_projects" template="Mangoit_MediaclipHub::savedproject.phtml" cacheable="false"> 
+        </block> 
+    </referenceContainer> 
+</body> 
+</page>          

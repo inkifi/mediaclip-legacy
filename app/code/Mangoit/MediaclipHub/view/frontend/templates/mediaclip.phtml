@@ -1,0 +1,64 @@
+<?php
+    $projectId = $this->getRequest()->getParam('projectId');
+    $mode = ($this->getRequest()->getParam('mode')) ? $this->getRequest()->getParam('mode') : NULL;
+    $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+    
+    $store_product_id = $objectManager->create('Mangoit\MediaclipHub\Model\Mediaclip')->load($projectId, 'project_id')->getStoreProductId();
+
+    $product = $objectManager->create('Magento\Catalog\Model\Product')->load($store_product_id);
+
+    $productName = $product->getName();
+?>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Customize - <?php echo $productName; ?></title>
+        <meta charset="utf-8" />
+        <meta name="description" content="A PHP sample to demonstrate a basic hub integration." />
+        <meta name="author" content="Mediaclip Inc." />
+        <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+        <meta http-equiv="encoding" content="utf-8" >
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <!--jQuery is required to run the designer.-->
+        <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+        <!--Mediaclip Hub Javascript Api-->
+        <script src="https://api.mediacliphub.com/scripts/hub.min.js" crossorigin="anonymous"></script>
+        
+        <link rel="stylesheet" href="<?php echo $block->getViewFileUrl('css/bootstrap.min.css',['_secure' => true]);?>" />
+        <link rel="stylesheet" href="<?php echo $block->getViewFileUrl('css/style.css',['_secure' => true]);?>" />
+        
+    </head>
+
+    <body id="designer-page">
+        <div class="navbar navbar-default navbar-static-top" role="navigation">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/"><?php echo $productName; ?></a>
+                </div>
+            </div>
+        </div>
+
+        <div id="designerContainer" class="mediaclip-designer-wrapper">
+            <!--All the content inside the "designerContainer" will be replaced once the Designer is launched-->
+            <section class="mediaclip-loading-section">
+                <p>Loading the designer...</p>
+                <div class="mediaclip-preloader-large"></div>
+            </section>
+        </div>
+        
+        <?php
+        $token = $this->getFeedback();
+            if ($token) {
+                
+                $objectManager->create('Mangoit\MediaclipHub\Helper\Data')->IncludeJavascriptToStartDesigner( $projectId, "designerContainer", $mode, $token );
+            }
+        ?>
+        
+    </body>
+</html>
+
+<?php //echo $this->getLayout()->createBlock('Mangoit\MediaclipHub\Block\Mediaclip\Projects')->setTemplate('Mangoit_MediaclipHub::logincheck.phtml')->toHtml(); ?>
+
+<?php echo $this->getLayout()->createBlock("Magento\Framework\View\Element\Template")->setTemplate("Mangoit_MediaclipHub::logincheck.phtml")->toHtml(); ?>

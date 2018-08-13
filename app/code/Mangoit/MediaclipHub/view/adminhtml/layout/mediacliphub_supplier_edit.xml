@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="admin-2columns-left" xsi:noNamespaceSchemaLocation="../../../../../../../lib/internal/Magento/Framework/View/Layout/etc/page_configuration.xsd">
+     <update handle="editor"/>
+    <body>
+	   <referenceContainer name="content">
+            <block class="Mangoit\MediaclipHub\Block\Adminhtml\Supplier\Edit" name="mediacliphub_supplier_edit"/>
+        </referenceContainer>
+		 <referenceContainer name="left">
+            <block class="Mangoit\MediaclipHub\Block\Adminhtml\Supplier\Edit\Tabs" name="mediacliphub_supplier_edit_tabs">
+				<block class="Mangoit\MediaclipHub\Block\Adminhtml\Supplier\Edit\Tab\SupplierInformation" name="mediacliphub_supplier_edit_tab_supplierinformation"/>
+				 <action method="addTab">
+                    <argument name="name" xsi:type="string">supplierinformation_section</argument>
+                    <argument name="block" xsi:type="string">mediacliphub_supplier_edit_tab_supplierinformation</argument>
+                </action>
+				<!--CedAddTab-->
+			</block>
+        </referenceContainer>
+    </body>
+</page>

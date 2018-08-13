@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="sales_quote_save_after">
+        <observer name="Mangoit_Product_Save_before" instance="Mangoit\MediaclipHub\Observer\quoteSaveBefore" />
+    </event>
+    <event name="controller_action_postdispatch_catalog_product_view">
+        <observer name="hookToControllerActionPostDispatch" instance="Mangoit\MediaclipHub\Observer\postDispatch" />
+    </event>
+<!-- 2018-06-26 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+"Prevent the «Pending Payment» orders from being sent to MediaClip Photobook in my Magento 2 store":
+https://www.upwork.com/ab/f/contracts/20288301 -->
+	<event name='checkout_onepage_controller_success_action'>
+		<observer
+			instance='Mangoit\MediaclipHub\Observer\CheckoutSuccess'
+			name='Mangoit\MediaclipHub\Observer\CheckoutSuccess'
+		/>
+	</event>
+	<event name='sales_order_save_before'>
+		<observer
+			instance='Mangoit\MediaclipHub\Observer\OrderSaveBefore'
+			name='Mangoit\MediaclipHub\Observer\OrderSaveBefore'
+		/>
+	</event>
+<!-- 2018-06-27 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+"Monitor orders and pass the «Payment Complete» ones to MediaClip Photobook in my Magento 2 store":
+https://www.upwork.com/ab/f/contracts/20295611 -->
+    <event name="checkout_submit_all_after">
+		<observer
+			instance='Mangoit\MediaclipHub\Observer\CheckoutSubmitAllAfter'
+			name='Mangoit\MediaclipHub\Observer\CheckoutSubmitAllAfter'
+		/>
+    </event>
+	<event name="customer_login">
+        <observer name="customer_login_observer" instance="Mangoit\MediaclipHub\Observer\CustomerLogin" />
+    </event>
+    <event name="customer_logout">
+    <observer name="customer_logout_observer" instance="Mangoit\MediaclipHub\Observer\CustomerLogOutObserver" />
+</event>
+</config>
+

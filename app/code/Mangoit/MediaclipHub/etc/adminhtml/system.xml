@@ -1,0 +1,128 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../Config/etc/system_file.xsd">
+    <system>
+        <!-- for add new tab in Magento2 system configuration section -->
+        <tab id="mangoit" translate="label" sortOrder="10">
+            <label>Mangoit</label>
+        </tab>
+        <!-- for create section -->
+        <section id="api" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>API Authentication</label>
+            <!-- Assign section to tab -->
+            <tab>mangoit</tab>
+            <resource>Mangoit_MediaclipHub::mangoit</resource>
+            <group id="api_auth" translate="label" type="text"  sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Mediaclip API Authentication</label>
+                <!-- create text type field -->
+                <field id="api_url" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Mediaclip API Url</label>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="api_id" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Mediaclip API ID</label>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="api_key" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Mediaclip API KEY</label>
+                    <validate>required-entry</validate>
+                </field>
+            </group>
+            <group id="pwinty_api_auth" translate="label" type="text"  sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Pwinty API Authentication</label>
+                <!-- create text type field -->
+                <field id="merchant_id" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Pwinty MerchantId</label>
+                    <validate>required-entry</validate>
+                </field>
+                <field id="pwinty_api_key" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Pwinty API Key</label>
+                    <validate>required-entry</validate>
+                </field>
+            </group>
+        </section>
+        <section id="configuration" translate="label" type="text" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Configuration</label>
+            <!-- Assign section to tab -->
+            <tab>mangoit</tab>
+            <resource>Mangoit_MediaclipHub::mangoit</resource>
+            <group id="configurationpopup" translate="label" type="text"  sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Configuration</label>
+                <!-- create text type field -->
+                <field id="dust_jacket_1" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Dust Jacket Product Popup 1</label>
+                    <comment>Please provide Dust Jacket Product SKU's as comma separated (e.g. dc-1,dc-2).</comment>
+                </field>
+                <field id="block_popup_1" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Block for Popup 1</label>
+                    <source_model>Mangoit\MediaclipHub\Model\Config\Source\Block</source_model>
+                    <comment>Please select a static block for popup 1</comment>
+                </field>
+                <field id="dust_jacket_2" translate="label" type="text" sortOrder="3" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Dust Jacket Product Popup 2</label>
+                    <comment>Please provide Dust Jacket Product SKU's as comma separated (e.g. dc-1,dc-2).</comment>
+                </field>
+                <field id="block_popup_2" translate="label" type="select" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Block for Popup 2</label>
+                    <source_model>Mangoit\MediaclipHub\Model\Config\Source\Block</source_model>
+                    <comment>Please select a static block for popup 2</comment>
+                </field>
+                <field id="dust_jacket_3" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Dust Jacket Product Popup 3</label>
+                    <comment>Please provide Dust Jacket Product SKU's as comma separated (e.g. dc-1,dc-2).</comment>
+                </field>
+                <field id="block_popup_3" translate="label" type="select" sortOrder="6" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Block for Popup 3</label>
+                    <source_model>Mangoit\MediaclipHub\Model\Config\Source\Block</source_model>
+                    <comment>Please select a static block for popup 3</comment>
+                </field><field id="dust_jacket_4" translate="label" type="text" sortOrder="7" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Dust Jacket Product Popup 4</label>
+                    <comment>Please provide Dust Jacket Product SKU's as comma separated (e.g. dc-1,dc-2).</comment>
+                </field>
+                <field id="block_popup_4" translate="label" type="select" sortOrder="8" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Block for Popup 4</label>
+                    <source_model>Mangoit\MediaclipHub\Model\Config\Source\Block</source_model>
+                    <comment>Please select a static block for popup 4</comment>
+                </field>
+                <field id="dust_jacket_5" translate="label" type="text" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Dust Jacket Product Popup 5</label>
+                    <comment>Please provide Dust Jacket Product SKU's as comma separated (e.g. dc-1,dc-2).</comment>
+                </field>
+                <field id="block_popup_5" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Block for Popup 5</label>
+                    <source_model>Mangoit\MediaclipHub\Model\Config\Source\Block</source_model>
+                    <comment>Please select a static block for popup 5</comment>
+                </field>
+                <field id="dust_jacket_6" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Dust Jacket Product Popup 6</label>
+                    <comment>Please provide Dust Jacket Product SKU's as comma separated (e.g. dc-1,dc-2).</comment>
+                </field>
+                <field id="block_popup_6" translate="label" type="select" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Block for Popup 6</label>
+                    <source_model>Mangoit\MediaclipHub\Model\Config\Source\Block</source_model>
+                    <comment>Please select a static block for popup 6</comment>
+                </field>
+            </group>
+        </section>
+        <section id="ftp" translate="label" type="text" sortOrder="300" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>FTP Upload</label>
+            <!-- Assign section to tab -->
+            <tab>mangoit</tab>
+            <resource>Mangoit_MediaclipHub::mangoit</resource>
+            <group id="ftp_upload" translate="label" type="text"  sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>FTP Upload</label>
+                <!-- create text type field -->
+                <field id="upload_folder" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Order Files Upload Folders</label>
+                    <comment>Please provide folder's name as comma separated to use in mediaclip orders files upload at FTP(e.g. name1,name2).</comment>
+                    <validate>required-entry</validate>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

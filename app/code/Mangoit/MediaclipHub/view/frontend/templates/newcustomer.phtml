@@ -1,0 +1,94 @@
+<?php
+/**
+ * Copyright © 2013-2017 Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+/**
+ * New Customer block template
+ *
+ * @var $block \Magento\Customer\Block\Form\Login\Info
+ */
+?>
+<style type="text/css">
+  @media(max-width: 767px) {
+  body .fancybox-inner {
+    width: 100% !important;
+    height: 350px !important;
+  }
+}
+</style>
+<?php if ($block->getRegistration()->isAllowed()): ?>
+<div class="row">
+<div class="col-md-12">
+<div class="block block-new-customer account-create">
+    <div class="block-title">
+        <strong id="block-new-customer-heading" role="heading" aria-level="2"><?php /* @escapeNotVerified */ echo __('New Customers') ?></strong>
+    </div>
+    <div class="block-content" aria-labelledby="block-new-customer-heading">
+        <div class="actions-toolbar">
+            <div class="primary">
+                <a href="<?php /* @escapeNotVerified */ //echo $block->getCreateAccountUrl() ?> javascript:void(0)" class="action create primary accountFormsToggle"><span><?php /* @escapeNotVerified */ echo __('Create an Account') ?></span></a>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+<?php endif; ?>
+<script type="text/javascript">
+    require([
+        'jquery'
+        ],
+    function($) {
+    $('.accountFormsToggle').click(function(){
+        $('.account-create').toggle();
+        $('#account-login').toggle();
+        $('.custom_customer_account').toggle();
+    });
+});
+
+</script>
+<style type="text/css">
+    .login-container .block.block-new-customer.account-create {
+   clear: inherit!important;
+    margin-left: 15px;
+}
+form.form-create-account {
+   width: 100% !important;
+}
+
+form.form-create-account fieldset {
+   width: 49%;
+   display: inline-block;
+   vertical-align: top;
+}
+.form-create-account .fieldset > .field:not(.choice) > .label {
+  width: 27.8%;}
+
+.login-container .fieldset > .field > .control {
+   width: 70%;
+}
+.page-wrapper {
+    min-height: auto;
+}
+
+form .fieldset > .field {
+   margin: 0 0 15px;
+}
+@media only screen and (max-width: 667px) {
+form.form-create-account fieldset {
+width: 100%;}
+
+.login-container .fieldset > .field > .control {
+   width: 100%;
+}
+.form-create-account .fieldset > .field:not(.choice) > .label {
+   width: 100%;
+}
+}
+</style>
