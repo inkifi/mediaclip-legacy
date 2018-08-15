@@ -708,7 +708,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $columns = [
                 'json_code' => [
                     'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
-                    'nullable' => true,
+                    'nullable' => false,
                     'comment' => 'json code will show in json file',
                 ]
             ];

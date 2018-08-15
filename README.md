@@ -1,1 +1,2 @@
-# Media-Clip-Inkifi
+The module integrates the [inkifi.com](https://inkifi.com) website with the [mediaclip.ca](https://www.mediaclip.ca) service.  
+The module should be placed to the `app/code/Mangoit/MediaclipHub` folder.

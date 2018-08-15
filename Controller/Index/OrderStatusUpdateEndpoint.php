@@ -479,7 +479,7 @@ class OrderStatusUpdateEndpoint extends Action
                             $dir = $this->_objectManager->get('\Magento\Framework\Filesystem\DirectoryList');            
                             $base = $dir->getRoot();
 
-                            $filesUploadPath = '/home/canvaspr/inkifi.com/html/ftp_json/'.$orderDirDate.'/'.$orderIncrementId.'/'.$orderItemID.'/'.$mediaClipOrdersData['product_label'];
+                            $filesUploadPath = '/home/canvaspr/dev2.inkifi.com/html/ftp_json25june/'.$orderDirDate.'/'.$orderIncrementId.'/'.$orderItemID.'/'.$mediaClipOrdersData['product_label'];
                             
 
                             //$filesUploadPath = $base.'/ftp_json25june/'.$orderDirDate.'/'.$orderIncrementId.'/'.$orderItemID.'/'.$mediaClipOrdersData['product_label'];

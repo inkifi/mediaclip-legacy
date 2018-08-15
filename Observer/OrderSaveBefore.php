@@ -19,16 +19,8 @@ final class OrderSaveBefore implements ObserverInterface {
 	 * @param Observer $ob
 	 */
 	function execute(Observer $ob) {
-        $checkoutWriter = new \Zend\Log\Writer\Stream(BP . '/var/log/order-save-before.log');
-        $checkoutLogger = new \Zend\Log\Logger();
-        $checkoutLogger->addWriter($checkoutWriter);
-        $checkoutLogger->info("-----------------------------");
-
 		$o = $ob['order']; /** @var O $o */
 		if ($id = $o->getId()) {
-		    $checkoutLogger->info("############orderid##############");
-            $checkoutLogger->info($id);
-
 			$o2 = OM::getInstance()->create(O::class);
 			$o2->load($id);
 			//$writer = new \Zend\Log\Writer\Stream(BP . '/var/log/mage2pro.log');
@@ -41,7 +33,6 @@ final class OrderSaveBefore implements ObserverInterface {
 					'canceled', 'closed', 'fraud', 'holded', 'payment_review', 'pending_payment',
 				])
 			) {
-                $checkoutLogger->info('posting...');
 				CS::post($o);
 			}
 		}

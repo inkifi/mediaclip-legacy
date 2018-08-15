@@ -29,11 +29,6 @@ final class CheckoutSuccess implements ObserverInterface {
 	 * @param Observer $ob
 	 */
 	function execute(Observer $ob) {
-        $checkoutWriter = new \Zend\Log\Writer\Stream(BP . '/var/log/checkout-success.log');
-        $checkoutLogger = new \Zend\Log\Logger();
-        $checkoutLogger->addWriter($checkoutWriter);
-        $checkoutLogger->info((new \Exception())->getTraceAsString());
-
 		$om = OM::getInstance(); /** @var OM $om */
 		$r = $om->get(IOrderRepository::class); /** @var IOrderRepository|OrderRepository $r */
 		$o = $r->get($ob['order_ids'][0]); /** @var O $o */
@@ -48,15 +43,8 @@ final class CheckoutSuccess implements ObserverInterface {
 	 * @param O $o
 	 */
     static function post(O $o) {
-        $checkoutWriter = new \Zend\Log\Writer\Stream(BP . '/var/log/checkout-success-post.log');
-        $checkoutLogger = new \Zend\Log\Logger();
-        $checkoutLogger->addWriter($checkoutWriter);
-        $checkoutLogger->info("-------------------------------------------");
-
         $om = OM::getInstance(); /** @var OM $om */
         $oid = $o->getId(); /** @var int $oid */
-        $checkoutLogger->info("##orderid##".$oid);
-
 		$supplier = $om->create(mSupplier::class);
 		$supplierDataCollection = $supplier->getCollection()->getData();
 		$supplierData = [];
@@ -67,16 +55,13 @@ final class CheckoutSuccess implements ObserverInterface {
 			}
 		}
 		$i = 1;
-        $checkoutLogger->info("##step001##");
 		$order_item_details = [];
 		// 2018-07-04 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 		// The `$item_supplier_id` variable should be defined outside of the loop
 		// because it is used outside of the loop below.
 		$item_supplier_id = [];
 		foreach ($o->getAllItems() as $oi) { /** @var OI $oi */
-            $checkoutLogger->info("##step001.1##");
 			if ($oi->getMediaclipProjectId()) {
-                $checkoutLogger->info("##step001.21##".$oi->getMediaclipProjectId());
 				$item_supplier_id = [];
 				$p = $om->create(P::class)->load($oi->getProductId());  /** @var P $p */
 				$pid = $oi->getProductId();
@@ -91,7 +76,6 @@ final class CheckoutSuccess implements ObserverInterface {
 						$item_detail[$item_supplier_id['domain']] = $item_supplier_id['value'];
 					}
 				}
-                $checkoutLogger->info("##step001.22##");
 				$item_detail['unitPrice']['money']['currency'] = $o->getOrderCurrencyCode();
 				$item_detail['unitPrice']['money']['value'] = $oi->getPrice();
 				$item_detail['description'] = $product_desc;
@@ -115,14 +99,11 @@ final class CheckoutSuccess implements ObserverInterface {
 				}
 				$item['quantity'] = $item_quantity;
 				$item['itemDetail'] = $item_detail;
-                $checkoutLogger->info("##step001.3##");
 				$order_item_details[] = $item;
 				$i++;
 			}
 		}
-        $checkoutLogger->info("##step002##".count($item_supplier_id));
 		if ($order_item_details) {
-            $checkoutLogger->info("##step1##".$oid);
 			$order_date = $o->getCreatedAt();
 			$shipping_address = $o->getShippingAddress()->getData();
 			$order_ship_to = [];
@@ -216,11 +197,9 @@ final class CheckoutSuccess implements ObserverInterface {
 			$order_details['contact'] = $order_contact;
 			$mediaClipOrderRequest['orderRequestHeader'] = $order_details;
 			$mediaClipOrderRequest['itemOut'] = $order_item_details;
-            $checkoutLogger->info("##step2##".$oid);
 			$hubHelper = $om->create(mHelper::class); /** @var mHelper $hubHelper */
 			$chekcoutMediaclipResponse =  $hubHelper->CheckoutWithSingleProduct($mediaClipOrderRequest);
 			if ($chekcoutMediaclipResponse  && is_array($chekcoutMediaclipResponse)) {
-                $checkoutLogger->info("##step3##");
 				$mediaClipData['magento_order_id'] = $oid;
 				$mediaClipData['mediaclip_order_id'] = $chekcoutMediaclipResponse['id'];
 				$mediaClipData['mediaclip_order_details'] = json_encode($chekcoutMediaclipResponse);
@@ -231,9 +210,7 @@ final class CheckoutSuccess implements ObserverInterface {
 					"Insert Into " . $tableName . " (magento_order_id, mediaclip_order_id, mediaclip_order_details) 					Values (".$mediaClipData['magento_order_id'].",'".$mediaClipData['mediaclip_order_id']
 					."','".$mediaClipData['mediaclip_order_details']."')"
 				;
-                $checkoutLogger->info("##step4##");
 				$connection->query($sql);
-                $checkoutLogger->info("##step5##");
 			}
 		}
     }
