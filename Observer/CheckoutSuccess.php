@@ -44,7 +44,10 @@ final class CheckoutSuccess implements ObserverInterface {
 	 */
     static function post(O $o) {
         $om = OM::getInstance(); /** @var OM $om */
-        $oid = $o->getId(); /** @var int $oid */
+		// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+		// «Modify orders numeration for Mediaclip»
+		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
+        $oid = ikf_ite($o->getId()); /** @var int $oid */
 		$supplier = $om->create(mSupplier::class);
 		$supplierDataCollection = $supplier->getCollection()->getData();
 		$supplierData = [];

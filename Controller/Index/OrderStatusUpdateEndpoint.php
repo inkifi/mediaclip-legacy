@@ -131,6 +131,10 @@ class OrderStatusUpdateEndpoint extends Action
             if (isset($obj['status']) && $obj['status']['value'] == 'AvailableForDownload') {
     
                 $orderId = $obj['order']['storeData']['orderId'];
+				// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+				// «Modify orders numeration for Mediaclip»
+				// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
+                $oidI = ikf_eti($orderId); /** @var string $oidI */
                 $logger->info($orderId);
                 $logger->info($json);
 
@@ -166,7 +170,12 @@ class OrderStatusUpdateEndpoint extends Action
                         }
 
                         $salesOrderItemModelCollection->clear()->getSelect()->reset('where');
-                        $salesOrderItem = $salesOrderItemModelCollection->addFieldToFilter('order_id', array('eq' => $orderId));
+                        $salesOrderItem = $salesOrderItemModelCollection->addFieldToFilter(
+						// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+						// «Modify orders numeration for Mediaclip»
+						// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
+                        	'order_id', ['eq' => $oidI]
+						);
 
                         foreach ($salesOrderItem as $key => $value) {//get status of order item
 
@@ -187,7 +196,10 @@ class OrderStatusUpdateEndpoint extends Action
                                 "GB",               //country code
                                 "Pro"               //quality
                             );
-                            $order = $this->_objectManager->create('\Magento\Sales\Model\Order')->load($orderId);
+							// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+							// «Modify orders numeration for Mediaclip»
+							// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
+                            $order = $this->_objectManager->create('\Magento\Sales\Model\Order')->load($oidI);
                             $orderIncrementId = $order['increment_id'];
                             $entityId = $order->getEntityId();
                             $orderDate = $order['created_at'];
@@ -352,7 +364,10 @@ class OrderStatusUpdateEndpoint extends Action
 
                         $salesOrderItemModel = $this->_objectManager->create('Magento\Sales\Model\Order\Item');
                         $salesOrderItemModelCollection = $salesOrderItemModel->getCollection();
-                        $order = $this->_objectManager->create('\Magento\Sales\Model\Order')->load($orderId);
+						// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+						// «Modify orders numeration for Mediaclip»
+						// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
+                        $order = $this->_objectManager->create('\Magento\Sales\Model\Order')->load($oidI);
                         
                         
                         $orderIncrementId = $order['increment_id'];
@@ -535,10 +550,17 @@ class OrderStatusUpdateEndpoint extends Action
             if (isset($obj['status']) && $obj['status']['value'] == 'Shipped') {
                 $projectId = $obj['projectId'];
                 $orderId = $obj['order']['storeData']['orderId'];
+				// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+				// «Modify orders numeration for Mediaclip»
+				// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
+                $oidI = ikf_eti($orderId); /** @var string $oidI */
                 //$orderId = 16717;
                 try{
 
-                    $order = $this->_objectManager->create('Magento\Sales\Model\Order')->load($orderId);
+					// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+					// «Modify orders numeration for Mediaclip»
+					// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
+                    $order = $this->_objectManager->create('Magento\Sales\Model\Order')->load($oidI);
 
                     $order_items = $order->getItemsCollection();
 
