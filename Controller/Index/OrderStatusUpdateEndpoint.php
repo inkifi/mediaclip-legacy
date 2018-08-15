@@ -98,7 +98,28 @@ class OrderStatusUpdateEndpoint extends Action
     }
     public function execute()
     {
-        
+
+		/**
+		 * 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+		 * A response looks like:
+		 * 	{
+		 *		"id": "3ea5265e-46cf-42cd-97a8-1c292169e006",
+		 *		"order": {
+		 *			"storeData": {
+		 *				"orderId": "40826"
+		 *			}
+		 *		},
+		 *		"storeData": {
+		 *			"lineNumber": 1,
+		 *			"productId": "79772"
+		 *		},
+		 *		"projectId": "4a9a1d14-0807-42ab-9a03-e2d54d9b8d12",
+		 *		"status": {
+		 *			"value": "AvailableForDownload",
+		 *			"effectiveDateUtc": "2018-08-15T22:51:43.5408397Z"
+		 *		}
+		 *	}
+		 */
         $json = file_get_contents('php://input');
         $obj = json_decode($json, true);
         $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/mediaclip_orders_download_shipment_status.log');
