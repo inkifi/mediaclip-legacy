@@ -315,7 +315,17 @@ class MediaclipOrderUpdate extends \Magento\Framework\App\Action\Action {
                                 $resource = $_objectManager->get('Magento\Framework\App\ResourceConnection');
                                 $connection = $resource->getConnection();
                                 $tableName = $resource->getTableName('mediaclip_orders');
-                                $sql = "Insert Into " . $tableName . " (magento_order_id, mediaclip_order_id, mediaclip_order_details) Values (".$mediaClipData['magento_order_id'].",'".$mediaClipData['mediaclip_order_id']."','".$mediaClipData['mediaclip_order_details']."')";
+// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+// «Modify orders numeration for Mediaclip»
+// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
+$sql =
+	"INSERT INTO $tableName (magento_order_id, mediaclip_order_id, mediaclip_order_details) "
+	. "VALUES ( "
+		. "'{$mediaClipData['magento_order_id']}'"
+		. ", '{$mediaClipData['mediaclip_order_id']}'"
+		. ", '{$mediaClipData['mediaclip_order_details']}'"
+	.")"
+;
                                 $sql1 = "Update `sales_order` Set mediaclip_order_flag = 1 where `entity_id` =".$orderId;
                                 $connection->query($sql1);
                                 $connection->query($sql);
