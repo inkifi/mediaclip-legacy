@@ -99,7 +99,7 @@ class Edit extends \Magento\Framework\App\Action\Action {
 
             $storeUserId = $helper->getCustomerId();
             
-            $checkoutWriter = new \Zend\Log\Writer\Stream(BP . '/var/log/request_token.log');
+            $checkoutWriter = new \Zend\Log\Writer\Stream(BP . '/var/log/request_token_productedit.log');
             $checkoutLogger = new \Zend\Log\Logger();
             $checkoutLogger->addWriter($checkoutWriter);
 
