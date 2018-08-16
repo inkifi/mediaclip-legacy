@@ -7,16 +7,8 @@ $customerSession = $objectManager->get('Magento\Customer\Model\Session');
 if($customerSession->isLoggedIn()) {
    $storeUserId = $customerSession->getCustomer()->getId();
 }
-
-$projects = $hubHelper->getMediaClipProjects($storeUserId); 
-//echo "<pre>"; print_r($projects->projects);
+$projects = $hubHelper->getMediaClipProjects($storeUserId);
 $projects = $projects->projects;
-if($_SERVER["REMOTE_ADDR"]=='103.231.46.197'){
-	//$projects = $hubHelper->getMediaClipProjectsTest($storeUserId); 
-}
-
-
-
 ?>
 <?php if(empty($projects)): ?>
 <h4><?php echo __('No Projects Found.'); ?></h4>
