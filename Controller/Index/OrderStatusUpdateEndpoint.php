@@ -130,15 +130,15 @@ class OrderStatusUpdateEndpoint extends Action
            
             if (isset($obj['status']) && $obj['status']['value'] == 'AvailableForDownload') {
     
-                $orderId = $obj['order']['storeData']['orderId'];
+                $oidE = $obj['order']['storeData']['orderId'];
 				// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 				// «Modify orders numeration for Mediaclip»
 				// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
-                $oidI = ikf_eti($orderId); /** @var string $oidI */
-                $logger->info($orderId);
+                $oidI = ikf_eti($oidE); /** @var string $oidI */
+                $logger->info($oidE);
                 $logger->info($json);
 
-                if ($orderId) {
+                if ($oidE) {
 
                     $helper = $this->_objectManager->create('Mangoit\MediaclipHub\Helper\Data');
                     $response = false;
@@ -146,12 +146,12 @@ class OrderStatusUpdateEndpoint extends Action
                     //Set mediaclip order status to 1 as the order is downloaded
                     $model = $this->_objectManager->create('Mangoit\MediaclipHub\Model\Orders');
                     $mediaclipOrder = $model->getCollection();
-                    $mediaclipOrderData = $mediaclipOrder->addFieldToFilter('magento_order_id', array('eq' => $orderId));
+                    $mediaclipOrderData = $mediaclipOrder->addFieldToFilter('magento_order_id', array('eq' => $oidE));
                     $mediaclipOrderData = $mediaclipOrderData->getData()[0];
                     $model->setId($mediaclipOrderData['id']);
                     $model->setOrderDownloadStatus(1);
                     $model->save();
-                    //$response = $helper->downloadAndUploadOrderFilesToServer($orderId);
+                    //$response = $helper->downloadAndUploadOrderFilesToServer($oidE);
                     $product_id = $obj['storeData']['productId'];
                     $product = $this->_objectManager->create('Magento\Catalog\Model\Product')->load($product_id);
                     $uploadfolder = $product->getMediaclipUploadFolder();
@@ -324,7 +324,7 @@ class OrderStatusUpdateEndpoint extends Action
                             //save pwinty id to custom table
                             $mediaclipOrderModel = $this->_objectManager->create('Mangoit\MediaclipHub\Model\Orders');
                             $mediaclipOrderModelCollection = $mediaclipOrderModel->getCollection();
-                            $mediaclipOrder = $mediaclipOrderModelCollection->addFieldToFilter('magento_order_id', array('eq' => $orderId));
+                            $mediaclipOrder = $mediaclipOrderModelCollection->addFieldToFilter('magento_order_id', array('eq' => $oidE));
 
                             foreach ($mediaclipOrder as $key => $value) {
 
@@ -549,12 +549,12 @@ class OrderStatusUpdateEndpoint extends Action
             }
             if (isset($obj['status']) && $obj['status']['value'] == 'Shipped') {
                 $projectId = $obj['projectId'];
-                $orderId = $obj['order']['storeData']['orderId'];
+                $oidE = $obj['order']['storeData']['orderId'];
 				// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 				// «Modify orders numeration for Mediaclip»
 				// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
-                $oidI = ikf_eti($orderId); /** @var string $oidI */
-                //$orderId = 16717;
+                $oidI = ikf_eti($oidE); /** @var string $oidI */
+                //$oidE = 16717;
                 try{
 
 					// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
@@ -600,9 +600,9 @@ class OrderStatusUpdateEndpoint extends Action
                         $order->setStatus('complete')
                               ->save();
                         // Success
-                        $loggers = $orderId." Shipment created successfully ".json_decode($item_qtys);
+                        $loggers = $oidE." Shipment created successfully ".json_decode($item_qtys);
                     } else {
-                        $loggers = $orderId." No item found to make shipment.";
+                        $loggers = $oidE." No item found to make shipment.";
                     }
                     $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/mediaclip_orders_shipped_dispactched_status.log');
                     $logger = new \Zend\Log\Logger();
@@ -615,7 +615,7 @@ class OrderStatusUpdateEndpoint extends Action
                               ->save();
 
                     // Error
-                    $loggers = $orderId." Failed to create shipment";
+                    $loggers = $oidE." Failed to create shipment";
                     $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/mediaclip_orders_shipped_dispactched_status.log');
                     $logger = new \Zend\Log\Logger();
                     $logger->addWriter($writer);
