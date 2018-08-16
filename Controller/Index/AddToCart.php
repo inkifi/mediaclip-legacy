@@ -217,11 +217,10 @@ class AddToCart extends \Magento\Framework\App\Action\Action
                      $e,
                      __('%1', $e->getMessage())
                  );
-             } catch (\Exception $e) {
-                 //$this->messageManager->addException($e, __('error123.'));
-             }
-             $quote->collectTotals()->save();
-             $this->getResponse()->setRedirect('/checkout/cart/index');
+			}
+			catch (\Exception $e) {}
+			$quote->collectTotals()->save();
+			$this->getResponse()->setRedirect(df_url('checkout/cart/index')); // 2018-08-17 Dmitry Fedyuk
         }
     }
 
