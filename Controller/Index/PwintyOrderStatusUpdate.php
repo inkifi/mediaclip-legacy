@@ -55,8 +55,12 @@ class PwintyOrderStatusUpdate extends Action
                     $mediaclipOrderModelCollection = $mediaclipOrderModel->getCollection();
                     $mediaclipOrder = $mediaclipOrderModelCollection->addFieldToFilter('pwinty_order_id', array('eq' => '682012'));
                     //print_r($mediaclipOrder->getData()[0]['magento_order_id']);
-                    $orderId = $mediaclipOrder->getData()[0]['magento_order_id'];
-                    $order = $this->_objectManager->create('Magento\Sales\Model\Order')->load($orderId);
+                    $order = $this->_objectManager->create('Magento\Sales\Model\Order')->load(
+						// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+						// «Modify orders numeration for Mediaclip»
+						// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
+						ikf_eti($mediaclipOrder->getData()[0]['magento_order_id'])
+					);
                     // Check if order can be shipped or has already shipped
 
                     if (! $order->canShip()) {
