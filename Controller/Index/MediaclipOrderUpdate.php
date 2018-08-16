@@ -167,7 +167,10 @@ class MediaclipOrderUpdate extends \Magento\Framework\App\Action\Action {
                     $loggerNew->info('before=>>!empty($order_item_details)');
                     if (!empty($order_item_details)) {
                         $loggerNew->info('if=>>!empty($order_item_details)');
-                        $order_id = $order->getEntityId();
+						// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+						// «Modify orders numeration for Mediaclip»
+						// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
+                        $oidE = ikf_ite($order);
                         $order_date = $order->getCreatedAt();
                        
                         $shipping_address = $order->getShippingAddress()->getData();
@@ -264,7 +267,10 @@ class MediaclipOrderUpdate extends \Magento\Framework\App\Action\Action {
 
                         $order_contact = $contact_details;
 
-                        $order_details['orderID'] = $order_id;
+						// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+						// «Modify orders numeration for Mediaclip»
+						// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
+                        $order_details['orderID'] = $oidE;
                         $order_details['orderDate'] = $order_date;
                         $order_details['shipTo'] = $order_ship_to;
                         $order_details['billTo'] = $order_bill_to;
@@ -296,8 +302,11 @@ class MediaclipOrderUpdate extends \Magento\Framework\App\Action\Action {
                         $debugData->info(json_encode($chekcoutMediaclipResponse));
                         $loggerNew->info(json_encode($chekcoutMediaclipResponse));
                         if ($chekcoutMediaclipResponse  && is_array($chekcoutMediaclipResponse)) {
-                            
-                            $mediaClipData['magento_order_id'] = $order_id;
+
+							// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+							// «Modify orders numeration for Mediaclip»
+							// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
+                            $mediaClipData['magento_order_id'] = $oidE;
                             $mediaClipData['mediaclip_order_id'] = $chekcoutMediaclipResponse['id'];
                             $mediaClipData['mediaclip_order_details'] = json_encode($chekcoutMediaclipResponse);
 

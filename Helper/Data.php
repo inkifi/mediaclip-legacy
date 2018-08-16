@@ -810,9 +810,17 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         //$model->setData($postData)->save();
         die('644');
     }
-    public function downloadAndUploadOrderFilesToServer($orderId){
-        //$hubHelper = Mage::helper('zalw_mediaclub/hub');
 
+	/**
+	 * 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+	 * "It looks like the «Mediaclip Order Status» tab on a backend order page is always empty
+	 * because it is wrongly programmed":
+	 * https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/2
+	 * @param $orderId
+	 * @return bool
+	 */
+    function downloadAndUploadOrderFilesToServer($orderId){
+        //$hubHelper = Mage::helper('zalw_mediaclub/hub');
         $response = false;
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
 

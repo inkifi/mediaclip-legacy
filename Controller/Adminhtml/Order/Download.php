@@ -63,10 +63,13 @@ class Download extends \Magento\Sales\Controller\Adminhtml\Order
 
     /**
      * Generate order history for ajax request
-     *
+	 * 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+	 * "It looks like the «Mediaclip Order Status» tab on a backend order page is always empty
+	 * because it is wrongly programmed":
+	 * https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/2
      * @return \Magento\Framework\Controller\Result\Raw
      */
-    public function execute()
+    function execute()
     {
 
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
