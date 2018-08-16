@@ -650,7 +650,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
     public function consolidateCustomerAndGetCustomerToken($storeUserId, $anonymousCustomerId)
     {
         
-        $checkoutWriter = new \Zend\Log\Writer\Stream(BP . '/var/log/checkout.log');
+        $checkoutWriter = new \Zend\Log\Writer\Stream(BP . '/var/log/checkout_login.log');
         $checkoutLogger = new \Zend\Log\Logger();
         $checkoutLogger->addWriter($checkoutWriter);
 
@@ -666,28 +666,23 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $response = curl_exec($curl);
 
         /* Consolidate customer response */
+        $checkoutLogger->info( "====Request for login ====" );
         $checkoutLogger->info(
-                        json_encode(
-                            array(
-                            "=====================start=============================="
-                            ),JSON_PRETTY_PRINT
-                        )
-                    );
-        $checkoutLogger->info(
-                        json_encode(
-                            array(
-                            "End Point " => $endPoint
-                            ),JSON_PRETTY_PRINT
-                        )
-                    );
+                    json_encode(
+                        array(
+                            "Request " =>array(
+                                "End Point"=> $endPoint,
+                                "Header" => $this->GetStoreAuthorizationHeader(),
+                                "Request Data"=>$postRequestBody
+                            )
 
-        $checkoutLogger->info(
-                        json_encode(
-                            array(
-                            "Consolidate Customer And Guest Customer tocke  " => $response
-                            ),JSON_PRETTY_PRINT
-                        )
-                    );
+                        ),
+                        JSON_PRETTY_PRINT
+                    )
+                );
+
+        $checkoutLogger->info( "====Response for login ====" );
+        $checkoutLogger->info($response);
 
 
         $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
