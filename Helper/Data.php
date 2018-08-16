@@ -285,8 +285,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         
         return $mediaclip_customer_id;
     }
-    public  function CreateProject($module, $productId, $theme, $storeProductId, $userToken, $additionalProprties = array(), $mediaclipProductDateOptions)
-    {
+    
+    function CreateProject(
+    	$module, $productId, $theme, $storeProductId,
+		$userToken, $additionalProprties = [], $mediaclipProductDateOptions
+	) {
         $requestBody = array(
             "designerData" => array(
                 "module" => $module,
