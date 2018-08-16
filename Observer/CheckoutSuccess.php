@@ -47,7 +47,7 @@ final class CheckoutSuccess implements ObserverInterface {
 		// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 		// «Modify orders numeration for Mediaclip»
 		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
-        $oid = ikf_ite($o); /** @var int $oid */
+        $oidE = ikf_ite($o); /** @var int $oidE */
 		$supplier = $om->create(mSupplier::class);
 		$supplierDataCollection = $supplier->getCollection()->getData();
 		$supplierData = [];
@@ -192,7 +192,7 @@ final class CheckoutSuccess implements ObserverInterface {
 			$contact_details['idReference']['identifier'] = $customer_id;
 			$contact_details['idReference']['domain'] = 'storeUserId';
 			$order_contact = $contact_details;
-			$order_details['orderID'] = $oid;
+			$order_details['orderID'] = $oidE;
 			$order_details['orderDate'] = $order_date;
 			$order_details['shipTo'] = $order_ship_to;
 			$order_details['billTo'] = $order_bill_to;
@@ -203,7 +203,7 @@ final class CheckoutSuccess implements ObserverInterface {
 			$hubHelper = $om->create(mHelper::class); /** @var mHelper $hubHelper */
 			$chekcoutMediaclipResponse =  $hubHelper->CheckoutWithSingleProduct($mediaClipOrderRequest);
 			if ($chekcoutMediaclipResponse  && is_array($chekcoutMediaclipResponse)) {
-				$mediaClipData['magento_order_id'] = $oid;
+				$mediaClipData['magento_order_id'] = $oidE;
 				$mediaClipData['mediaclip_order_id'] = $chekcoutMediaclipResponse['id'];
 				$mediaClipData['mediaclip_order_details'] = json_encode($chekcoutMediaclipResponse);
 				$resource = $om->get(ResourceConnection::class);
