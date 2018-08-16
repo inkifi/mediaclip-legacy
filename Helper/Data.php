@@ -308,8 +308,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         if (!empty($additionalProprties)) {
             $requestBody['properties'] = array_merge($requestBody['properties'], $additionalProprties);
         }
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->HUBURL = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('api/api_auth/api_url');
+        $this->HUBURL = S::s()->url();
         $curl = $this->BuildCurl("POST", $this->HUBURL . "/projects", $this->GetEndUserAuthorizationHeader($userToken),  $requestBody);
 
         $response = curl_exec($curl);
@@ -392,8 +391,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         if($core_session->getMediaClipUserType() == 'anonymous'){
             $postRequestBody['roles'] = array("Anonymous");
         }
-        $this->HUBURL = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('api/api_auth/api_url');
-        
+        $this->HUBURL = S::s()->url();
         $checkoutWriter = new \Zend\Log\Writer\Stream(BP . '/var/log/checkout.log');
         $checkoutLogger = new \Zend\Log\Logger();
         $checkoutLogger->addWriter($checkoutWriter);
@@ -511,10 +509,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         }
     }
 
-    public  function renewMediaClipToken($userToken)
-    {
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->HUBURL = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('api/api_auth/api_url');
+    function renewMediaClipToken($userToken) {
+        $this->HUBURL = S::s()->url();
         $curl = $this->BuildCurl("POST", $this->HUBURL . "/auth/jwt/renew", $this->GetStoreAuthorizationHeader(), $userToken);
         $response = curl_exec($curl);
         $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
@@ -575,8 +571,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         {
             throw new Exception("Cannot renew token because it differs from expected token");
         }
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->HUBURL = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('api/api_auth/api_url');
+        $this->HUBURL = S::s()->url();
         $curl = $this->BuildCurl("POST", $this->HUBURL . "/auth/jwt/renew", $this->GetStoreAuthorizationHeader(), $postRequestBody);
         $response = curl_exec($curl);
         $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
