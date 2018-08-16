@@ -511,32 +511,24 @@ class OrderStatusUpdateEndpoint extends Action
                            'shipTo' => array('name' => $name, 'address1'=> $street1,'address2'=>$street2,'town'=>$city,'postcode'=>$postcode,'isoCountry'=>$countryCode,'state'=>$region,'email'=>$email,'phone'=>$telephone),
                            'carrier' => array('alias'=>$shippingMethod)
                             ));
-
-                            $dir = $this->_objectManager->get('\Magento\Framework\Filesystem\DirectoryList');            
-                            $base = $dir->getRoot();
-
-                            $filesUploadPath = '/home/canvaspr/dev2.inkifi.com/html/ftp_json25june/'.$orderDirDate.'/'.$orderIncrementId.'/'.$orderItemID.'/'.$mediaClipOrdersData['product_label'];
-                            
-
-                            //$filesUploadPath = $base.'/ftp_json25june/'.$orderDirDate.'/'.$orderIncrementId.'/'.$orderItemID.'/'.$mediaClipOrdersData['product_label'];
+							// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+							// "Replace the «/home/canvaspr/dev2.inkifi.com/html/ftp_json25june/»
+							// hardcoded filesystem path with a dynamics one":
+							// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/3
+                            $filesUploadPath = df_cc_path(
+                            	BP, 'ftp_json', $orderDirDate, $orderIncrementId
+								,$orderItemID, $mediaClipOrdersData['product_label']
+							);
                             $logger->info(json_encode($filesUploadPath));
-                            $args = $this->connectRemoteServer();
-                            $open = $this->sftp->open($args);
-
                             /* Check SKU code here */
-
                             $jsonFileName = $orderIncrementId.'.json';
                             $jsonFile = $filesUploadPath.'/'.$jsonFileName;
                             $jsonRemoteFile = '/Inkifi/'.$jsonFileName;
-
                             if (!is_dir($filesUploadPath)) {
-
                                 $this->file->mkdir($filesUploadPath);   
                             } else {
-
                                 $this->file->mkdir($filesUploadPath);  
                             }
-
                             $json_handler = fopen ($jsonFile, 'w+');
                             fwrite($json_handler, json_encode($array,JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT));   //here it will print the array pretty
                             fclose($json_handler);
