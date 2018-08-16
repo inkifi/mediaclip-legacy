@@ -209,10 +209,17 @@ final class CheckoutSuccess implements ObserverInterface {
 				$resource = $om->get(ResourceConnection::class);
 				$connection = $resource->getConnection();
 				$tableName = $resource->getTableName('mediaclip_orders');
-				$sql =
-					"Insert Into " . $tableName . " (magento_order_id, mediaclip_order_id, mediaclip_order_details) 					Values (".$mediaClipData['magento_order_id'].",'".$mediaClipData['mediaclip_order_id']
-					."','".$mediaClipData['mediaclip_order_details']."')"
-				;
+// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+// «Modify orders numeration for Mediaclip»
+// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
+$sql =
+	"INSERT INTO $tableName (magento_order_id, mediaclip_order_id, mediaclip_order_details) "
+	. "VALUES ( "
+		. "'{$mediaClipData['magento_order_id']}'"
+		. ", '{$mediaClipData['mediaclip_order_id']}'"
+		. ", '{$mediaClipData['mediaclip_order_details']}'"
+	.")"
+;
 				$connection->query($sql);
 			}
 		}
