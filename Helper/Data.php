@@ -3,6 +3,10 @@
  * Copyright © 2015 Mangoit . All rights reserved.
  */
 namespace Mangoit\MediaclipHub\Helper;
+// 2018-08-17 Dmitry Fedyuk
+// «Force Mediaclip to use the relevant API credentials in the multi-store mode»
+// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/4
+use Inkifi\Core\Settings as S;
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
 
@@ -455,14 +459,17 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         
         return $userTokenInfo;
     }
-    private  function GetStoreAuthorizationHeader()
-    {
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->STOREAPPID = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('api/api_auth/api_id');
-        $this->STORESECRET = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('api/api_auth/api_key');
+
+    private function GetStoreAuthorizationHeader() {
+		// 2018-08-17 Dmitry Fedyuk
+		// «Force Mediaclip to use the relevant API credentials in the multi-store mode»
+		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/4
+        $this->STOREAPPID = S::s()->id();
+        $this->STORESECRET = S::s()->key();
         $authorizationHeader = 'HubApi ' . base64_encode($this->STOREAPPID . ":" . $this->STORESECRET);
         return $authorizationHeader;
     }
+    
     public function checkUserToken($postData){
 
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
@@ -604,18 +611,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $checkoutWriter = new \Zend\Log\Writer\Stream(BP . '/var/log/checkout.log');
         $checkoutLogger = new \Zend\Log\Logger();
         $checkoutLogger->addWriter($checkoutWriter);
-        
-
-
         $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/helper.log');
         $logger = new \Zend\Log\Logger();
         $logger->addWriter($writer);
         $logger->info(json_encode($postRequestBody));
         $checkoutLogger->info(json_encode($postRequestBody));
-        $strJson = json_encode($postRequestBody);
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->HUBURL = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('api/api_auth/api_url');
-        $this->STOREAPPID = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('api/api_auth/api_id');
+		// 2018-08-17 Dmitry Fedyuk
+		// «Force Mediaclip to use the relevant API credentials in the multi-store mode»
+		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/4
+        $this->HUBURL = S::s()->url();
+        $this->STOREAPPID = S::s()->id();
         $curl = $this->BuildCurl("POST", $this->HUBURL . "/stores/" . $this->STOREAPPID . "/orders", $this->GetStoreAuthorizationHeader(), $postRequestBody);
         $response = curl_exec($curl);
         
@@ -655,16 +660,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         $checkoutLogger->addWriter($checkoutWriter);
 
         $postRequestBody['storeData'] = array("anonymousUserId" => $anonymousCustomerId);
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $this->HUBURL = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('api/api_auth/api_url');
-       $key  = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('api/api_auth/api_id');
-        //$key = $this->STOREAPPID;
-        $endPoint = $this->HUBURL."/stores/".$key."/users/".$storeUserId."/consolidation";
-
+		// 2018-08-17 Dmitry Fedyuk
+		// «Force Mediaclip to use the relevant API credentials in the multi-store mode»
+		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/4
+        $this->HUBURL = S::s()->url();
+        $endPoint = $this->HUBURL."/stores/".S::s()->id()."/users/".$storeUserId."/consolidation";
         $curl = $this->BuildCurl("POST", $endPoint, $this->GetStoreAuthorizationHeader(), $postRequestBody);
-        
         $response = curl_exec($curl);
-
         /* Consolidate customer response */
         $checkoutLogger->info( "====Request for login ====" );
         $checkoutLogger->info(
@@ -699,76 +701,20 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         
         return $userTokenInfo;
     }
-    public function getMediaClipProjects($storeUserId){
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $hub_url = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('api/api_auth/api_url');
-        $key = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('api/api_auth/api_id');
-        //$hub_url = $this->HUBURL;
-        //$key = $this->STOREAPPID;
-
-        $service_url = $hub_url.'/stores/'.$key.'/users/'.$storeUserId.'/projects/';
-
+    public function getMediaClipProjects($storeUserId) {
+		// 2018-08-17 Dmitry Fedyuk
+		// «Force Mediaclip to use the relevant API credentials in the multi-store mode»
+		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/4
+        $service_url = S::s()->url().'/stores/'.S::s()->id().'/users/'.$storeUserId.'/projects/';
         $curl = curl_init($service_url);
-
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
         $authorization = $this->GetStoreAuthorizationHeader();
-
         curl_setopt($curl, CURLOPT_HTTPHEADER, array(
             'Accept: application/json',
             'Authorization: ' . $authorization,
         ));
         
         $curl_response = curl_exec($curl);
-        
-        if ($curl_response === false) {
-            $info = curl_getinfo($curl);
-            curl_close($curl);
-            die('error occured during curl exec. Additioanl info: ' . var_export($info));
-        }
-
-        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-        
-        curl_close($curl);
-
-        if ($httpCode != 200)
-        {
-            return array();
-            //self::ThrowHttpException("Error in the request made: ", $httpCode, $response);
-        }
-
-        $decoded = json_decode($curl_response);
-
-        return $decoded;
-    }
-
-    /*For testing purpose*/
-    public function getMediaClipProjectsTest($storeUserId){
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $hub_url = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('api/api_auth/api_url');
-        $key = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('api/api_auth/api_id');
-        //$hub_url = $this->HUBURL;
-        //$key = $this->STOREAPPID;
-
-        $service_url = $hub_url.'/stores/'.$key.'/users/'.$storeUserId.'/projects/';
-        echo $service_url;
-        die;
-        
-        $curl = curl_init($service_url);
-
-        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
-        $authorization = $this->GetStoreAuthorizationHeader();
-
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-            'Accept: application/json',
-            'Authorization: ' . $authorization,
-        ));
-        
-        $curl_response = curl_exec($curl);
-
-        print_r($curl_response);
-        die();
         
         if ($curl_response === false) {
             $info = curl_getinfo($curl);
@@ -1108,23 +1054,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         //}    
         return $response;
     }
-    public function getMediaClipOrders($storeOrderId){
-
-        //$hub_url = $this->HUBURL;
-        //$key = $this->STOREAPPID;
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $hub_url = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('api/api_auth/api_url');
-       $key  = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('api/api_auth/api_id');
+    
+    function getMediaClipOrders($storeOrderId) {
         //GET https://api.mediacliphub.com/stores/{YOUR-KEY}/orders/{YOUR-ORDER-ID}
-
-        $service_url = $hub_url.'/stores/'.$key.'/orders/'.$storeOrderId;
-
+		// 2018-08-17 Dmitry Fedyuk
+		// «Force Mediaclip to use the relevant API credentials in the multi-store mode»
+		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/4
+        $service_url = S::s()->url().'/stores/'.S::s()->id().'/orders/'.$storeOrderId;
         $curl = curl_init($service_url);
-
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
         $authorization = $this->GetStoreAuthorizationHeader();
-
         curl_setopt($curl, CURLOPT_HTTPHEADER, array(
             'Accept: application/json',
             'Authorization: ' . $authorization,
@@ -1224,22 +1163,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             fclose ($file);
         }
     }
-    public function getMediaClipOrderLinesDetails($storeOrderLineId){
 
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $hub_url = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('api/api_auth/api_url');
-       $key  = $objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('api/api_auth/api_id');
-
+    function getMediaClipOrderLinesDetails($storeOrderLineId){
         //GET https://api.mediacliphub.com/stores/{YOUR-KEY}/orders/{YOUR-ORDER-ID}
-
-        $service_url = $hub_url.'/lines/'.$storeOrderLineId;
-
+		// 2018-08-17 Dmitry Fedyuk
+		// «Force Mediaclip to use the relevant API credentials in the multi-store mode»
+		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/4
+        $service_url = S::s()->url().'/lines/'.$storeOrderLineId;
         $curl = curl_init($service_url);
-
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-
         $authorization = $this->GetStoreAuthorizationHeader();
-
         curl_setopt($curl, CURLOPT_HTTPHEADER, array(
             'Accept: application/json',
             'Authorization: ' . $authorization,
