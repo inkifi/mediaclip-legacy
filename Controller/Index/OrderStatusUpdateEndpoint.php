@@ -519,6 +519,10 @@ class OrderStatusUpdateEndpoint extends Action
 									,$orderItemID, $mediaClipOrdersData['product_label']
 								);
 								$logger->info(json_encode($filesUploadPath));
+								// 2018-08-20 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+								// «FTP upload to ftp.pureprint.com has stopped working»
+								// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/6
+								$this->sftp->open($this->connectRemoteServer());
 								/* Check SKU code here */
 								$jsonFileName = $orderIncrementId.'.json';
 								$jsonFile = $filesUploadPath.'/'.$jsonFileName;
