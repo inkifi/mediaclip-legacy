@@ -4,6 +4,7 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Result\PageFactory;
+use Mangoit\MediaclipHub\Session as mSession;
 class RenewMediaclipToken extends Action {
 	/**
 	 * @param Context $context
@@ -19,10 +20,9 @@ class RenewMediaclipToken extends Action {
 	 * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
 	 */
 	function execute() {
-		$s = df_customer_session(); /** @var Session $s */
-		if ($s->getMediaClipToken()) {
-			$mediaclipToken = $s->getMediaClipToken()->token;
-			$hubHelperResponse = $this->_objectManager->create('Mangoit\MediaclipHub\Helper\Data')->RenewToken($mediaclipToken);
+		$s = df_customer_session(); /** @var Session|mSession $s */
+		if ($to = $s->getMediaClipToken()) { /** @var object|null to */
+			$hubHelperResponse = $this->_objectManager->create('Mangoit\MediaclipHub\Helper\Data')->RenewToken($to->token);
 			if (!empty($hubHelperResponse)) {
 				$s->setMediaClipToken($hubHelperResponse);
 				return $hubHelperResponse;
