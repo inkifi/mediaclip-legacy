@@ -1,12 +1,13 @@
 <?php
 namespace Mangoit\MediaclipHub\Controller\Index;
+use Df\Framework\W\Result\Json;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Action;
 use Mangoit\MediaclipHub\Session as mSession;
 /**
  * 2018-09-11
  * https://doc.mediacliphub.com/pages/Getting%20Started/yourFirstIntegration.html#renew-token
- * The renew-token page
+ * «The renew-token page
  * The user token is short-lived.
  * If you leave the application open a long time, the session will expire.
  * To keep the "session" alive, the Mediaclip Designer makes periodic HTTP calls to a special `renew-token` page.
@@ -51,20 +52,49 @@ use Mangoit\MediaclipHub\Session as mSession;
  * NOTE: For increased security, we recommend that you verify
  * that the token you receive in the `renew-token` page is indeed refreshed by the correct user.
  * You will need to store who owns the token (e.g. in a memory cache or temporary database),
- * and verify that the user (e.g. using the cookie/session) is still logged in, and owns that token.
+ * and verify that the user (e.g. using the cookie/session) is still logged in, and owns that token.»
  */
 class RenewMediaclipToken extends Action {
 	/**
 	 * 2018-09-11
-	 * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface
+	 * @return Json
 	 */
 	function execute() {
-		$s = df_customer_session(); /** @var Session|mSession $s */
-		if ($to = $s->getMediaClipToken()) { /** @var object|null to */
-			if ($r = mc_h()->RenewToken($to->token)) {
-				$s->setMediaClipToken($r);
+		try {
+			$s = df_customer_session(); /** @var Session|mSession $s */
+			/** @var object|array(string => mixed) $r */
+			if (!($t = $s->getMediaClipToken())) { /** @var object|null $t */
+				/**
+				 * 2018-09-11
+				 * «If the user's session is no longer valid on your eCommerce website, redirect to login page.
+				 * If the store's session is not valid, return a redirect URL (e.g. the store's login page)
+				 * to force the user to re-login.
+				 * Do so by returning the following JSON:
+				 * 		{"redirectUrl": "http://store.example.com/login"}
+				 * https://doc.mediacliphub.com/pages/Getting%20Started/yourFirstIntegration.html#renew-token
+				 * »
+				 */
+				$r = ['redirectUrl' => df_customer_url_h()->getLoginUrl()];
 			}
-			return $r;
+			else {
+				/**
+				 * 2018-09-11
+				 * «Read the POST body, which looks like this JSON:
+				 * 		{"token": "some-very-long-and-cryptic-token"}
+				 * »
+				 * https://doc.mediacliphub.com/pages/Getting%20Started/yourFirstIntegration.html#renew-token
+				 */
+				$req = json_decode(@file_get_contents('php://input')); /** @var object $req */
+				if ($t->token !== $req->token) {
+					df_error("Magento token: «{$t->token}», Mediaclip token: «{$req->token}».");
+				}
+				$s->setMediaClipToken($r = mc_h()->RenewToken($req));
+			}
 		}
+		catch (\Exception $e) {
+			$r = ['error' => $e->getMessage()];
+			df_log($e);
+		}
+		return Json::i($r);
 	}
 }

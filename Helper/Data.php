@@ -327,7 +327,17 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 		$projectResponse = json_decode($response);
 		return $projectResponse->id;
 	}
-	private  function BuildCurl($method, $url, $authorization, $data = false)
+
+	/**
+	 * 2018-09-11
+	 * @used-by RenewToken()
+	 * @param $method
+	 * @param $url
+	 * @param $authorization
+	 * @param object|array|false $data [optional]
+	 * @return resource
+	 */
+	private function BuildCurl($method, $url, $authorization, $data = false)
 	{
 		$curl = curl_init();
 		curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
@@ -571,24 +581,21 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 	 * 2018-09-11
 	 * The end user token has a short life span. A token can be extended.
 	 * @used-by \Mangoit\MediaclipHub\Controller\Index\RenewMediaclipToken::execute()
-	 * @param $userToken
+	 * @param object $req
 	 * @return array|mixed
 	 */
-	final function RenewToken($userToken) {
-		$req = json_decode(@file_get_contents('php://input')); /** @var object $req */
-		if ($userToken !== $req->token) {
-			throw new \Exception('Cannot renew token because it differs from expected token');
-		}
+	final function RenewToken($req) {
 		$this->HUBURL = S::s()->url();
-		$curl = $this->BuildCurl("POST", $this->HUBURL . "/auth/jwt/renew", $this->GetStoreAuthorizationHeader(), $req);
-		$response = curl_exec($curl);
+		$curl = $this->BuildCurl(
+			'POST', "{$this->HUBURL}/auth/jwt/renew", $this->GetStoreAuthorizationHeader(), $req
+		);
+		$res = curl_exec($curl);
 		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 		curl_close($curl);
 		if ($httpCode != 200) {
-			return [];
+			df_error("/auth/jwt/renew failed with the code $httpCode");
 		}
-		$userTokenInfo = json_decode($response);
-		return $userTokenInfo;
+		return json_decode($res);
 	}
 	
 	function getMediaClipUserToken(){
