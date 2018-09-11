@@ -93,7 +93,7 @@ class RenewMediaclipToken extends Action {
 		}
 		catch (\Exception $e) {
 			$r = ['error' => $e->getMessage()];
-			df_log($e);
+			ikf_log($e);
 		}
 		return Json::i($r);
 	}
