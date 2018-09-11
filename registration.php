@@ -1,7 +1,3 @@
 <?php
-
-\Magento\Framework\Component\ComponentRegistrar::register(
-    \Magento\Framework\Component\ComponentRegistrar::MODULE,
-    'Mangoit_MediaclipHub',
-    __DIR__
-);
+use Magento\Framework\Component\ComponentRegistrar as R;
+R::register(R::MODULE, 'Mangoit_MediaclipHub', __DIR__);
