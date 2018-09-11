@@ -574,7 +574,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 	 * @param $userToken
 	 * @return array|mixed
 	 */
-	function RenewToken($userToken) {
+	final function RenewToken($userToken) {
 		$postRequestBody = json_decode(@file_get_contents('php://input'));
 		if ($userToken !== $postRequestBody->token) {
 			throw new \Exception('Cannot renew token because it differs from expected token');
@@ -584,10 +584,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 		$response = curl_exec($curl);
 		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 		curl_close($curl);
-		if ($httpCode != 200)
-		{
-			return array();
-			//self::ThrowHttpException("Could not renew Hub user token", $httpCode, $response);
+		if ($httpCode != 200) {
+			return [];
 		}
 		$userTokenInfo = json_decode($response);
 		return $userTokenInfo;
