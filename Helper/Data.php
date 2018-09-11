@@ -575,12 +575,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 	 * @return array|mixed
 	 */
 	final function RenewToken($userToken) {
-		$postRequestBody = json_decode(@file_get_contents('php://input'));
-		if ($userToken !== $postRequestBody->token) {
+		$req = json_decode(@file_get_contents('php://input')); /** @var object $req */
+		if ($userToken !== $req->token) {
 			throw new \Exception('Cannot renew token because it differs from expected token');
 		}
 		$this->HUBURL = S::s()->url();
-		$curl = $this->BuildCurl("POST", $this->HUBURL . "/auth/jwt/renew", $this->GetStoreAuthorizationHeader(), $postRequestBody);
+		$curl = $this->BuildCurl("POST", $this->HUBURL . "/auth/jwt/renew", $this->GetStoreAuthorizationHeader(), $req);
 		$response = curl_exec($curl);
 		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 		curl_close($curl);
