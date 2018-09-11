@@ -52,7 +52,7 @@
         $token = $this->getFeedback();
             if ($token) {
                 
-                $objectManager->create('Mangoit\MediaclipHub\Helper\Data')->IncludeJavascriptToStartDesigner( $projectId, "designerContainer", $mode, $token );
+                mc_h()->IncludeJavascriptToStartDesigner( $projectId, "designerContainer", $mode, $token );
             }
         ?>
         

@@ -45,8 +45,7 @@ class Customizeproject extends Action
         $resultPage = $this->_resultPageFactory->create();
         //$resultPage->getConfig()->getTitle()->prepend(__(' heading '));
         $params = $this->getRequest()->getParams();
-        $helper = $this->_objectManager->create('Mangoit\MediaclipHub\Helper\Data');
-        if ($helper->checkUserToken($params)) {
+        if (mc_h()->checkUserToken($params)) {
            
             $block = $resultPage->getLayout()
                     ->createBlock('Magento\Framework\View\Element\Template')

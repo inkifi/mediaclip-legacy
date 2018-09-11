@@ -140,7 +140,7 @@ class OrderStatusUpdateEndpoint extends Action
 
                 if ($oidE) {
 
-                    $helper = $this->_objectManager->create('Mangoit\MediaclipHub\Helper\Data');
+                    $helper = mc_h();
                     $response = false;
                     $message = '';
                     //Set mediaclip order status to 1 as the order is downloaded
@@ -427,7 +427,7 @@ class OrderStatusUpdateEndpoint extends Action
 									$baseUrl = $store->getBaseUrl();
 									$array['destination']['name'] = 'pureprint';
 									$array['orderData']['sourceOrderId'] = $mediaclipOrderDetails->storeData->orderId;
-									$helper = $this->_objectManager->create('Mangoit\MediaclipHub\Helper\Data');
+									$helper = mc_h();
 									$linesDetails = $helper->getMediaClipOrderLinesDetails($lines->id);
 									foreach ($linesDetails->files as $key => $fileDetails) {
 										$array1['sku'] = $mediaClipOrdersData['plu'];

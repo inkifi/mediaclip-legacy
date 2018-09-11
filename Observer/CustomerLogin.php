@@ -19,7 +19,7 @@ class CustomerLogin implements ObserverInterface
         $session = $objectManager->get('Magento\Customer\Model\Session');
         
         $storeUserId = $customer->getEntityId();
-        $hubHelper = $objectManager->create('Mangoit\MediaclipHub\Helper\Data');
+        $hubHelper = mc_h();
 
         $userConsolidationWriter = new \Zend\Log\Writer\Stream(BP . '/var/log/user_login_consolidation.log');
         $userConsolidatedLog = new \Zend\Log\Logger();
@@ -106,7 +106,7 @@ class CustomerLogin implements ObserverInterface
            
         }else{
 
-            $helper = $objectManager->create('Mangoit\MediaclipHub\Helper\Data');
+            $helper = mc_h();
             $storeUserId = $helper->getCustomerId();
             $session = $objectManager->get('Magento\Customer\Model\Session');
             $anonymousCustomerId = $session->getMediaClipUserId();

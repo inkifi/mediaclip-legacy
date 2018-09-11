@@ -15,11 +15,8 @@ class Mediaclipsuppliers extends \Magento\Eav\Model\Entity\Attribute\Source\Abst
      */
     public function getAllOptions()
     {
- //die('ghjg');
         if (!$this->_options) {
-            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-            $helper = $objectManager->create('Mangoit\MediaclipHub\Helper\Data');
-            $this->_options = $helper->getSuppliers();
+            $this->_options = mc_h()->getSuppliers();
         }
         return $this->_options;
     }

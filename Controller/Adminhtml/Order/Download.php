@@ -77,8 +77,6 @@ class Download extends \Magento\Sales\Controller\Adminhtml\Order
         $orderId = $this->getRequest()->getParam('order_id');
         //echo $orderId;
         if ($orderId) {
-            $helper = $objectManager->create('Mangoit\MediaclipHub\Helper\Data');
-            
             $response = false;
             $message = '';
 
@@ -91,7 +89,7 @@ class Download extends \Magento\Sales\Controller\Adminhtml\Order
                 $model->setId($mediaclipOrderData['id']);
                 $model->setOrderDownloadStatus(1);
                 $model->save();
-                $response = $helper->downloadAndUploadOrderFilesToServer($orderId);
+                $response = mc_h()->downloadAndUploadOrderFilesToServer($orderId);
 
             } else if($mediaclipOrderData && $mediaclipOrderData['order_download_status'] == 1){
                 $message = 'Order already downloaded.';

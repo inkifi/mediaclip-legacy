@@ -15,11 +15,8 @@ class Giftingproduct extends \Magento\Eav\Model\Entity\Attribute\Source\Abstract
      */
     public function getAllOptions()
     {
- //die('ghjg');
         if (!$this->_options) {
-            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-            $helper = $objectManager->create('Mangoit\MediaclipHub\Helper\Data');
-            $this->_options = $helper->getGiftingProduct();
+            $this->_options = mc_h()->getGiftingProduct();
         }
         return $this->_options;
     }

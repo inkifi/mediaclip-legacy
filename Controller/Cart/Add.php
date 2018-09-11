@@ -43,7 +43,7 @@ die('21');*/
                 //$params['uenc'] = str_replace(',', '', (string)$params['uenc']);
                 $session->setMediaclip($params);
 
-                $editorUrl = $this->_objectManager->get('Mangoit\MediaclipHub\Helper\Data')->getEditorLinkUrl($product, $params);
+                $editorUrl = mc_h()->getEditorLinkUrl($product, $params);
                //echo "<pre>"; print_r($params);
                 $this->getResponse()->setRedirect($editorUrl);
             }else{

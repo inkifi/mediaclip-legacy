@@ -15,11 +15,8 @@ class Dustjacketpopup extends \Magento\Eav\Model\Entity\Attribute\Source\Abstrac
      */
     public function getAllOptions()
     {
- //die('ghjg');
         if (!$this->_options) {
-            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-            $helper = $objectManager->create('Mangoit\MediaclipHub\Helper\Data');
-            $this->_options = $helper->getDustjacketpopup();
+            $this->_options = mc_h()->getDustjacketpopup();
         }
         return $this->_options;
     }

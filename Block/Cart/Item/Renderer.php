@@ -29,8 +29,7 @@ class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
         if ($product->getAttributeSetId() != 4) {
             if ($mediaclipProjectid) {
                 $additional = array('mode' => 'editCartProject', 'projectId' => "$mediaclipProjectid");
-                $helper = $objectManager->create('Mangoit\MediaclipHub\Helper\Data');
-                return $helper->getEditorUrl($product, $additional);
+                return mc_h()->getEditorUrl($product, $additional);
             }
         }
         return $product->getUrlModel()->getUrl($product);

@@ -15,11 +15,8 @@ class Mediaclipmodule extends \Magento\Eav\Model\Entity\Attribute\Source\Abstrac
      */
     public function getAllOptions()
     {
- //die('ghjg');
         if (!$this->_options) {
-            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-            $helper = $objectManager->create('Mangoit\MediaclipHub\Helper\Data');
-            $this->_options = $helper->getModules();
+            $this->_options = mc_h()->getModules();
         }
         return $this->_options;
     }

@@ -1,7 +1,7 @@
 <?php //$projects = $this->getProjects();
 
 $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-$hubHelper = $objectManager->create('Mangoit\MediaclipHub\Helper\Data');
+$hubHelper = mc_h();
 
 $customerSession = $objectManager->get('Magento\Customer\Model\Session');
 if($customerSession->isLoggedIn()) {

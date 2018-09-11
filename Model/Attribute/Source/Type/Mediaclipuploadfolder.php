@@ -15,12 +15,8 @@ class Mediaclipuploadfolder extends \Magento\Eav\Model\Entity\Attribute\Source\A
      */
     public function getAllOptions()
     {
- //die('ghjg');
         if (!$this->_options) {
-
-            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-            $helper = $objectManager->create('Mangoit\MediaclipHub\Helper\Data');
-            $this->_options = $helper->getuploadFolder();    
+            $this->_options = mc_h()->getuploadFolder();    
         }
         return $this->_options;
     }

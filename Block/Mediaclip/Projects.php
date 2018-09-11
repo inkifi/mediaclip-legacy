@@ -14,12 +14,8 @@ class Projects extends \Magento\Framework\View\Element\Template
 
     public function  getProjects() 
     {
-
-    	$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $hubHelper = $objectManager->create('Mangoit\MediaclipHub\Helper\Data');
-
+        $hubHelper = mc_h();
         $storeUserId = $hubHelper->getCustomerId();
-
     	$projects = $hubHelper->getMediaClipProjects($storeUserId);
         return $projects->projects;
     }

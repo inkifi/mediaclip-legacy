@@ -22,7 +22,7 @@ class RenewMediaclipToken extends Action {
 	function execute() {
 		$s = df_customer_session(); /** @var Session|mSession $s */
 		if ($to = $s->getMediaClipToken()) { /** @var object|null to */
-			$hubHelperResponse = $this->_objectManager->create('Mangoit\MediaclipHub\Helper\Data')->RenewToken($to->token);
+			$hubHelperResponse = mc_h()->RenewToken($to->token);
 			if (!empty($hubHelperResponse)) {
 				$s->setMediaClipToken($hubHelperResponse);
 				return $hubHelperResponse;

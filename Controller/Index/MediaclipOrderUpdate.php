@@ -279,8 +279,6 @@ class MediaclipOrderUpdate extends \Magento\Framework\App\Action\Action {
 
                         $mediaClipOrderRequest['orderRequestHeader'] = $order_details;
                         $mediaClipOrderRequest['itemOut'] = $order_item_details;
-
-                        $hubHelper = $_objectManager->create('Mangoit\MediaclipHub\Helper\Data');
                        //echo "<pre>"; print_r($mediaClipOrderRequest);
                         $debugData->info(json_encode($mediaClipOrderRequest));
                         $loggerNew->info(json_encode($mediaClipOrderRequest));
@@ -290,7 +288,7 @@ class MediaclipOrderUpdate extends \Magento\Framework\App\Action\Action {
                         $checkoutLogger = new \Zend\Log\Logger();
                         $checkoutLogger->addWriter($checkoutWriter);
 
-                        $chekcoutMediaclipResponse =  $hubHelper->CheckoutWithSingleProduct($mediaClipOrderRequest);
+                        $chekcoutMediaclipResponse =  mc_h()->CheckoutWithSingleProduct($mediaClipOrderRequest);
                         $checkoutLogger->info(
                         json_encode(
                             array(
@@ -331,7 +329,6 @@ $sql =
                                 $connection->query($sql);
                                 $debugData->info(json_encode($sql));
                                 $loggerNew->info(json_encode($sql));
-                                //$hubHelper->saveMediaclipOrder($mediaClipData);
                             }catch(Exception $e){
                                 echo $e->getMessage(); die;
                             }

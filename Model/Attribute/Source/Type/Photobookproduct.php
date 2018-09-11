@@ -15,11 +15,8 @@ class Photobookproduct extends \Magento\Eav\Model\Entity\Attribute\Source\Abstra
      */
     public function getAllOptions()
     {
- //die('ghjg');
         if (!$this->_options) {
-            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-            $helper = $objectManager->create('Mangoit\MediaclipHub\Helper\Data');
-            $this->_options = $helper->getPhotobookProduct();
+            $this->_options = mc_h()->getPhotobookProduct();
         }
         return $this->_options;
     }

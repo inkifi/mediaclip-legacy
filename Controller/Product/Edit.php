@@ -76,7 +76,7 @@ class Edit extends \Magento\Framework\App\Action\Action {
             if (isset($product_options['options'])) {
                 $additionalProprties['option_details'] = json_encode($product_options['options']);
             }
-            $helper = $this->_objectManager->create('Mangoit\MediaclipHub\Helper\Data');
+            $helper = mc_h();
             $storeUserId = $helper->getCustomerId();
             $checkoutWriter = new \Zend\Log\Writer\Stream(BP . '/var/log/request_token_productedit.log');
             $checkoutLogger = new \Zend\Log\Logger();

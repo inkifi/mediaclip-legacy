@@ -42,8 +42,7 @@ class ProductInformation extends \Magento\Backend\Block\Widget\Form\Generic impl
         $form->setHtmlIdPrefix('page_');
 
         $fieldset = $form->addFieldset('base_fieldset', ['legend' => __('Product Details')]);
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $helper = $objectManager->create('Mangoit\MediaclipHub\Helper\Data');
+        $helper = mc_h();
         $moduleValues = $helper->getModules();
         $themeValues = $helper->getThemes();
         $dust_jacket_popup = $helper->getDustjacketpopup();

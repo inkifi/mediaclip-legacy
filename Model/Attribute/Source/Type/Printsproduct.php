@@ -15,11 +15,8 @@ class Printsproduct extends \Magento\Eav\Model\Entity\Attribute\Source\AbstractS
      */
     public function getAllOptions()
     {
- //die('ghjg');
         if (!$this->_options) {
-            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-            $helper = $objectManager->create('Mangoit\MediaclipHub\Helper\Data');
-            $this->_options = $helper->getPrintProduct();
+            $this->_options = mc_h()->getPrintProduct();
         }
         return $this->_options;
     }
