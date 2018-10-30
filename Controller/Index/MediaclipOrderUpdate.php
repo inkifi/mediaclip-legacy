@@ -213,8 +213,10 @@ class MediaclipOrderUpdate extends \Magento\Framework\App\Action\Action {
                             //print_r($order_item_details);
 							if (
 								// 2018-07-04 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
-								isset($order_item_details[0]['supplierId'])
-								&& $order_item_details[0]['supplierId']['value'] == 'OneFlowCloud'
+								//isset($order_item_details[0]['supplierId'])
+								//&& $order_item_details[0]['supplierId']['value'] == 'OneFlowCloud'
+								// 2018-10-30 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+								'OneFlowCloud' === @$item_supplier_id['value']
 							) {
                                 $carrierIdentifier_carrier['domain'] = 'alias';
                                 $carrierIdentifier_carrier['value'] = $order->getShippingMethod();
@@ -283,6 +285,21 @@ class MediaclipOrderUpdate extends \Magento\Framework\App\Action\Action {
                         $debugData->info(json_encode($mediaClipOrderRequest));
                         $loggerNew->info(json_encode($mediaClipOrderRequest));
 
+                        /**
+						 * 2018-10-30 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+						 * «Log all requests for the OneFlow on-demand print API»
+						 * https://www.upwork.com/ab/f/contracts/20996991
+						 * https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/8
+						 */
+                        if (
+                        	//isset($order_item_details)
+							//&& isset($order_item_details[0]['supplierId'])
+							//&& 'OneFlowCloud' === $order_item_details[0]['supplierId']['value']
+								// 2018-10-30 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+							'OneFlowCloud' === @$item_supplier_id['value']
+						) {
+							df_report("oneflow/request-$oidE.json", df_json_encode($mediaClipOrderRequest));
+						}
 
                         $checkoutWriter = new \Zend\Log\Writer\Stream(BP . '/var/log/checkout.log');
                         $checkoutLogger = new \Zend\Log\Logger();
