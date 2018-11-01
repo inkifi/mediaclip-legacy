@@ -24,12 +24,13 @@ https://www.upwork.com/ab/f/contracts/20288301 -->
 <!-- 2018-06-27 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 "Monitor orders and pass the «Payment Complete» ones to MediaClip Photobook in my Magento 2 store":
 https://www.upwork.com/ab/f/contracts/20295611 -->
-    <event name="checkout_submit_all_after">
+	<event name='sales_order_payment_place_start'>
 		<observer
-			instance='Mangoit\MediaclipHub\Observer\CheckoutSubmitAllAfter'
-			name='Mangoit\MediaclipHub\Observer\CheckoutSubmitAllAfter'
+			instance='Mangoit\MediaclipHub\Observer\PaymentPlaceStart'
+			name='Mangoit\MediaclipHub\Observer\PaymentPlaceStart'
 		/>
-    </event>
+	</event>
+
 	<event name="customer_login">
         <observer name="customer_login_observer" instance="Mangoit\MediaclipHub\Observer\CustomerLogin" />
     </event>
