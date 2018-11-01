@@ -140,8 +140,10 @@ final class CheckoutSuccess implements ObserverInterface {
 			if ($item_supplier_id) {
 				if (
 					// 2018-07-04 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
-					isset($order_item_details[0]['supplierId'])
-					&& $order_item_details[0]['supplierId']['value'] == 'OneFlowCloud'
+					//isset($order_item_details[0]['supplierId'])
+					//&& $order_item_details[0]['supplierId']['value'] == 'OneFlowCloud'
+					// 2018-10-30 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+					'OneFlowCloud' === @$item_supplier_id['value']
 				) {
 					$carrierIdentifier_carrier['domain'] = 'alias';
 					$carrierIdentifier_carrier['value'] = $o->getShippingMethod();
@@ -192,6 +194,9 @@ final class CheckoutSuccess implements ObserverInterface {
 			$contact_details['idReference']['identifier'] = $customer_id;
 			$contact_details['idReference']['domain'] = 'storeUserId';
 			$order_contact = $contact_details;
+			// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+			// «Modify orders numeration for Mediaclip»
+			// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
 			$order_details['orderID'] = $oidE;
 			$order_details['orderDate'] = $order_date;
 			$order_details['shipTo'] = $order_ship_to;
@@ -200,6 +205,21 @@ final class CheckoutSuccess implements ObserverInterface {
 			$order_details['contact'] = $order_contact;
 			$mediaClipOrderRequest['orderRequestHeader'] = $order_details;
 			$mediaClipOrderRequest['itemOut'] = $order_item_details;
+			/**
+			 * 2018-10-30 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+			 * «Log all requests for the OneFlow on-demand print API»
+			 * https://www.upwork.com/ab/f/contracts/20996991
+			 * https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/8
+			 */
+			if (
+				//isset($order_item_details)
+				//&& isset($order_item_details[0]['supplierId'])
+				//&& 'OneFlowCloud' === $order_item_details[0]['supplierId']['value']
+					// 2018-10-30 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+				$item_supplier_id && 'OneFlowCloud' === @$item_supplier_id['value']
+			) {
+				df_report("oneflow/request-$oidE.json", df_json_encode($mediaClipOrderRequest));
+			}
 			$hubHelper = $om->create(mHelper::class); /** @var mHelper $hubHelper */
 			$chekcoutMediaclipResponse =  $hubHelper->CheckoutWithSingleProduct($mediaClipOrderRequest);
 			if ($chekcoutMediaclipResponse  && is_array($chekcoutMediaclipResponse)) {
