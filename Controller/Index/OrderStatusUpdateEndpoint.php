@@ -434,7 +434,7 @@ class OrderStatusUpdateEndpoint extends Action
 // https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/9
 $defaultCode = function($m) {
 	$m = strtolower($m);
-	return 'Gifting' === $m ? 'gift' : ('Print' === $m ? 'prints-set-01' : 'photobook-jacket');
+	return 'gifting' === $m ? 'gift' : ('print' === $m ? 'prints-set-01' : 'photobook-jacket');
 };
 									foreach ($linesDetails->files as $key => $fileDetails) {
 // 2018-11-02 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
