@@ -50,8 +50,8 @@ class OrderStatusUpdateEndpoint extends Action
     protected $_productloader;
 
     protected $resultJsonFactory;
-        /**
-     * @var Magento\Framework\View\Result\PageFactory
+    /**
+     * @var \Magento\Framework\View\Result\PageFactory
      */
     protected $_resultPageFactory;
  
@@ -429,49 +429,27 @@ class OrderStatusUpdateEndpoint extends Action
 									$array['orderData']['sourceOrderId'] = $mediaclipOrderDetails->storeData->orderId;
 									$helper = mc_h();
 									$linesDetails = $helper->getMediaClipOrderLinesDetails($lines->id);
+// 2018-11-02 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+// «Generate JSON data for photo-books»
+// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/9
+$defaultCode = function($m) {
+	$m = strtolower($m);
+	return 'Gifting' === $m ? 'gift' : ('Print' === $m ? 'prints-set-01' : 'photobook-jacket');
+};
 									foreach ($linesDetails->files as $key => $fileDetails) {
-										$array1['sku'] = $mediaClipOrdersData['plu'];
-										$array1['sourceItemId'] = $lines->id;
-
-										#check module code for gift type start#
-
-										if( strtolower($module) == strtolower("Gifting") ) {
-											# @var $JSONCode
-											$JSONCode = $mediaClipOrdersData['json_code'] ? $mediaClipOrdersData['json_code'] : 'gift';
-											$array1['components'] = array(
-												array(
-													'code' => $JSONCode,
-													'fetch' => true,
-													'path' =>$fileDetails->url
-												)
-											);
-											if( $includeQuantityInJSON == 1 ) {
-												$array1['quantity'] = $orderQuantity;
-											} else {
-												$array1['quantity'] = 1;
-											}
-
-										} else if(strtolower($module) == strtolower("Print")) {
-
-											$JSONCode = $mediaClipOrdersData['json_code'] ? $mediaClipOrdersData['json_code'] : 'prints-set-01';
-											$array1['components'] = array(
-												array(
-													'code' => $JSONCode,
-													'fetch' => true,
-													'path' =>$fileDetails->url
-												)
-											);
-											if( $includeQuantityInJSON == 1 ) {
-												$array1['quantity'] = $orderQuantity;
-											} else {
-												$array1['quantity'] = 1;
-											}
-
-										}
-
-										#check module code end#
-
-										$array['orderData']['items'][] = $array1;
+// 2018-11-02 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+// «Generate JSON data for photo-books»
+// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/9
+$array['orderData']['items'][] = [
+	'sku' => $mediaClipOrdersData['plu']
+	,'sourceItemId' => $lines->id
+	,'components' => [[
+		'code' => $mediaClipOrdersData['json_code'] ?: $defaultCode($module)
+		,'fetch' => true
+		,'path' => $fileDetails->url
+	]]
+	,'quantity' => 1 == $includeQuantityInJSON ? $orderQuantity : 1
+];
 									}
 								}
 							}
@@ -605,7 +583,7 @@ class OrderStatusUpdateEndpoint extends Action
                     $logger->addWriter($writer);
                     $logger->info($loggers);
                     //Mage::log($logger, null, 'mediaclip_orders_shipped_dispactched_status.log');
-                } catch (Exception $e) {
+                } catch (\Exception $e) {
                     // Log Error On Order Comment History
                     $order->addStatusHistoryComment('Failed to create shipment - '. $e->getMessage())
                               ->save();
