@@ -5,6 +5,7 @@ use Magento\Customer\Model\Customer;
 use Magento\Eav\Api\AttributeSetRepositoryInterface as IAttributeSetRepository;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Config\ScopeConfigInterface as IScopeConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\DB\Transaction;
 use Magento\Framework\View\Result\PageFactory;
@@ -28,7 +29,7 @@ class OrderStatusUpdateEndpoint extends Action {
         \Magento\Framework\Filesystem\Io\Sftp $sftp,
         \Magento\Framework\Filesystem\Io\Ftp $ftp,
         \Magento\Framework\Filesystem\Io\File $file,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        IScopeConfig $scopeConfig,
         OI $orderitem,
         O $order,
         \Magento\Catalog\Model\ProductFactory $_productloader,
@@ -128,14 +129,12 @@ class OrderStatusUpdateEndpoint extends Action {
 							);
 
 							foreach ($salesOrderItem as $key => $value) {//get status of order item
-
 								$status [] = $value->getData('item_download_status');
 							}
-
 							if (!in_array(0, $status)) { // check if all items are downloaded
 
-								$merchantId = $this->_objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('api/pwinty_api_auth/merchant_id');
-								$apiKey = $this->_objectManager->get('Magento\Framework\App\Config\ScopeConfigInterface')->getValue('api/pwinty_api_auth/pwinty_api_key');
+								$merchantId = $this->_objectManager->get(IScopeConfig::class)->getValue('api/pwinty_api_auth/merchant_id');
+								$apiKey = $this->_objectManager->get(IScopeConfig::class)->getValue('api/pwinty_api_auth/pwinty_api_key');
 								$config = array(  //log in to pwinty
 									'api'        => 'sandbox',//production
 									'merchantId' => $merchantId,
@@ -164,12 +163,9 @@ class OrderStatusUpdateEndpoint extends Action {
 								foreach ($projectDetails as $value) {
 									$salesOrderItemModelCollection->clear()->getSelect()->reset('where');
 									$salesOrderItem = $salesOrderItemModelCollection->addFieldToFilter('mediaclip_project_id', array('eq' => $value['projectId']));
-
-
 									//get images from downloaded folder
 									foreach ($salesOrderItem as $newvalue) {
-
-									   $orderItemID = $newvalue->getData('item_id');
+										$orderItemID = $newvalue->getData('item_id');
 									}
 									$dir = $this->_objectManager->get(DirectoryList::class);
 									$base = $dir->getRoot();
