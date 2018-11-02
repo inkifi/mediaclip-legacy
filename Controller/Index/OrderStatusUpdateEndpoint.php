@@ -399,29 +399,26 @@ $array['orderData']['items'][] = [
 									}
 								}
 							}
-
 							if (!empty($array)) {
 								$dir = $this->_objectManager->get(DirectoryList::class);
 								$base = $dir->getRoot();
 								$logger->info(json_encode($array));
 								$shippingMethod = $order->getShippingMethod();
 								$address = $order->getShippingAddress();
-
 								$postcode = $address->getPostcode();
 								$countryCode = $address->getCountryId();
 								$region = $address->getRegion();
 								$telephone = $address->getTelephone();
-								if($address->getCompany() != ''){
-
-									$street1 = $address->getCompany().','.$address->getStreet()[0];
-								}else{
-
+								if ($address->getCompany() != ''){
+									$street1 = $address->getCompany() . ',' . $address->getStreet()[0];
+								}
+								else {
 									$street1 = $address->getStreet()[0];
 								}
 								if (isset($address->getStreet()[1])) {
-
 									$street2 = $address->getStreet()[1];
-								}else{
+								}
+								else {
 									$street2 = '';
 								}
 								$city = $address->getCity();
@@ -430,10 +427,20 @@ $array['orderData']['items'][] = [
 								$name = $address->getFirstname().' '.$address->getLastname();
 
 								$email = $customer['email'];
-								$array['shipments'] = array(array(
-							   'shipTo' => array('name' => $name, 'address1'=> $street1,'address2'=>$street2,'town'=>$city,'postcode'=>$postcode,'isoCountry'=>$countryCode,'state'=>$region,'email'=>$email,'phone'=>$telephone),
-							   'carrier' => array('alias'=>$shippingMethod)
-								));
+								$array['shipments'] = [[
+								   'shipTo' => [
+										'name' => $name
+										,'address1'=> $street1
+										,'address2' => $street2
+										,'town' => $city
+										,'postcode' => $postcode
+										,'isoCountry' => $countryCode
+										,'state' => $region
+										,'email' => $email
+										,'phone' => $telephone
+								   ],
+								   'carrier' => ['alias' => $shippingMethod]
+								]];
 								// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 								// "Replace the «/home/canvaspr/dev2.inkifi.com/html/ftp_json25june/»
 								// hardcoded filesystem path with a dynamics one":
@@ -491,7 +498,6 @@ $array['orderData']['items'][] = [
                             $attributeSet = $this->_objectManager->create(IAttributeSetRepository::class);
                             $attributeSetRepository = $attributeSet->get($_product->getAttributeSetId());
                             $attribute_set_name = $attributeSetRepository->getAttributeSetName();
-                
                             if ($attribute_set_name == 'Photobook') {
                                 if ($item->getMediaclipProjectId() != '' && ($item->getMediaclipProjectId() == $projectId)) {
                                     $itemId = $item->getItemId();
