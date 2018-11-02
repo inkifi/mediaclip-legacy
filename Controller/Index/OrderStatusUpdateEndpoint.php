@@ -467,8 +467,7 @@ $array['orderData']['items'][] = [
 				// «Modify orders numeration for Mediaclip»
 				// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
                 $oidI = ikf_eti($oidE); /** @var string $oidI */
-                //$oidE = 16717;
-                try{
+                try {
 
 					// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 					// «Modify orders numeration for Mediaclip»
