@@ -1,6 +1,7 @@
 <?php
 namespace Mangoit\MediaclipHub\Controller\Index;
 use Magento\Catalog\Model\Product;
+use Magento\Customer\Model\Customer;
 use Magento\Eav\Api\AttributeSetRepositoryInterface as IAttributeSetRepository;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
@@ -243,7 +244,7 @@ class OrderStatusUpdateEndpoint extends Action {
 								//$street2 = $address->getStreet(2);
 								$city = $address->getCity();
 								$customerId = $order->getCustomerId();
-								$customer = $this->_objectManager->create('\Magento\Customer\Model\Customer')->load($customerId);
+								$customer = $this->_objectManager->create(Customer::class)->load($customerId);
 								$name = $customer['firstname'].' '.$customer['lastname'];
 								$email = $customer['email'];
 
@@ -423,9 +424,8 @@ $array['orderData']['items'][] = [
 								}
 								$city = $address->getCity();
 								$customerId = $order->getCustomerId();
-								$customer = $this->_objectManager->create('\Magento\Customer\Model\Customer')->load($customerId);
+								$customer = $this->_objectManager->create(Customer::class)->load($customerId);
 								$name = $address->getFirstname().' '.$address->getLastname();
-
 								$email = $customer['email'];
 								$array['shipments'] = [[
 								   'shipTo' => [
