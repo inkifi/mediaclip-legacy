@@ -523,7 +523,6 @@ $array['orderData']['items'][] = [
                     $logger = new \Zend\Log\Logger();
                     $logger->addWriter($writer);
                     $logger->info($loggers);
-                    //Mage::log($logger, null, 'mediaclip_orders_shipped_dispactched_status.log');
                 }
                 catch (\Exception $e) {
                     // Log Error On Order Comment History
