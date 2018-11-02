@@ -10,6 +10,7 @@ use Magento\Framework\DB\Transaction;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Sales\Model\Order as O;
 use Magento\Sales\Model\Order\Item as OI;
+use Magento\Store\Model\StoreManagerInterface as IStoreManager;
 use Mangoit\MediaclipHub\Model\Orders;
 use pwinty\PhpPwinty;
 // 2018-11-02
@@ -179,7 +180,7 @@ class OrderStatusUpdateEndpoint extends Action {
 									$frameColour = $mediaClipOrdersData['frame_colour'];
 									$filesUploadPath = $base.'/mediaclip_orders/'.$orderDirDate.'/pwinty/'.$orderIncrementId.'/'.$orderItemID.'/'.$mediaClipOrdersData['product_label'];
 									$imgPath = explode('html/', $filesUploadPath);
-									$storeManager = $this->_objectManager->get('\Magento\Store\Model\StoreManagerInterface');
+									$storeManager = $this->_objectManager->get(IStoreManager::class);
 									$store = $storeManager->getStore();
 									$baseUrl = $store->getBaseUrl();
 
@@ -370,7 +371,7 @@ class OrderStatusUpdateEndpoint extends Action {
 									$filesUploadPath = $base.'/mediaclip_orders/'.$orderDirDate.'/ascendia/'.$orderIncrementId.'/'.$orderItemID.'/'.$mediaClipOrdersData['product_label'];
 									$logger->info(json_encode($filesUploadPath));
 									$imgPath = explode('html/', $filesUploadPath);
-									$storeManager = $this->_objectManager->get('\Magento\Store\Model\StoreManagerInterface');
+									$storeManager = $this->_objectManager->get(IStoreManager::class);
 									$store = $storeManager->getStore();
 									$baseUrl = $store->getBaseUrl();
 									$array['destination']['name'] = 'pureprint';
