@@ -75,12 +75,8 @@ class OrderStatusUpdateEndpoint extends Action {
                 $oidI = ikf_eti($oidE); /** @var string $oidI */
                 $logger->info($oidE);
                 $logger->info($json);
-
                 if ($oidE) {
-
                     $helper = mc_h();
-                    $response = false;
-                    $message = '';
                     //Set mediaclip order status to 1 as the order is downloaded
                     $model = $this->_objectManager->create('Mangoit\MediaclipHub\Model\Orders');
                     $mediaclipOrder = $model->getCollection();
@@ -90,7 +86,6 @@ class OrderStatusUpdateEndpoint extends Action {
 						$model->setId($mediaclipOrderData['id']);
 						$model->setOrderDownloadStatus(1);
 						$model->save();
-						//$response = $helper->downloadAndUploadOrderFilesToServer($oidE);
 						$product_id = $obj['storeData']['productId'];
 						$product = $this->_objectManager->create('Magento\Catalog\Model\Product')->load($product_id);
 						$uploadfolder = $product->getMediaclipUploadFolder();
