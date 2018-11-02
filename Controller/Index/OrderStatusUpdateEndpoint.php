@@ -4,6 +4,7 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Result\PageFactory;
+use Mangoit\MediaclipHub\Model\Orders;
 use pwinty\PhpPwinty;
 class OrderStatusUpdateEndpoint extends Action {
     /**
@@ -78,7 +79,7 @@ class OrderStatusUpdateEndpoint extends Action {
                 if ($oidE) {
                     $helper = mc_h();
                     //Set mediaclip order status to 1 as the order is downloaded
-                    $model = $this->_objectManager->create('Mangoit\MediaclipHub\Model\Orders');
+                    $model = $this->_objectManager->create(Orders::class);
                     $mediaclipOrder = $model->getCollection();
                     $mediaclipOrderData = $mediaclipOrder->addFieldToFilter('magento_order_id', array('eq' => $oidE));
 					// 2018-08-17 Dmitry Fedyuk
@@ -254,7 +255,7 @@ class OrderStatusUpdateEndpoint extends Action {
 
 								$pwintyOrderId = $order['id'];
 								//save pwinty id to custom table
-								$mediaclipOrderModel = $this->_objectManager->create('Mangoit\MediaclipHub\Model\Orders');
+								$mediaclipOrderModel = $this->_objectManager->create(Orders::class);
 								$mediaclipOrderModelCollection = $mediaclipOrderModel->getCollection();
 								$mediaclipOrder = $mediaclipOrderModelCollection->addFieldToFilter('magento_order_id', array('eq' => $oidE));
 
