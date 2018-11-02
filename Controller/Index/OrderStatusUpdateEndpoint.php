@@ -5,6 +5,7 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Sales\Model\Order as O;
 use Mangoit\MediaclipHub\Model\Orders;
 use pwinty\PhpPwinty;
 class OrderStatusUpdateEndpoint extends Action {
@@ -21,7 +22,7 @@ class OrderStatusUpdateEndpoint extends Action {
         \Magento\Framework\Filesystem\Io\File $file,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Sales\Model\Order\Item $orderitem,
-        \Magento\Sales\Model\Order $order,
+        O $order,
         \Magento\Catalog\Model\ProductFactory $_productloader,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         PageFactory $resultPageFactory
@@ -135,7 +136,7 @@ class OrderStatusUpdateEndpoint extends Action {
 								// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 								// «Modify orders numeration for Mediaclip»
 								// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
-								$order = $this->_objectManager->create('\Magento\Sales\Model\Order')->load($oidI);
+								$order = $this->_objectManager->create(O::class)->load($oidI);
 								$orderIncrementId = $order['increment_id'];
 								$entityId = $order->getEntityId();
 								$orderDate = $order['created_at'];
@@ -303,7 +304,7 @@ class OrderStatusUpdateEndpoint extends Action {
 							// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 							// «Modify orders numeration for Mediaclip»
 							// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
-							$order = $this->_objectManager->create('\Magento\Sales\Model\Order')->load($oidI);
+							$order = $this->_objectManager->create(O::class)->load($oidI);
 
 
 							$orderIncrementId = $order['increment_id'];
@@ -473,7 +474,7 @@ $array['orderData']['items'][] = [
 					// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 					// «Modify orders numeration for Mediaclip»
 					// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
-                    $order = $this->_objectManager->create('Magento\Sales\Model\Order')->load($oidI);
+                    $order = $this->_objectManager->create(O::class)->load($oidI);
 
                     $order_items = $order->getItemsCollection();
 
