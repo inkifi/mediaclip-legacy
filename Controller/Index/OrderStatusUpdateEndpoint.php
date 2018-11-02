@@ -183,7 +183,7 @@ class OrderStatusUpdateEndpoint extends Action {
 											if ($fileInfo->isFile() && $fileInfo->getExtension() != 'csv') {
 
 												$img = $baseUrl.$imgPath[1].'/'.$fileInfo->getFilename();
-												$imgAttribute = array();
+												$imgAttribute = [];
 												$imgAttribute['url'] = $img;
 												$imgAttribute['sizing'] = "ShrinkToFit";
 												$imgAttribute['priceToUser'] = "0";
@@ -313,7 +313,7 @@ class OrderStatusUpdateEndpoint extends Action {
 							$orderDate = $order['created_at'];
 							$mediaclipOrderDetails = $helper->getMediaClipOrders($entityId);
 							$orderDirDate = $helper->createOrderDirectoryDate($orderDate);
-							$array = array();
+							$array = [];
 
 
 							foreach ($mediaclipOrderDetails->lines as $lines){
@@ -470,16 +470,12 @@ $array['orderData']['items'][] = [
 				// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
                 $oidI = ikf_eti($oidE); /** @var string $oidI */
                 try {
-
 					// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 					// «Modify orders numeration for Mediaclip»
 					// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
                     $order = $this->_objectManager->create(O::class)->load($oidI);
-
                     $order_items = $order->getItemsCollection();
-
-                    $item_qtys = array();
-                    
+                    $item_qtys = [];
                     foreach ($order_items as $item) {
                         if (($item->getQtyToShip() > 0) && (!$item->getIsVirtual())) {
                             $_productId = $item->getProductId();
