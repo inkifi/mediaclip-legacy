@@ -7,7 +7,7 @@ use Magento\Framework\View\Result\PageFactory;
 use pwinty\PhpPwinty;
 class OrderStatusUpdateEndpoint extends Action {
     /**
-     * @param Context     $context
+     * @param Context $context
      * @param PageFactory $resultPageFactory
      */
     function __construct(
@@ -36,11 +36,9 @@ class OrderStatusUpdateEndpoint extends Action {
         $this->resultJsonFactory = $resultJsonFactory;
         $this->_resultPageFactory = $resultPageFactory;
         parent::__construct($context);
- 
     }
-    function connectRemoteServer()
-    {
 
+    function connectRemoteServer() {
         $args['host'] = 'ftp.pureprint.com';
         $args['username'] = 'Inkifi';
         $args['password'] = 'Summ3rD4ys!';
