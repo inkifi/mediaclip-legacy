@@ -1,14 +1,10 @@
-<?php 
-
-
+<?php
 namespace Mangoit\MediaclipHub\Controller\Index;
- 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Result\PageFactory;
 use pwinty\PhpPwinty;
-
 class OrderStatusUpdateEndpoint extends Action
 {
     protected $_productCollectionFactory;
@@ -220,7 +216,7 @@ class OrderStatusUpdateEndpoint extends Action
 
 									   $orderItemID = $newvalue->getData('item_id');
 									}
-									$dir = $this->_objectManager->get('\Magento\Framework\Filesystem\DirectoryList');
+									$dir = $this->_objectManager->get(DirectoryList::class);
 									$base = $dir->getRoot();
 									$mediaClipOrdersData = $this->_objectManager->create('Mangoit\MediaclipHub\Model\Product')->load($value['items'][0]['plu'], 'plu')->getData();
 									$pwintyProduct = $mediaClipOrdersData['pwinty_product_name'];
@@ -398,7 +394,7 @@ class OrderStatusUpdateEndpoint extends Action
 								}
 
 
-								$dir = $this->_objectManager->get('\Magento\Framework\Filesystem\DirectoryList');
+								$dir = $this->_objectManager->get(DirectoryList::class);
 								$base = $dir->getRoot();
 
 								$mediaClipOrdersData = $this->_objectManager->create('Mangoit\MediaclipHub\Model\Product')->load($projectDetails['items'][0]['plu'], 'plu')->getData();
@@ -452,7 +448,7 @@ $array['orderData']['items'][] = [
 							}
 
 							if (!empty($array)) {
-								$dir = $this->_objectManager->get('\Magento\Framework\Filesystem\DirectoryList');
+								$dir = $this->_objectManager->get(DirectoryList::class);
 								$base = $dir->getRoot();
 								$logger->info(json_encode($array));
 								$shippingMethod = $order->getShippingMethod();
