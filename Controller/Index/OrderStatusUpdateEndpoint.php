@@ -5,52 +5,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Result\PageFactory;
 use pwinty\PhpPwinty;
-class OrderStatusUpdateEndpoint extends Action
-{
-    protected $_productCollectionFactory;
-
-    /**
-     * @var \Magento\Framework\Filesystem
-     */
-    protected $filesystem;
-
-    /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory
-     */
-    protected $fileFactory;
-
-    protected $sftp;
-
-    protected $ftp;
-
-    protected $file;
-
-    protected $scopeConfig;
-
-    private $_orderItem;
-
-    private $_dimensionField;
-
-    private $_alterationField;
-
-    private $_garment;
-
-    private $_garmentStyle;
-
-    private $_garmentStyleOption;
-
-    private $_order;
-
-    private $_warehouseFactory;
-
-    protected $_productloader;
-
-    protected $resultJsonFactory;
-    /**
-     * @var \Magento\Framework\View\Result\PageFactory
-     */
-    protected $_resultPageFactory;
- 
+class OrderStatusUpdateEndpoint extends Action {
     /**
      * @param Context     $context
      * @param PageFactory $resultPageFactory
@@ -613,4 +568,48 @@ $array['orderData']['items'][] = [
         return $mediaclip_module;
 
     }
+
+    protected $_productCollectionFactory;
+
+    /**
+     * @var \Magento\Framework\Filesystem
+     */
+    protected $filesystem;
+
+    /**
+     * @var \Magento\Framework\App\Response\Http\FileFactory
+     */
+    protected $fileFactory;
+
+    protected $sftp;
+
+    protected $ftp;
+
+    protected $file;
+
+    protected $scopeConfig;
+
+    private $_orderItem;
+
+    private $_dimensionField;
+
+    private $_alterationField;
+
+    private $_garment;
+
+    private $_garmentStyle;
+
+    private $_garmentStyleOption;
+
+    private $_order;
+
+    private $_warehouseFactory;
+
+    protected $_productloader;
+
+    protected $resultJsonFactory;
+    /**
+     * @var \Magento\Framework\View\Result\PageFactory
+     */
+    protected $_resultPageFactory;
 }
