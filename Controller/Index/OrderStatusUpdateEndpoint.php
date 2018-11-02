@@ -302,28 +302,29 @@ class OrderStatusUpdateEndpoint extends Action {
 						$array = [];
 						$this->l('mediaclipOrderDetails->lines count: ' . count($mediaclipOrderDetails->lines));
 						foreach ($mediaclipOrderDetails->lines as $lines) {
+							$this->l('A line:');  $this->l($lines);
 							$projectId = $lines->projectId;
-							$projectData = df_new_om(Mediaclip::class)
-									->load($projectId, 'project_id')->getData();
+							$projectData = df_new_om(Mediaclip::class)->load($projectId, 'project_id')->getData();
 							$projectDetails = json_decode($projectData['project_details'], true);
 							$salesOrderItemModelCollection->clear()->getSelect()->reset('where');
 							$salesOrderItem = $salesOrderItemModelCollection->addFieldToFilter(
 								'mediaclip_project_id', array('eq' => $projectDetails['projectId'])
 							);
-							$module = "";
+							$module = '';
 							$orderQuantity = 1;
 							foreach ($salesOrderItem as $newvalue) {
 								$orderItemID = $newvalue->getData('item_id');
 								$orderQuantity = (int)$newvalue->getQtyOrdered();
-								$productSKU = $newvalue->getData('sku');
 								$module = $this->getMediaclipModuleName($newvalue->getData('product_id'));
 							}
+							$this->l("Module: $module");
 							$dir = df_o(DirectoryList::class);
 							$base = $dir->getRoot();
 							$mediaClipOrdersData = df_new_om(mProduct::class)
 								->load($projectDetails['items'][0]['plu'], 'plu')->getData();
 							$ftp_json = $mediaClipOrdersData['ftp_json'];
 							$logger->info($ftp_json);
+							$this->l('Send Json: ' . $ftp_json);
 							#@var $includeQuantityInJSON flag to include json
 							$includeQuantityInJSON = $mediaClipOrdersData['include_quantity_in_json'];
 							if ($ftp_json == 1) {
@@ -332,42 +333,31 @@ class OrderStatusUpdateEndpoint extends Action {
 									.$orderIncrementId.'/'.$orderItemID.'/'
 									.$mediaClipOrdersData['product_label']
 								;
+								$this->l("filesUploadPath: $filesUploadPath");
 								$logger->info(json_encode($filesUploadPath));
-								$imgPath = explode('html/', $filesUploadPath);
-								$storeManager = df_o(IStoreManager::class);
-								$store = $storeManager->getStore();
-								$baseUrl = $store->getBaseUrl();
 								$array['destination']['name'] = 'pureprint';
-								$array['orderData']['sourceOrderId'] =
-									$mediaclipOrderDetails->storeData->orderId;
+								$array['orderData']['sourceOrderId'] = $mediaclipOrderDetails->storeData->orderId;
 								$linesDetails = $helper->getMediaClipOrderLinesDetails($lines->id);
-// 2018-11-02 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
-// «Generate JSON data for photo-books»
-// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/9
-$defaultCode = function($m) {
-$m = strtolower($m);
-return 'gifting' === $m ? 'gift' : ('print' === $m ? 'prints-set-01' : 'photobook-jacket');
-};
-								foreach ($linesDetails->files as $key => $fileDetails) {
+								$this->l('linesDetails->files count: ' . count($linesDetails->files));
+								foreach ($linesDetails->files as $fileDetails) {
 // 2018-11-02 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 // «Generate JSON data for photo-books»
 // https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/9
 $array['orderData']['items'][] = [
-'sku' => $mediaClipOrdersData['plu']
-,'sourceItemId' => $lines->id
-,'components' => [[
-	'code' => $mediaClipOrdersData['json_code'] ?: $defaultCode($module)
-	,'fetch' => true
-	,'path' => $fileDetails->url
-]]
-,'quantity' => 1 == $includeQuantityInJSON ? $orderQuantity : 1
+	'sku' => $mediaClipOrdersData['plu']
+	,'sourceItemId' => $lines->id
+	,'components' => [[
+		'code' => $mediaClipOrdersData['json_code'] ?: $this->code($module)
+		,'fetch' => true
+		,'path' => $fileDetails->url
+	]]
+	,'quantity' => 1 == $includeQuantityInJSON ? $orderQuantity : 1
 ];
 								}
 							}
 						}
+						$this->l('array:'); $this->l($array);
 						if (!empty($array)) {
-							$dir = df_o(DirectoryList::class);
-							$base = $dir->getRoot();
 							$logger->info(json_encode($array));
 							$shippingMethod = $order->getShippingMethod();
 							$address = $order->getShippingAddress();
@@ -414,6 +404,7 @@ $array['orderData']['items'][] = [
 								BP, 'ftp_json', $orderDirDate, $orderIncrementId
 								,$orderItemID, $mediaClipOrdersData['product_label']
 							);
+							$this->l("filesUploadPath: $filesUploadPath");
 							$logger->info(json_encode($filesUploadPath));
 							// 2018-08-20 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 							// «FTP upload to ftp.pureprint.com has stopped working»
@@ -427,13 +418,10 @@ $array['orderData']['items'][] = [
 							$jsonFileName = $orderIncrementId.'.json';
 							$jsonFile = $filesUploadPath.'/'.$jsonFileName;
 							$jsonRemoteFile = '/Inkifi/'.$jsonFileName;
-							if (!is_dir($filesUploadPath)) {
-								$this->file->mkdir($filesUploadPath);
-							} else {
-								$this->file->mkdir($filesUploadPath);
-							}
-							$json_handler = fopen ($jsonFile, 'w+');
-							fwrite($json_handler, json_encode($array,JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT));   //here it will print the array pretty
+							$this->file->mkdir($filesUploadPath);
+							$json_handler = fopen($jsonFile, 'w+');
+							//here it will print the array pretty
+							fwrite($json_handler, json_encode($array,JSON_UNESCAPED_SLASHES|JSON_PRETTY_PRINT));
 							fclose($json_handler);
 							$content = file_get_contents($jsonFile);
 							$this->sftp->write($jsonRemoteFile, $content);
@@ -509,6 +497,19 @@ $array['orderData']['items'][] = [
         }
     }
 
+	/**
+	 * 2018-11-02 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+	 * «Generate JSON data for photo-books»: https://www.upwork.com/ab/f/contracts/21011549
+	 * https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/9
+	 * @used-by execute()
+	 * @param string $m
+	 * @return string
+	 */
+    private function code($m) {
+		$m = strtolower($m);
+		return 'gifting' === $m ? 'gift' : ('print' === $m ? 'prints-set-01' : 'photobook-jacket');
+	}
+
     /**
 	 * 2018-11-02
      * @param int $product_id product id
@@ -526,10 +527,10 @@ $array['orderData']['items'][] = [
 	 * 2018-11-02 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 	 * «Generate JSON data for photo-books»: https://www.upwork.com/ab/f/contracts/21011549
 	 * @used-by execute()
-	 * @param string $s
+	 * @param mixed $d
 	 */
-    private function l($s) {df_report(
-    	"OrderStatusUpdate/{$this->_oidI}.log", is_string($s) ? $s : df_json_encode($s), true
+    private function l($d) {df_report(
+    	"OrderStatusUpdate/{$this->_oidI}.log", is_string($d) ? $d : df_json_encode($d), true
 	);}
 
 	/**
