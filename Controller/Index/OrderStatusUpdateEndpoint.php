@@ -161,10 +161,7 @@ class OrderStatusUpdateEndpoint extends Action {
 								}
 								$orderDirDate = $helper->createOrderDirectoryDate($orderDate);
 								$imageArray = [];
-
 								foreach ($projectDetails as $value) {
-
-									$quantity = $value['items'][0]['quantity'];
 									$salesOrderItemModelCollection->clear()->getSelect()->reset('where');
 									$salesOrderItem = $salesOrderItemModelCollection->addFieldToFilter('mediaclip_project_id', array('eq' => $value['projectId']));
 
@@ -337,23 +334,16 @@ class OrderStatusUpdateEndpoint extends Action {
 								$salesOrderItemModelCollection->clear()->getSelect()->reset('where');
 
 								$salesOrderItem = $salesOrderItemModelCollection->addFieldToFilter('mediaclip_project_id', array('eq' => $projectDetails['projectId']));
-								$quantity = $projectDetails['items'][0]['quantity'];
-
-
 								$module = "";
 								$orderQuantity = 1;
-
 								foreach ($salesOrderItem as $newvalue) {
 									$orderItemID = $newvalue->getData('item_id');
 									$orderQuantity = (int)$newvalue->getQtyOrdered();
 									$productSKU = $newvalue->getData('sku');
 									$module = $this->getMediaclipModuleName($newvalue->getData('product_id'));
 								}
-
-
 								$dir = $this->_objectManager->get(DirectoryList::class);
 								$base = $dir->getRoot();
-
 								$mediaClipOrdersData = $this->_objectManager->create(mProduct::class)->load($projectDetails['items'][0]['plu'], 'plu')->getData();
 								$ftp_json = $mediaClipOrdersData['ftp_json'];
 								$logger->info($ftp_json);
