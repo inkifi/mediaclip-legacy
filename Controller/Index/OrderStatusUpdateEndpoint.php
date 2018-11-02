@@ -5,6 +5,7 @@ use Magento\Eav\Api\AttributeSetRepositoryInterface as IAttributeSetRepository;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\DB\Transaction;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Sales\Model\Order as O;
 use Magento\Sales\Model\Order\Item as OI;
@@ -499,46 +500,42 @@ $array['orderData']['items'][] = [
                             }
                         }
                     }
-
                     if (!empty($item_qtys)) {
                         // Create Shipment
                         $shipment = $order->prepareShipment($item_qtys);
                         $shipment->register();
-                        $shipment->sendEmail(true)
-                                ->setEmailSent(true)
-                                ->save();
-
-                        $transactionSave = $this->_objectManager->create('\Magento\Framework\DB\Transaction')
-                                           ->addObject($shipment)
-                                           ->addObject($shipment->getOrder())
-                                           ->save();
-                 
+                        $shipment->sendEmail(true)->setEmailSent(true)->save();
+                        $this->_objectManager->create(Transaction::class)
+							->addObject($shipment)
+							->addObject($shipment->getOrder())
+							->save()
+						;
                         // Update Magento Order State/Status to Processing/Sent To Picking
-                        $order->setStatus('complete')
-                              ->save();
+                        $order->setStatus('complete')->save();
                         // Success
                         $loggers = $oidE." Shipment created successfully ".json_decode($item_qtys);
                     } else {
                         $loggers = $oidE." No item found to make shipment.";
                     }
-                    $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/mediaclip_orders_shipped_dispactched_status.log');
+                    $writer = new \Zend\Log\Writer\Stream(
+                    	BP . '/var/log/mediaclip_orders_shipped_dispactched_status.log'
+					);
                     $logger = new \Zend\Log\Logger();
                     $logger->addWriter($writer);
                     $logger->info($loggers);
                     //Mage::log($logger, null, 'mediaclip_orders_shipped_dispactched_status.log');
-                } catch (\Exception $e) {
+                }
+                catch (\Exception $e) {
                     // Log Error On Order Comment History
-                    $order->addStatusHistoryComment('Failed to create shipment - '. $e->getMessage())
-                              ->save();
-
+                    $order->addStatusHistoryComment('Failed to create shipment - '. $e->getMessage())->save();
                     // Error
                     $loggers = $oidE." Failed to create shipment";
-                    $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/mediaclip_orders_shipped_dispactched_status.log');
+                    $writer = new \Zend\Log\Writer\Stream(
+                    	BP . '/var/log/mediaclip_orders_shipped_dispactched_status.log'
+					);
                     $logger = new \Zend\Log\Logger();
                     $logger->addWriter($writer);
                     $logger->info($loggers);
-                   
-                    //Mage::log($logger, null, 'mediaclip_orders_shipped_dispactched_status.log');
                 }
             }
         }
