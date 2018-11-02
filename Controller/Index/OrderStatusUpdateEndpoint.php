@@ -68,8 +68,8 @@ class OrderStatusUpdateEndpoint extends Action {
         $logger->addWriter($writer);
         if (!empty($obj) && isset($obj['status'])) {
         	$dfStatus = (string)$obj['status']['value']; /** @var string $dfStatus */
+        	$oidE = $obj['order']['storeData']['orderId']; /** @var string $oidE */
             if ('AvailableForDownload' === $dfStatus) {
-                $oidE = $obj['order']['storeData']['orderId'];
 				// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 				// «Modify orders numeration for Mediaclip»
 				// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
@@ -463,7 +463,6 @@ $array['orderData']['items'][] = [
             }
             else if ('Shipped' === $dfStatus) {
                 $projectId = $obj['projectId'];
-                $oidE = $obj['order']['storeData']['orderId'];
 				// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 				// «Modify orders numeration for Mediaclip»
 				// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
