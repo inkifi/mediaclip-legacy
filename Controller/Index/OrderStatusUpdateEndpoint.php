@@ -10,8 +10,10 @@ use Magento\Sales\Model\Order as O;
 use Magento\Sales\Model\Order\Item as OI;
 use Mangoit\MediaclipHub\Model\Orders;
 use pwinty\PhpPwinty;
+// 2018-11-02
 class OrderStatusUpdateEndpoint extends Action {
     /**
+	 * 2018-11-02
      * @param Context $context
      * @param PageFactory $resultPageFactory
      */
@@ -43,6 +45,11 @@ class OrderStatusUpdateEndpoint extends Action {
         parent::__construct($context);
     }
 
+	/**
+	 * 2018-11-02
+	 * @return \Magento\Framework\App\ResponseInterface|\Magento\Framework\Controller\ResultInterface|void
+	 * @throws \Exception
+	 */
     function execute() {
 		/**
 		 * 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
@@ -538,6 +545,7 @@ $array['orderData']['items'][] = [
     }
 
     /**
+	 * 2018-11-02
      * @param int $product_id product id
      * @return String $mediaclip_module media clip produc type Photobook | Gifting | Print
      */
