@@ -547,14 +547,11 @@ $array['orderData']['items'][] = [
      * @return String $mediaclip_module media clip produc type Photobook | Gifting | Print
      */
     private function getMediaclipModuleName( $product_id ) {
-
         $product = $this->_objectManager->create(Product::class)->load($product_id);
-        $uploadfolder = $product->getMediaclipUploadFolder();
         $attributeSet = $this->_objectManager->create(IAttributeSetRepository::class);
         $attributeSetRepository = $attributeSet->get($product->getAttributeSetId());
         $mediaclip_module = $attributeSetRepository->getAttributeSetName();
         return $mediaclip_module;
-
     }
 
     protected $_productCollectionFactory;
