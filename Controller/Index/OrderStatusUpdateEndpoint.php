@@ -1,5 +1,6 @@
 <?php
 namespace Mangoit\MediaclipHub\Controller\Index;
+use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -90,7 +91,7 @@ class OrderStatusUpdateEndpoint extends Action {
 						$model->setOrderDownloadStatus(1);
 						$model->save();
 						$product_id = $obj['storeData']['productId'];
-						$product = $this->_objectManager->create('Magento\Catalog\Model\Product')->load($product_id);
+						$product = $this->_objectManager->create(Product::class)->load($product_id);
 						$uploadfolder = $product->getMediaclipUploadFolder();
 						if($uploadfolder == 'pwinty') {
 							//set order item status to 1 as response of each line item receives
@@ -481,7 +482,7 @@ $array['orderData']['items'][] = [
                     foreach ($order_items as $item) {
                         if (($item->getQtyToShip() > 0) && (!$item->getIsVirtual())) {
                             $_productId = $item->getProductId();
-                            $_product = $this->_objectManager->create('Magento\Catalog\Model\Product')->load($_productId);
+                            $_product = $this->_objectManager->create(Product::class)->load($_productId);
                             $attributeSet = $objectManager->create('Magento\Eav\Api\AttributeSetRepositoryInterface');
                             $attributeSetRepository = $attributeSet->get($_product->getAttributeSetId());
                             $attribute_set_name = $attributeSetRepository->getAttributeSetName();
@@ -545,7 +546,7 @@ $array['orderData']['items'][] = [
      */
     private function getMediaclipModuleName( $product_id ) {
 
-        $product = $this->_objectManager->create('Magento\Catalog\Model\Product')->load($product_id);
+        $product = $this->_objectManager->create(Product::class)->load($product_id);
         $uploadfolder = $product->getMediaclipUploadFolder();
         $attributeSet = $this->_objectManager->create('Magento\Eav\Api\AttributeSetRepositoryInterface');
         $attributeSetRepository = $attributeSet->get($product->getAttributeSetId());
