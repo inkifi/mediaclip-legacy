@@ -306,6 +306,7 @@ class OrderStatusUpdateEndpoint extends Action {
 							$projectId = $lines->projectId;
 							$projectData = df_new_om(Mediaclip::class)->load($projectId, 'project_id')->getData();
 							$projectDetails = json_decode($projectData['project_details'], true);
+							$this->l('projectDetails:'); $this->l($projectDetails);
 							$salesOrderItemModelCollection->clear()->getSelect()->reset('where');
 							$salesOrderItem = $salesOrderItemModelCollection->addFieldToFilter(
 								'mediaclip_project_id', array('eq' => $projectDetails['projectId'])
@@ -339,21 +340,42 @@ class OrderStatusUpdateEndpoint extends Action {
 								$array['orderData']['sourceOrderId'] = $mediaclipOrderDetails->storeData->orderId;
 								$linesDetails = $helper->getMediaClipOrderLinesDetails($lines->id);
 								$this->l('linesDetails->files count: ' . count($linesDetails->files));
-								foreach ($linesDetails->files as $fileDetails) {
-// 2018-11-02 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
-// «Generate JSON data for photo-books»
-// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/9
-$array['orderData']['items'][] = [
-	'sku' => $mediaClipOrdersData['plu']
-	,'sourceItemId' => $lines->id
-	,'components' => [[
-		'code' => $mediaClipOrdersData['json_code'] ?: $this->code($module)
-		,'fetch' => true
-		,'path' => $fileDetails->url
-	]]
-	,'quantity' => 1 == $includeQuantityInJSON ? $orderQuantity : 1
-];
-								}
+if (count($linesDetails->files)) {
+	$this->l('linesDetails->files:');  $this->l($linesDetails->files);
+	/**
+	 * 2018-11-02 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+	 * «Generate JSON data for photo-books»
+	 * https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/9
+	 * 2018-11-03
+	 * An example of $linesDetails->files
+	 *	[
+	 *		{
+	 *			"id": "photobook-jacket",
+	 *			"productId": "$(package:inkifi/photobooks)/products/hard-cover-gray-210x210mm-70",
+	 *			"plu": "INKIFI-HCB210-M-70",
+	 *			"quantity": 1,
+	 *			"url": "https://renderstouse.blob.core.windows.net/0c25168e-eda3-41d4-b266-8259566d2507/dust.pdf?sv=2018-03-28&sr=c&sig=XzCB%2B2CWlpqNFqVf6CnoVr8ICDGufTexaNqyzxMDUx8%3D&st=2018-11-02T19%3A36%3A41Z&se=2018-12-02T19%3A38%3A41Z&sp=r",
+	 *			"order": 0
+	 *		},
+	 *		{
+	 *			"id": "photobook-pages",
+	 *			"productId": "$(package:inkifi/photobooks)/products/hard-cover-gray-210x210mm-70",
+	 *			"plu": "INKIFI-HCB210-M-70",
+	 *			"quantity": 1,
+	 *			"url": "https://renderstouse.blob.core.windows.net/0c25168e-eda3-41d4-b266-8259566d2507/0d0e8542-db8d-475b-95bb-33156dc6551a_0c25168e-eda3-41d4-b266-8259566d2507.pdf?sv=2018-03-28&sr=c&sig=maMnPG2XIrQuLC3mArAgf3YKrM6EzFwNMggwApqMTeo%3D&st=2018-11-02T19%3A36%3A43Z&se=2018-12-02T19%3A38%3A43Z&sp=r",
+	 *			"order": 1
+	 *		}
+	 *	]
+	 */
+	$array['orderData']['items'][] = [
+		'sku' => $mediaClipOrdersData['plu']
+		,'sourceItemId' => $lines->id
+		,'components' => array_values(df_map($linesDetails->files, function($f) use($module) {return [
+			'code' => $this->code(dfo($f, 'id'), $module), 'fetch' => true, 'path' => $f->url
+		];}))
+		,'quantity' => 1 == $includeQuantityInJSON ? $orderQuantity : 1
+	];
+}
 							}
 						}
 						$this->l('array:'); $this->l($array);
@@ -502,13 +524,13 @@ $array['orderData']['items'][] = [
 	 * «Generate JSON data for photo-books»: https://www.upwork.com/ab/f/contracts/21011549
 	 * https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/9
 	 * @used-by execute()
+	 * @param string|null $v
 	 * @param string $m
 	 * @return string
 	 */
-    private function code($m) {
-		$m = strtolower($m);
-		return 'gifting' === $m ? 'gift' : ('print' === $m ? 'prints-set-01' : 'photobook-jacket');
-	}
+    private function code($v, $m) {return $v ?: (
+    	'gifting' === ($m = strtolower($m)) ? 'gift' : ('print' === $m ? 'prints-set-01' : 'photobook-jacket')
+	);}
 
     /**
 	 * 2018-11-02
