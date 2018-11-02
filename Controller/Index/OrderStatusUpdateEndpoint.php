@@ -12,6 +12,7 @@ use Magento\Framework\View\Result\PageFactory;
 use Magento\Sales\Model\Order as O;
 use Magento\Sales\Model\Order\Item as OI;
 use Magento\Store\Model\StoreManagerInterface as IStoreManager;
+use Mangoit\MediaclipHub\Model\Mediaclip;
 use Mangoit\MediaclipHub\Model\Orders;
 use Mangoit\MediaclipHub\Model\Product as mProduct;
 use pwinty\PhpPwinty;
@@ -153,7 +154,7 @@ class OrderStatusUpdateEndpoint extends Action {
 								$mediaclipOrderDetails = $helper->getMediaClipOrders($entityId);
 								foreach ($mediaclipOrderDetails->lines as $lines){
 									$projectId = $lines->projectId;
-									$projectData = $this->_objectManager->create('Mangoit\MediaclipHub\Model\Mediaclip')->load($projectId, 'project_id')->getData();
+									$projectData = $this->_objectManager->create(Mediaclip::class)->load($projectId, 'project_id')->getData();
 									$projectDetails[] = json_decode($projectData['project_details'], true);
 								}
 								$orderDirDate = $helper->createOrderDirectoryDate($orderDate);
@@ -289,7 +290,7 @@ class OrderStatusUpdateEndpoint extends Action {
 							foreach ($mediaclipOrderDetails->lines as $lines){
 
 								$projectId = $lines->projectId;
-								$projectData = $this->_objectManager->create('Mangoit\MediaclipHub\Model\Mediaclip')->load($projectId, 'project_id')->getData();
+								$projectData = $this->_objectManager->create(Mediaclip::class)->load($projectId, 'project_id')->getData();
 								$projectDetails = json_decode($projectData['project_details'], true);
 								$salesOrderItemModelCollection->clear()->getSelect()->reset('where');
 								$salesOrderItem = $salesOrderItemModelCollection->addFieldToFilter('mediaclip_project_id', array('eq' => $projectDetails['projectId']));
