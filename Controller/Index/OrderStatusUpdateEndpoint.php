@@ -10,7 +10,7 @@ class OrderStatusUpdateEndpoint extends Action {
      * @param Context     $context
      * @param PageFactory $resultPageFactory
      */
-    public function __construct(
+    function __construct(
         Context $context,
         \Magento\Framework\Filesystem $filesystem,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
@@ -23,7 +23,6 @@ class OrderStatusUpdateEndpoint extends Action {
         \Magento\Catalog\Model\ProductFactory $_productloader,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
         PageFactory $resultPageFactory
- 
     ) {
         $this->filesystem = $filesystem;
         $this->fileFactory = $fileFactory;
@@ -39,7 +38,7 @@ class OrderStatusUpdateEndpoint extends Action {
         parent::__construct($context);
  
     }
-    public function connectRemoteServer()
+    function connectRemoteServer()
     {
 
         $args['host'] = 'ftp.pureprint.com';
@@ -549,7 +548,7 @@ $array['orderData']['items'][] = [
         }
     }
 
-    public function CheckMediaclipOrderStatus()
+    function CheckMediaclipOrderStatus()
     {
        
     }
