@@ -12,6 +12,7 @@ use Magento\Sales\Model\Order as O;
 use Magento\Sales\Model\Order\Item as OI;
 use Magento\Store\Model\StoreManagerInterface as IStoreManager;
 use Mangoit\MediaclipHub\Model\Orders;
+use Mangoit\MediaclipHub\Model\Product as mProduct;
 use pwinty\PhpPwinty;
 // 2018-11-02
 class OrderStatusUpdateEndpoint extends Action {
@@ -175,7 +176,7 @@ class OrderStatusUpdateEndpoint extends Action {
 									}
 									$dir = $this->_objectManager->get(DirectoryList::class);
 									$base = $dir->getRoot();
-									$mediaClipOrdersData = $this->_objectManager->create('Mangoit\MediaclipHub\Model\Product')->load($value['items'][0]['plu'], 'plu')->getData();
+									$mediaClipOrdersData = $this->_objectManager->create(mProduct::class)->load($value['items'][0]['plu'], 'plu')->getData();
 									$pwintyProduct = $mediaClipOrdersData['pwinty_product_name'];
 									$frameColour = $mediaClipOrdersData['frame_colour'];
 									$filesUploadPath = $base.'/mediaclip_orders/'.$orderDirDate.'/pwinty/'.$orderIncrementId.'/'.$orderItemID.'/'.$mediaClipOrdersData['product_label'];
@@ -353,21 +354,12 @@ class OrderStatusUpdateEndpoint extends Action {
 								$dir = $this->_objectManager->get(DirectoryList::class);
 								$base = $dir->getRoot();
 
-								$mediaClipOrdersData = $this->_objectManager->create('Mangoit\MediaclipHub\Model\Product')->load($projectDetails['items'][0]['plu'], 'plu')->getData();
+								$mediaClipOrdersData = $this->_objectManager->create(mProduct::class)->load($projectDetails['items'][0]['plu'], 'plu')->getData();
 								$ftp_json = $mediaClipOrdersData['ftp_json'];
 								$logger->info($ftp_json);
-
 								#@var $includeQuantityInJSON flag to include json
 								$includeQuantityInJSON = $mediaClipOrdersData['include_quantity_in_json'];
-
-
-
-
 								if ($ftp_json == 1) {
-
-
-									// $filesUploadPath1 = $base.'/mediaclip_orders/'.$orderDirDate.'/ascendia/'.$orderIncrementId.'/'.$orderItemID.'/'.$mediaClipOrdersData['product_label'];
-
 									$filesUploadPath = $base.'/mediaclip_orders/'.$orderDirDate.'/ascendia/'.$orderIncrementId.'/'.$orderItemID.'/'.$mediaClipOrdersData['product_label'];
 									$logger->info(json_encode($filesUploadPath));
 									$imgPath = explode('html/', $filesUploadPath);
