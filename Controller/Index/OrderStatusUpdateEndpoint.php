@@ -38,13 +38,6 @@ class OrderStatusUpdateEndpoint extends Action {
         parent::__construct($context);
     }
 
-    function connectRemoteServer() {
-        $args['host'] = 'ftp.pureprint.com';
-        $args['username'] = 'Inkifi';
-        $args['password'] = 'Summ3rD4ys!';
-        return $args;
-    }
-
     function execute() {
 		/**
 		 * 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
@@ -445,7 +438,11 @@ $array['orderData']['items'][] = [
 								// 2018-08-20 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 								// «FTP upload to ftp.pureprint.com has stopped working»
 								// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/6
-								$this->sftp->open($this->connectRemoteServer());
+								$this->sftp->open([
+									'host' => 'ftp.pureprint.com'
+									,'username' => 'Inkifi'
+									,'password' => 'Summ3rD4ys!'
+								]);
 								/* Check SKU code here */
 								$jsonFileName = $orderIncrementId.'.json';
 								$jsonFile = $filesUploadPath.'/'.$jsonFileName;
@@ -544,11 +541,6 @@ $array['orderData']['items'][] = [
                 }
             }
         }
-    }
-
-    function CheckMediaclipOrderStatus()
-    {
-       
     }
 
     /**
