@@ -112,29 +112,27 @@ class OrderStatusUpdateEndpoint extends Action {
 							//set order item status to 1 as response of each line item receives
 							$salesOrderItemModel = $this->_objectManager->create(OI::class);
 							$salesOrderItemModelCollection = $salesOrderItemModel->getCollection();
-							$salesOrderItem = $salesOrderItemModelCollection->addFieldToFilter('mediaclip_project_id', array('eq' => $obj['projectId']));
-
+							$salesOrderItem = $salesOrderItemModelCollection
+								->addFieldToFilter('mediaclip_project_id', array('eq' => $obj['projectId']));
 							foreach ($salesOrderItem as $key => $value) {
-
 								$value->setItemDownloadStatus(1);
 								$value->save();
 							}
-
 							$salesOrderItemModelCollection->clear()->getSelect()->reset('where');
 							$salesOrderItem = $salesOrderItemModelCollection->addFieldToFilter(
-							// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
-							// «Modify orders numeration for Mediaclip»
-							// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
+								// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+								// «Modify orders numeration for Mediaclip»
+								// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
 								'order_id', ['eq' => $oidI]
 							);
-
 							foreach ($salesOrderItem as $key => $value) {//get status of order item
 								$status [] = $value->getData('item_download_status');
 							}
 							if (!in_array(0, $status)) { // check if all items are downloaded
-
-								$merchantId = $this->_objectManager->get(IScopeConfig::class)->getValue('api/pwinty_api_auth/merchant_id');
-								$apiKey = $this->_objectManager->get(IScopeConfig::class)->getValue('api/pwinty_api_auth/pwinty_api_key');
+								$merchantId = $this->_objectManager->get(IScopeConfig::class)
+									->getValue('api/pwinty_api_auth/merchant_id');
+								$apiKey = $this->_objectManager->get(IScopeConfig::class)
+									->getValue('api/pwinty_api_auth/pwinty_api_key');
 								$config = array(  //log in to pwinty
 									'api'        => 'sandbox',//production
 									'merchantId' => $merchantId,
@@ -177,15 +175,12 @@ class OrderStatusUpdateEndpoint extends Action {
 									$storeManager = $this->_objectManager->get(IStoreManager::class);
 									$store = $storeManager->getStore();
 									$baseUrl = $store->getBaseUrl();
-
 									if ($filesUploadPath != '') {
 										$quantity = 0 ;
 										foreach (new \DirectoryIterator($filesUploadPath) as $key => $fileInfo) {
-
 											if ($fileInfo->isDot() || $fileInfo->isDir())
 											   continue;
 											if ($fileInfo->isFile() && $fileInfo->getExtension() != 'csv') {
-
 												$img = $baseUrl.$imgPath[1].'/'.$fileInfo->getFilename();
 												$imgAttribute = [];
 												$imgAttribute['url'] = $img;
@@ -193,13 +188,10 @@ class OrderStatusUpdateEndpoint extends Action {
 												$imgAttribute['priceToUser'] = "0";
 												$imgAttribute['copies'] = $quantity+1;
 												$imgAttribute['type'] = $pwintyProduct;
-
-												foreach ($catalogue['items'] as  $value) {//check if product has frame attribute
-
+												foreach ($catalogue['items'] as  $value) {
+													//check if product has frame attribute
 													if ($value['name'] == $pwintyProduct) {
-
-														if($frameColour != "" && !empty($value['attributes'])){
-
+														if($frameColour != "" && !empty($value['attributes'])) {
 															$imgAttribute['attributes'][$value['attributes'][0]['name']] = strtolower($frameColour);
 														}
 													}
@@ -215,34 +207,21 @@ class OrderStatusUpdateEndpoint extends Action {
 								$postcode = $address->getPostcode();
 								$countryCode = $address->getCountryId();
 								$region = $address->getRegion();
-
-								/*if($address->getCompany() != ''){
-
-									$street1 = $address->getCompany().','.$address->getStreet(1);
-								}else{
-
-									$street1 = $address->getStreet(1);
-								}*/
-								if($address->getCompany() != ''){
-
+								if ($address->getCompany() != ''){
 									$street1 = $address->getCompany().','.$address->getStreet()[0];
-								}else{
-
+								} else {
 									$street1 = $address->getStreet()[0];
 								}
 								if (isset($address->getStreet()[1])) {
-
 									$street2 = $address->getStreet()[1];
-								}else{
+								} else{
 									$street2 = '';
 								}
-								//$street2 = $address->getStreet(2);
 								$city = $address->getCity();
 								$customerId = $order->getCustomerId();
 								$customer = $this->_objectManager->create(Customer::class)->load($customerId);
 								$name = $customer['firstname'].' '.$customer['lastname'];
 								$email = $customer['email'];
-
 								$order = $pwinty->createOrder(// create order to pwinty
 									$name,          //name
 									$email,         //email address
@@ -257,20 +236,17 @@ class OrderStatusUpdateEndpoint extends Action {
 									"InvoiceMe",     //payment method
 									"Pro"            //quality
 								);
-
 								$writer = new \Zend\Log\Writer\Stream(BP . '/var/log/pwinty_orders_status.log');
 								$logger = new \Zend\Log\Logger();
 								$logger->addWriter($writer);
 								$logger->info($order);
-
 								$pwintyOrderId = $order['id'];
 								//save pwinty id to custom table
 								$mediaclipOrderModel = $this->_objectManager->create(Orders::class);
 								$mediaclipOrderModelCollection = $mediaclipOrderModel->getCollection();
-								$mediaclipOrder = $mediaclipOrderModelCollection->addFieldToFilter('magento_order_id', array('eq' => $oidE));
-
+								$mediaclipOrder = $mediaclipOrderModelCollection
+									->addFieldToFilter('magento_order_id', array('eq' => $oidE));
 								foreach ($mediaclipOrder as $key => $value) {
-
 									$value->setPwintyOrderId($pwintyOrderId);
 									$value->save();
 								}
@@ -278,24 +254,18 @@ class OrderStatusUpdateEndpoint extends Action {
 									$pwintyOrderId, //order id
 									$imageArray
 								);
-
 								$logger->info($photos);
-
 								$getOrderStatus = $pwinty->getOrderStatus(// check order status
 									$pwintyOrderId              //orderid
 									 //status
 								);
-
 								$logger->info($getOrderStatus);
-
 								if ($getOrderStatus['isValid'] == 1) {// submit order if no error
-
 									$pwinty->updateOrderStatus(
 										$pwintyOrderId,              //orderid
 										"Submitted"         //status
 									);
-								}else{
-
+								} else {
 									$logger->info('order is not submitted');
 								}
 							}
@@ -310,25 +280,18 @@ class OrderStatusUpdateEndpoint extends Action {
 							// «Modify orders numeration for Mediaclip»
 							// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
 							$order = $this->_objectManager->create(O::class)->load($oidI);
-
-
 							$orderIncrementId = $order['increment_id'];
 							$entityId = $order->getEntityId();
 							$orderDate = $order['created_at'];
 							$mediaclipOrderDetails = $helper->getMediaClipOrders($entityId);
 							$orderDirDate = $helper->createOrderDirectoryDate($orderDate);
 							$array = [];
-
-
 							foreach ($mediaclipOrderDetails->lines as $lines){
 
 								$projectId = $lines->projectId;
 								$projectData = $this->_objectManager->create('Mangoit\MediaclipHub\Model\Mediaclip')->load($projectId, 'project_id')->getData();
 								$projectDetails = json_decode($projectData['project_details'], true);
-
-
 								$salesOrderItemModelCollection->clear()->getSelect()->reset('where');
-
 								$salesOrderItem = $salesOrderItemModelCollection->addFieldToFilter('mediaclip_project_id', array('eq' => $projectDetails['projectId']));
 								$module = "";
 								$orderQuantity = 1;
