@@ -483,7 +483,7 @@ $array['orderData']['items'][] = [
                         if (($item->getQtyToShip() > 0) && (!$item->getIsVirtual())) {
                             $_productId = $item->getProductId();
                             $_product = $this->_objectManager->create(Product::class)->load($_productId);
-                            $attributeSet = $objectManager->create('Magento\Eav\Api\AttributeSetRepositoryInterface');
+                            $attributeSet = $this->_objectManager->create('Magento\Eav\Api\AttributeSetRepositoryInterface');
                             $attributeSetRepository = $attributeSet->get($_product->getAttributeSetId());
                             $attribute_set_name = $attributeSetRepository->getAttributeSetName();
                 
