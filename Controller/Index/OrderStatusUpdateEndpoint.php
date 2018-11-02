@@ -7,6 +7,7 @@ use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Sales\Model\Order as O;
+use Magento\Sales\Model\Order\Item as OI;
 use Mangoit\MediaclipHub\Model\Orders;
 use pwinty\PhpPwinty;
 class OrderStatusUpdateEndpoint extends Action {
@@ -22,7 +23,7 @@ class OrderStatusUpdateEndpoint extends Action {
         \Magento\Framework\Filesystem\Io\Ftp $ftp,
         \Magento\Framework\Filesystem\Io\File $file,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        \Magento\Sales\Model\Order\Item $orderitem,
+        OI $orderitem,
         O $order,
         \Magento\Catalog\Model\ProductFactory $_productloader,
         \Magento\Framework\Controller\Result\JsonFactory $resultJsonFactory,
@@ -97,7 +98,7 @@ class OrderStatusUpdateEndpoint extends Action {
 						$uploadfolder = $product->getMediaclipUploadFolder();
 						if($uploadfolder == 'pwinty') {
 							//set order item status to 1 as response of each line item receives
-							$salesOrderItemModel = $this->_objectManager->create('Magento\Sales\Model\Order\Item');
+							$salesOrderItemModel = $this->_objectManager->create(OI::class);
 							$salesOrderItemModelCollection = $salesOrderItemModel->getCollection();
 							$salesOrderItem = $salesOrderItemModelCollection->addFieldToFilter('mediaclip_project_id', array('eq' => $obj['projectId']));
 
@@ -299,8 +300,7 @@ class OrderStatusUpdateEndpoint extends Action {
 							$writer = new \Zend\Log\Writer\Stream(BP . '/var/log/json_status.log');
 							$logger = new \Zend\Log\Logger();
 							$logger->addWriter($writer);
-
-							$salesOrderItemModel = $this->_objectManager->create('Magento\Sales\Model\Order\Item');
+							$salesOrderItemModel = $this->_objectManager->create(OI::class);
 							$salesOrderItemModelCollection = $salesOrderItemModel->getCollection();
 							// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 							// «Modify orders numeration for Mediaclip»
