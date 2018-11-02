@@ -79,8 +79,8 @@ class OrderStatusUpdateEndpoint extends Action {
                 $oidI = ikf_eti($oidE); /** @var string $oidI */
                 $logger->info($oidE);
                 $logger->info($json);
+                $helper = mc_h();
                 if ($oidE) {
-                    $helper = mc_h();
                     //Set mediaclip order status to 1 as the order is downloaded
                     $model = $this->_objectManager->create(Orders::class);
                     $mediaclipOrder = $model->getCollection();
@@ -366,7 +366,6 @@ class OrderStatusUpdateEndpoint extends Action {
 									$baseUrl = $store->getBaseUrl();
 									$array['destination']['name'] = 'pureprint';
 									$array['orderData']['sourceOrderId'] = $mediaclipOrderDetails->storeData->orderId;
-									$helper = mc_h();
 									$linesDetails = $helper->getMediaClipOrderLinesDetails($lines->id);
 // 2018-11-02 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 // «Generate JSON data for photo-books»
