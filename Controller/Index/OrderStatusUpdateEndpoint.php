@@ -96,9 +96,8 @@ class OrderStatusUpdateEndpoint extends Action
         $args['password'] = 'Summ3rD4ys!';
         return $args;
     }
-    public function execute()
-    {
 
+    function execute() {
 		/**
 		 * 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 		 * A response looks like:
@@ -125,11 +124,9 @@ class OrderStatusUpdateEndpoint extends Action
         $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/mediaclip_orders_download_shipment_status.log');
         $logger = new \Zend\Log\Logger();
         $logger->addWriter($writer);
-
-        if (!empty($obj)) {
-           
-            if (isset($obj['status']) && $obj['status']['value'] == 'AvailableForDownload') {
-    
+        if (!empty($obj) && isset($obj['status'])) {
+        	$dfStatus = (string)$obj['status']['value']; /** @var string $dfStatus */
+            if ('AvailableForDownload' === $dfStatus) {
                 $oidE = $obj['order']['storeData']['orderId'];
 				// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 				// «Modify orders numeration for Mediaclip»
@@ -521,7 +518,7 @@ $array['orderData']['items'][] = [
 					}
                 }
             }
-            if (isset($obj['status']) && $obj['status']['value'] == 'Shipped') {
+            else if ('Shipped' === $dfStatus) {
                 $projectId = $obj['projectId'];
                 $oidE = $obj['order']['storeData']['orderId'];
 				// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
@@ -599,7 +596,6 @@ $array['orderData']['items'][] = [
                 }
             }
         }
-        
     }
 
     public function CheckMediaclipOrderStatus()
