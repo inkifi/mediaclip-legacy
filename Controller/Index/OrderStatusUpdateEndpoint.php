@@ -154,24 +154,32 @@ class OrderStatusUpdateEndpoint extends Action {
 								$mediaclipOrderDetails = $helper->getMediaClipOrders($entityId);
 								foreach ($mediaclipOrderDetails->lines as $lines){
 									$projectId = $lines->projectId;
-									$projectData = $this->_objectManager->create(Mediaclip::class)->load($projectId, 'project_id')->getData();
+									$projectData = $this->_objectManager->create(Mediaclip::class)
+										->load($projectId, 'project_id')->getData();
 									$projectDetails[] = json_decode($projectData['project_details'], true);
 								}
 								$orderDirDate = $helper->createOrderDirectoryDate($orderDate);
 								$imageArray = [];
 								foreach ($projectDetails as $value) {
 									$salesOrderItemModelCollection->clear()->getSelect()->reset('where');
-									$salesOrderItem = $salesOrderItemModelCollection->addFieldToFilter('mediaclip_project_id', array('eq' => $value['projectId']));
+									$salesOrderItem = $salesOrderItemModelCollection->addFieldToFilter(
+										'mediaclip_project_id', array('eq' => $value['projectId'])
+									);
 									//get images from downloaded folder
 									foreach ($salesOrderItem as $newvalue) {
 										$orderItemID = $newvalue->getData('item_id');
 									}
 									$dir = $this->_objectManager->get(DirectoryList::class);
 									$base = $dir->getRoot();
-									$mediaClipOrdersData = $this->_objectManager->create(mProduct::class)->load($value['items'][0]['plu'], 'plu')->getData();
+									$mediaClipOrdersData = $this->_objectManager->create(mProduct::class)
+										->load($value['items'][0]['plu'], 'plu')->getData();
 									$pwintyProduct = $mediaClipOrdersData['pwinty_product_name'];
 									$frameColour = $mediaClipOrdersData['frame_colour'];
-									$filesUploadPath = $base.'/mediaclip_orders/'.$orderDirDate.'/pwinty/'.$orderIncrementId.'/'.$orderItemID.'/'.$mediaClipOrdersData['product_label'];
+									$filesUploadPath =
+										$base.'/mediaclip_orders/'.$orderDirDate.'/pwinty/'
+										.$orderIncrementId.'/'.$orderItemID
+										.'/'.$mediaClipOrdersData['product_label']
+									;
 									$imgPath = explode('html/', $filesUploadPath);
 									$storeManager = $this->_objectManager->get(IStoreManager::class);
 									$store = $storeManager->getStore();
@@ -288,12 +296,14 @@ class OrderStatusUpdateEndpoint extends Action {
 							$orderDirDate = $helper->createOrderDirectoryDate($orderDate);
 							$array = [];
 							foreach ($mediaclipOrderDetails->lines as $lines){
-
 								$projectId = $lines->projectId;
-								$projectData = $this->_objectManager->create(Mediaclip::class)->load($projectId, 'project_id')->getData();
+								$projectData = $this->_objectManager->create(Mediaclip::class)
+									->load($projectId, 'project_id')->getData();
 								$projectDetails = json_decode($projectData['project_details'], true);
 								$salesOrderItemModelCollection->clear()->getSelect()->reset('where');
-								$salesOrderItem = $salesOrderItemModelCollection->addFieldToFilter('mediaclip_project_id', array('eq' => $projectDetails['projectId']));
+								$salesOrderItem = $salesOrderItemModelCollection->addFieldToFilter(
+									'mediaclip_project_id', array('eq' => $projectDetails['projectId'])
+								);
 								$module = "";
 								$orderQuantity = 1;
 								foreach ($salesOrderItem as $newvalue) {
@@ -304,20 +314,26 @@ class OrderStatusUpdateEndpoint extends Action {
 								}
 								$dir = $this->_objectManager->get(DirectoryList::class);
 								$base = $dir->getRoot();
-								$mediaClipOrdersData = $this->_objectManager->create(mProduct::class)->load($projectDetails['items'][0]['plu'], 'plu')->getData();
+								$mediaClipOrdersData = $this->_objectManager->create(mProduct::class)
+									->load($projectDetails['items'][0]['plu'], 'plu')->getData();
 								$ftp_json = $mediaClipOrdersData['ftp_json'];
 								$logger->info($ftp_json);
 								#@var $includeQuantityInJSON flag to include json
 								$includeQuantityInJSON = $mediaClipOrdersData['include_quantity_in_json'];
 								if ($ftp_json == 1) {
-									$filesUploadPath = $base.'/mediaclip_orders/'.$orderDirDate.'/ascendia/'.$orderIncrementId.'/'.$orderItemID.'/'.$mediaClipOrdersData['product_label'];
+									$filesUploadPath =
+										$base.'/mediaclip_orders/'.$orderDirDate.'/ascendia/'
+										.$orderIncrementId.'/'.$orderItemID.'/'
+										.$mediaClipOrdersData['product_label']
+									;
 									$logger->info(json_encode($filesUploadPath));
 									$imgPath = explode('html/', $filesUploadPath);
 									$storeManager = $this->_objectManager->get(IStoreManager::class);
 									$store = $storeManager->getStore();
 									$baseUrl = $store->getBaseUrl();
 									$array['destination']['name'] = 'pureprint';
-									$array['orderData']['sourceOrderId'] = $mediaclipOrderDetails->storeData->orderId;
+									$array['orderData']['sourceOrderId'] =
+										$mediaclipOrderDetails->storeData->orderId;
 									$linesDetails = $helper->getMediaClipOrderLinesDetails($lines->id);
 // 2018-11-02 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 // «Generate JSON data for photo-books»
@@ -442,7 +458,10 @@ $array['orderData']['items'][] = [
                             $attributeSetRepository = $attributeSet->get($_product->getAttributeSetId());
                             $attribute_set_name = $attributeSetRepository->getAttributeSetName();
                             if ($attribute_set_name == 'Photobook') {
-                                if ($item->getMediaclipProjectId() != '' && ($item->getMediaclipProjectId() == $projectId)) {
+                                if (
+                                	$item->getMediaclipProjectId() != ''
+									&& ($item->getMediaclipProjectId() == $projectId)
+								) {
                                     $itemId = $item->getItemId();
                                     $item_qtys[$itemId] = $item->getQtyToShip();
                                 }
@@ -524,19 +543,7 @@ $array['orderData']['items'][] = [
 
     private $_orderItem;
 
-    private $_dimensionField;
-
-    private $_alterationField;
-
-    private $_garment;
-
-    private $_garmentStyle;
-
-    private $_garmentStyleOption;
-
     private $_order;
-
-    private $_warehouseFactory;
 
     protected $_productloader;
 
