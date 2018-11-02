@@ -1,6 +1,7 @@
 <?php
 namespace Mangoit\MediaclipHub\Controller\Index;
 use Magento\Catalog\Model\Product;
+use Magento\Eav\Api\AttributeSetRepositoryInterface as IAttributeSetRepository;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -484,7 +485,7 @@ $array['orderData']['items'][] = [
                         if (($item->getQtyToShip() > 0) && (!$item->getIsVirtual())) {
                             $_productId = $item->getProductId();
                             $_product = $this->_objectManager->create(Product::class)->load($_productId);
-                            $attributeSet = $this->_objectManager->create('Magento\Eav\Api\AttributeSetRepositoryInterface');
+                            $attributeSet = $this->_objectManager->create(IAttributeSetRepository::class);
                             $attributeSetRepository = $attributeSet->get($_product->getAttributeSetId());
                             $attribute_set_name = $attributeSetRepository->getAttributeSetName();
                 
@@ -549,7 +550,7 @@ $array['orderData']['items'][] = [
 
         $product = $this->_objectManager->create(Product::class)->load($product_id);
         $uploadfolder = $product->getMediaclipUploadFolder();
-        $attributeSet = $this->_objectManager->create('Magento\Eav\Api\AttributeSetRepositoryInterface');
+        $attributeSet = $this->_objectManager->create(IAttributeSetRepository::class);
         $attributeSetRepository = $attributeSet->get($product->getAttributeSetId());
         $mediaclip_module = $attributeSetRepository->getAttributeSetName();
         return $mediaclip_module;
