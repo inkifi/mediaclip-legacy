@@ -14,7 +14,7 @@ use Magento\Sales\Model\Order\Item as OI;
 use Magento\Store\Model\StoreManagerInterface as IStoreManager;
 use Mangoit\MediaclipHub\Model\Mediaclip;
 use Mangoit\MediaclipHub\Model\Orders;
-use Mangoit\MediaclipHub\Model\Product as mProduct;
+use Mangoit\MediaclipHub\Model\Product as mP;
 use pwinty\PhpPwinty;
 // 2018-11-02
 class OrderStatusUpdateEndpoint extends Action {
@@ -176,14 +176,14 @@ class OrderStatusUpdateEndpoint extends Action {
 								}
 								$dir = df_o(DirectoryList::class);
 								$base = $dir->getRoot();
-								$mediaClipOrdersData = df_new_om(mProduct::class)
-									->load($value['items'][0]['plu'], 'plu')->getData();
-								$pwintyProduct = $mediaClipOrdersData['pwinty_product_name'];
-								$frameColour = $mediaClipOrdersData['frame_colour'];
+								/** @var array(string => mixed) $mP */
+								$mP = df_new_om(mP::class)->load($value['items'][0]['plu'], 'plu')->getData();
+								$pwintyProduct = $mP['pwinty_product_name'];
+								$frameColour = $mP['frame_colour'];
 								$filesUploadPath =
 									$base.'/mediaclip_orders/'.$orderDirDate.'/pwinty/'
 									.$orderIncrementId.'/'.$orderItemID
-									.'/'.$mediaClipOrdersData['product_label']
+									.'/'.$mP['product_label']
 								;
 								$imgPath = explode('html/', $filesUploadPath);
 								$storeManager = df_o(IStoreManager::class);
@@ -321,18 +321,19 @@ class OrderStatusUpdateEndpoint extends Action {
 							$this->l("Module: $module");
 							$dir = df_o(DirectoryList::class);
 							$base = $dir->getRoot();
-							$mediaClipOrdersData = df_new_om(mProduct::class)
-								->load($projectDetails['items'][0]['plu'], 'plu')->getData();
-							$ftp_json = $mediaClipOrdersData['ftp_json'];
+							/** @var array(string => mixed) $mP */
+							$mP = df_new_om(mP::class)->load($projectDetails['items'][0]['plu'], 'plu')->getData();
+							$this->l('Mediaclip Product:');  $this->l($mP);
+							$ftp_json = $mP['ftp_json'];
 							$logger->info($ftp_json);
 							$this->l('Send Json: ' . $ftp_json);
 							#@var $includeQuantityInJSON flag to include json
-							$includeQuantityInJSON = $mediaClipOrdersData['include_quantity_in_json'];
+							$includeQuantityInJSON = $mP['include_quantity_in_json'];
 							if ($ftp_json == 1) {
 								$filesUploadPath =
 									$base.'/mediaclip_orders/'.$orderDirDate.'/ascendia/'
 									.$orderIncrementId.'/'.$orderItemID.'/'
-									.$mediaClipOrdersData['product_label']
+									.$mP['product_label']
 								;
 								$this->l("filesUploadPath: $filesUploadPath");
 								$logger->info(json_encode($filesUploadPath));
@@ -368,10 +369,10 @@ if (count($linesDetails->files)) {
 	 *	]
 	 */
 	$array['orderData']['items'][] = [
-		'sku' => $mediaClipOrdersData['plu']
+		'sku' => $mP['plu']
 		,'sourceItemId' => $lines->id
-		,'components' => array_values(df_map($linesDetails->files, function($f) use($module) {return [
-			'code' => $this->code(dfo($f, 'id'), $module), 'fetch' => true, 'path' => $f->url
+		,'components' => array_values(df_map($linesDetails->files, function($f) use($module, $mP) {return [
+			'code' => dfa($mP, 'json_code', $this->code(dfo($f, 'id'), $module)), 'fetch' => true, 'path' => $f->url
 		];}))
 		,'quantity' => 1 == $includeQuantityInJSON ? $orderQuantity : 1
 	];
@@ -423,8 +424,7 @@ if (count($linesDetails->files)) {
 							// hardcoded filesystem path with a dynamics one":
 							// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/3
 							$filesUploadPath = df_cc_path(
-								BP, 'ftp_json', $orderDirDate, $orderIncrementId
-								,$orderItemID, $mediaClipOrdersData['product_label']
+								BP, 'ftp_json', $orderDirDate, $orderIncrementId, $orderItemID, $mP['product_label']
 							);
 							$this->l("filesUploadPath: $filesUploadPath");
 							$logger->info(json_encode($filesUploadPath));
