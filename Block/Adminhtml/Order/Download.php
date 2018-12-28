@@ -24,7 +24,7 @@ class Download extends \Magento\Backend\Block\Template implements \Magento\Backe
      * @param \Magento\Framework\Registry $registry
      * @param array $data
      */
-    public function __construct(
+    function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         array $data = []
@@ -38,7 +38,7 @@ class Download extends \Magento\Backend\Block\Template implements \Magento\Backe
      *
      * @return \Magento\Sales\Model\Order
      */
-    public function getOrder()
+    function getOrder()
     {
         return $this->coreRegistry->registry('current_order');
     }
@@ -46,7 +46,7 @@ class Download extends \Magento\Backend\Block\Template implements \Magento\Backe
     /**
      * {@inheritdoc}
      */
-    public function getTabLabel()
+    function getTabLabel()
     {
         return __('Mediaclip Order Status');
     }
@@ -54,7 +54,7 @@ class Download extends \Magento\Backend\Block\Template implements \Magento\Backe
     /**
      * {@inheritdoc}
      */
-    public function getTabTitle()
+    function getTabTitle()
     {
         return __('Mediaclip Order Status');
     }
@@ -62,7 +62,7 @@ class Download extends \Magento\Backend\Block\Template implements \Magento\Backe
     /**
      * {@inheritdoc}
      */
-    public function canShowTab()
+    function canShowTab()
     {
         // For me, I wanted this tab to always show
         // You can play around with the ACL settings 
@@ -73,7 +73,7 @@ class Download extends \Magento\Backend\Block\Template implements \Magento\Backe
     /**
      * {@inheritdoc}
      */
-    public function isHidden()
+    function isHidden()
     {
         // For me, I wanted this tab to always show
         // You can play around with conditions to
@@ -86,7 +86,7 @@ class Download extends \Magento\Backend\Block\Template implements \Magento\Backe
      *
      * @return string
      */
-    public function getTabClass()
+    function getTabClass()
     {
         // I wanted mine to load via AJAX when it's selected
         // That's what this does
@@ -98,7 +98,7 @@ class Download extends \Magento\Backend\Block\Template implements \Magento\Backe
      *
      * @return string
      */
-    public function getClass()
+    function getClass()
     {
         return $this->getTabClass();
     }
@@ -108,7 +108,7 @@ class Download extends \Magento\Backend\Block\Template implements \Magento\Backe
      *
      * @return string
      */
-    public function getTabUrl()
+    function getTabUrl()
     {
         // customtab is a adminhtml router we're about to define
         // the full route can really be whatever you want

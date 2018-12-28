@@ -14,7 +14,7 @@
  
     class CustomPrice implements ObserverInterface
     {
-        public function execute(\Magento\Framework\Event\Observer $observer) {
+        function execute(\Magento\Framework\Event\Observer $observer) {
 
             $item = $observer->getEvent()->getData('quote_item');
             $objectManager = \Magento\Framework\App\ObjectManager::getInstance();

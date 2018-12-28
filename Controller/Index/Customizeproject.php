@@ -19,7 +19,7 @@ class Customizeproject extends Action
      * @param Context     $context
      * @param PageFactory $resultPageFactory
      */
-    public function __construct(
+    function __construct(
         Context $context,
         PageFactory $resultPageFactory
  
@@ -29,7 +29,7 @@ class Customizeproject extends Action
  
     }
  
-    public function execute()
+    function execute()
     {
 		/**
 		 * 2018-07-30 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro

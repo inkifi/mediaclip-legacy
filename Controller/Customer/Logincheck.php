@@ -18,7 +18,7 @@ class Logincheck extends Action
      * @param Context     $context
      * @param PageFactory $resultPageFactory
      */
-    public function __construct(
+    function __construct(
         Context $context,
         PageFactory $resultPageFactory
  
@@ -28,7 +28,7 @@ class Logincheck extends Action
  
     }
  
-    public function execute()
+    function execute()
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         echo $objectManager->get('Magento\Customer\Model\Session')->isLoggedIn();

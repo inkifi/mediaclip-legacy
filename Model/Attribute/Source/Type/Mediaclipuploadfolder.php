@@ -13,7 +13,7 @@ class Mediaclipuploadfolder extends \Magento\Eav\Model\Entity\Attribute\Source\A
      * Get all options
      * @return array
      */
-    public function getAllOptions()
+    function getAllOptions()
     {
         if (!$this->_options) {
             $this->_options = mc_h()->getuploadFolder();    

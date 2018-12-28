@@ -13,7 +13,7 @@ class Mediaclipsuppliers extends \Magento\Eav\Model\Entity\Attribute\Source\Abst
      * Get all options
      * @return array
      */
-    public function getAllOptions()
+    function getAllOptions()
     {
         if (!$this->_options) {
             $this->_options = mc_h()->getSuppliers();

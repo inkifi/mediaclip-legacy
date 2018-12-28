@@ -27,7 +27,7 @@ class Requestmediaclipordersave extends Action
      * @param Context     $context
      * @param PageFactory $resultPageFactory
      */
-    public function __construct(
+    function __construct(
         Context $context,
         \Magento\Framework\HTTP\Client\Curl $curl,
         PageFactory $resultPageFactory
@@ -39,7 +39,7 @@ class Requestmediaclipordersave extends Action
  
     }
  
-    public function execute()
+    function execute()
     { 
         $response = $this->_curl->getBody();
         /*$json = file_get_contents('php://input');

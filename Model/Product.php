@@ -20,7 +20,7 @@ class Product extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\Db $resourceCollection
      * @param array $data
      */
-    public function __construct(
+    function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
@@ -33,11 +33,11 @@ class Product extends \Magento\Framework\Model\AbstractModel
     /**
      * @return void
      */
-    public function _construct()
+    function _construct()
     {
         $this->_init('Mangoit\MediaclipHub\Model\ResourceModel\Product');
     }
-    public function getMediaClipProductByLabel($label, $_module){
+    function getMediaClipProductByLabel($label, $_module){
         $collection = $this->getCollection();
         if ($label) {
             $collection->addFieldToFilter('product_label', $label);
@@ -48,7 +48,7 @@ class Product extends \Magento\Framework\Model\AbstractModel
         return $collection->getData();
     }
 
-    public function getMediaClipProductBySku($sku, $module){
+    function getMediaClipProductBySku($sku, $module){
         $collection = $this->getCollection();
         if ($sku) {
             $collection->addFieldToFilter('plu', $sku);

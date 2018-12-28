@@ -53,7 +53,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
-    public function __construct(
+    function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Backend\Helper\Data $backendHelper,
         \Magento\Store\Model\WebsiteFactory $websiteFactory,
@@ -218,7 +218,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
     /**
      * @return string
      */
-    public function getGridUrl()
+    function getGridUrl()
     {
         return $this->getUrl('mediacliphub/*/index', ['_current' => true]);
     }
@@ -227,7 +227,7 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param \Magento\Catalog\Model\Product|\Magento\Framework\Object $row
      * @return string
      */
-    public function getRowUrl($row)
+    function getRowUrl($row)
     {
         return $this->getUrl(
             'mediacliphub/*/edit',

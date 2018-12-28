@@ -13,7 +13,7 @@ class Dustjacketpopup extends \Magento\Eav\Model\Entity\Attribute\Source\Abstrac
      * Get all options
      * @return array
      */
-    public function getAllOptions()
+    function getAllOptions()
     {
         if (!$this->_options) {
             $this->_options = mc_h()->getDustjacketpopup();

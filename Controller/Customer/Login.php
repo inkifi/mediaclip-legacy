@@ -61,7 +61,7 @@ class Login extends \Magento\Customer\Controller\AbstractAccount
      * @param Validator $formKeyValidator
      * @param AccountRedirect $accountRedirect
      */
-    public function __construct(
+    function __construct(
         Context $context,
         Session $customerSession,
         AccountManagementInterface $customerAccountManagement,
@@ -132,7 +132,7 @@ class Login extends \Magento\Customer\Controller\AbstractAccount
      * @return \Magento\Framework\Controller\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    public function execute()
+    function execute()
     {   
         if ($this->session->isLoggedIn() || !$this->formKeyValidator->validate($this->getRequest())) {
             /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */

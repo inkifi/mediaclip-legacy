@@ -71,7 +71,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * @param \Magento\Framework\UrlFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
-    public function __construct(
+    function __construct(
         \Magento\Framework\App\RequestInterface $request,
         \Magento\Framework\View\LayoutInterface $layout,
         \Magento\Framework\Event\ManagerInterface $eventManager,
@@ -141,7 +141,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * Function for getting developer helper object
      * @return \Mangoit\MediaclipHub\Helper\Data
      */
-    public function getMediaclipHubHelper()
+    function getMediaclipHubHelper()
     {
         return $this->_devToolHelper;
     }
@@ -151,7 +151,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * Function for getting registry object
      * @return \Magento\Framework\Registry
      */
-    public function getRegistry()
+    function getRegistry()
     {
         return $this->registry;
     }
@@ -160,7 +160,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * Function for getting mediacliphub model config object
      * @return \Mangoit\MediaclipHub\Model\Config
      */
-    public function getConfig()
+    function getConfig()
     {
         return $this->_config;
     }
@@ -169,7 +169,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * Function for getting object manager object
      * @return \Magento\Framework\ObjectManagerInterface
      */
-    public function getObjectManager()
+    function getObjectManager()
     {
         return $this->_objectManager;
     }
@@ -178,7 +178,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * Function for getting UrlFactory object
      * @return \Magento\Framework\UrlFactory
      */
-    public function getUrlFactory()
+    function getUrlFactory()
     {
         return $this->_urlFactory;
     }

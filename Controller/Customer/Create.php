@@ -114,7 +114,7 @@ class Create extends \Magento\Customer\Controller\AbstractAccount
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
-    public function __construct(
+    function __construct(
         Context $context,
         Session $customerSession,
         ScopeConfigInterface $scopeConfig,
@@ -243,7 +243,7 @@ class Create extends \Magento\Customer\Controller\AbstractAccount
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function execute()
+    function execute()
     {
         /** @var \Magento\Framework\Controller\Result\Redirect $resultRedirect */
         $resultRedirect = $this->resultRedirectFactory->create();

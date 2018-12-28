@@ -14,7 +14,7 @@ class Mediaclip extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @return void
      */
-    public function _construct()
+    function _construct()
     {
         $this->_init('mediaclip', 'id');
     }

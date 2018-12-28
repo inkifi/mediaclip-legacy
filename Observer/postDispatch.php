@@ -15,7 +15,7 @@ class postDispatch implements ObserverInterface
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      */
-    public function __construct(
+    function __construct(
         \Mangoit\MediaclipHub\Model\OrdersFactory $replenish,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -33,7 +33,7 @@ class postDispatch implements ObserverInterface
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    function execute(\Magento\Framework\Event\Observer $observer)
     {        
         $addNewOption = true;
         if ($this->_registry->registry('current_product')) {

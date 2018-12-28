@@ -8,7 +8,7 @@ class Save extends \Magento\Backend\App\Action
     /**
      * @var \Magento\Framework\View\Result\PageFactory
      */
-    public function execute()
+    function execute()
     {
         $data = $this->getRequest()->getParams();
         if ($data) {
@@ -65,7 +65,7 @@ class Save extends \Magento\Backend\App\Action
         }
         $this->_redirect('*/*/');
     }
-    public function getModuleCode($_modulename)
+    function getModuleCode($_modulename)
     {
         $code = preg_replace('#[^0-9a-z]+#i', '-', trim($_modulename));
         $code = strtolower($code);

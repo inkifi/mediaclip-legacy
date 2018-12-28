@@ -18,7 +18,7 @@ class GetPriceEndpoint extends Action
      * @param Context     $context
      * @param PageFactory $resultPageFactory
      */
-    public function __construct(
+    function __construct(
         Context $context,
         \Psr\Log\LoggerInterface $logger,
         PageFactory $resultPageFactory
@@ -30,7 +30,7 @@ class GetPriceEndpoint extends Action
  
     }
  
-    public function execute()
+    function execute()
     {
         
         $json = file_get_contents('php://input');
@@ -58,7 +58,7 @@ class GetPriceEndpoint extends Action
         exit;
     }
 
-    public function checkToAppendQty($product){
+    function checkToAppendQty($product){
      
         $response = true;
         if ($product->getMediaclipMinimumPrintsAllow() && $product->getMediaclipMinimumPrintsCount() != '' && $product->getMediaclipExtraPrintsPrice() != '') {
@@ -67,7 +67,7 @@ class GetPriceEndpoint extends Action
         return $response;
     }
 
-    public function getProductQuantity($items){
+    function getProductQuantity($items){
         
         $quantity = 0;
         if (!empty($items)) {
@@ -77,7 +77,7 @@ class GetPriceEndpoint extends Action
         }
         return $quantity;
     }
-    public function getProductCalculatedPrice($product_id, $mediaclip_obj, $quantity){
+    function getProductCalculatedPrice($product_id, $mediaclip_obj, $quantity){
 
         $price = 0;
         
@@ -154,7 +154,7 @@ class GetPriceEndpoint extends Action
         return $price;
     }
 
-    public function getProductAdditionalPriceAmount($productId){
+    function getProductAdditionalPriceAmount($productId){
         $product = $this->_objectManager->create('\Magento\Catalog\Model\Product')->load($productId);
         if ($product->getMediaClipExtrasheetamt() && is_numeric($product->getMediaClipExtrasheetamt())) {
             $additionalAmount = $product->getMediaClipExtrasheetamt();
@@ -163,7 +163,7 @@ class GetPriceEndpoint extends Action
         return 0;
     }
 
-    public function getPriceHtml($productPrice){
+    function getPriceHtml($productPrice){
     
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
 

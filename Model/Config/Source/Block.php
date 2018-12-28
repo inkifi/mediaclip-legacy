@@ -10,7 +10,7 @@ class Block implements ArrayInterface
      * Option getter
      * @return array
      */
-    public function toOptionArray()
+    function toOptionArray()
     {
         $arr = $this->toArray();
         $ret = [];
@@ -27,7 +27,7 @@ class Block implements ArrayInterface
      * Get options in "key-value" format
      * @return array
      */
-    public function toArray()
+    function toArray()
     {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $model = $objectManager->create('Magento\Cms\Model\Block')->getCollection();

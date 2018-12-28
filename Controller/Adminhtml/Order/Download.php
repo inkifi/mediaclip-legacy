@@ -31,7 +31,7 @@ class Download extends \Magento\Sales\Controller\Adminhtml\Order
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
-    public function __construct(
+    function __construct(
         Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,

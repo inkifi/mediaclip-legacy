@@ -10,7 +10,7 @@ namespace Mangoit\MediaclipHub\Controller\Cart;
 class Add extends \Magento\Checkout\Controller\Cart\Add
 {
    
-    public function execute()
+    function execute()
     {
         $params = $this->getRequest()->getParams();
        /* print_r($params); 

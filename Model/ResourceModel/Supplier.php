@@ -14,7 +14,7 @@ class Supplier extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      *
      * @return void
      */
-    public function _construct()
+    function _construct()
     {
         $this->_init('mediacliphub_supplier', 'id');
     }

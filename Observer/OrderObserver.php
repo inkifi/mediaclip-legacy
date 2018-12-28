@@ -15,7 +15,7 @@ use Magento\Payment\Observer\AbstractDataAssignObserver;
 class OrderObserver extends AbstractDataAssignObserver
 {
     
-    public function execute(Observer $observer)
+    function execute(Observer $observer)
     {
         $order = $observer->getEvent()->getOrder();
         $payment = $order->getPayment()->getState();

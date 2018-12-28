@@ -27,7 +27,7 @@ class BaseBlock extends \Magento\Framework\View\Element\Template
      * @param \Mangoit\MediaclipHub\Block\Context $context
      * @param \Magento\Framework\UrlFactory $urlFactory
      */
-    public function __construct( \Mangoit\MediaclipHub\Block\Context $context
+    function __construct( \Mangoit\MediaclipHub\Block\Context $context
     )
     {
         $this->_devToolHelper = $context->getMediaclipHubHelper();
@@ -40,7 +40,7 @@ class BaseBlock extends \Magento\Framework\View\Element\Template
      * Function for getting event details
      * @return array
      */
-    public function getEventDetails()
+    function getEventDetails()
     {
         return  $this->_devToolHelper->getEventDetails();
     }
@@ -49,7 +49,7 @@ class BaseBlock extends \Magento\Framework\View\Element\Template
      * Function for getting current url
      * @return string
      */
-    public function getCurrentUrl()
+    function getCurrentUrl()
     {
         return $this->_urlApp->getCurrentUrl();
     }
@@ -59,7 +59,7 @@ class BaseBlock extends \Magento\Framework\View\Element\Template
      * @param string $routePath
      * @return string
      */
-    public function getControllerUrl($routePath)
+    function getControllerUrl($routePath)
     {
         
         return $this->_urlApp->getUrl($routePath);
@@ -70,7 +70,7 @@ class BaseBlock extends \Magento\Framework\View\Element\Template
      * @param string $path
      * @return string
      */
-    public function getConfigValue($path)
+    function getConfigValue($path)
     {
         return $this->_config->getCurrentStoreConfigValue($path);
     }
@@ -79,7 +79,7 @@ class BaseBlock extends \Magento\Framework\View\Element\Template
      * Function canShowMediaclipHub
      * @return bool
      */
-    public function canShowMediaclipHub()
+    function canShowMediaclipHub()
     {
         $isEnabled=$this->getConfigValue('mediacliphub/module/is_enabled');
         if ($isEnabled) {

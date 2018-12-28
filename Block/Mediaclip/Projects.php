@@ -6,13 +6,13 @@ class Projects extends \Magento\Framework\View\Element\Template
 {
 	protected $_projects;
 
-	public function __construct(\Magento\Framework\View\Element\Template\Context $context)
+	function __construct(\Magento\Framework\View\Element\Template\Context $context)
 	{
 		parent::__construct($context);
 	}
 
 
-    public function  getProjects() 
+    function  getProjects() 
     {
         $hubHelper = mc_h();
         $storeUserId = $hubHelper->getCustomerId();
@@ -20,7 +20,7 @@ class Projects extends \Magento\Framework\View\Element\Template
         return $projects->projects;
     }
 
-    public function getProjectEditUrl($project_id){
+    function getProjectEditUrl($project_id){
 
         $url = "javascript:void(0)";
         if ($project_id) {
@@ -37,7 +37,7 @@ class Projects extends \Magento\Framework\View\Element\Template
         return $url;
     }
 
-    public function checkCustomerLoggedIn(){
+    function checkCustomerLoggedIn(){
     	$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         return $objectManager->get('Magento\Customer\Model\Session')->isLoggedIn();
     }

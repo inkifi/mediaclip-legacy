@@ -13,7 +13,7 @@ class quoteSaveBefore implements ObserverInterface
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      */
-    public function __construct(
+    function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager
     ) {
         $this->_objectManager = $objectManager;
@@ -25,7 +25,7 @@ class quoteSaveBefore implements ObserverInterface
      * @param \Magento\Framework\Event\Observer $observer
      * @return void
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    function execute(\Magento\Framework\Event\Observer $observer)
     {
         
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();

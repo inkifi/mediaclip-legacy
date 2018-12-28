@@ -31,7 +31,7 @@ class Index extends \Magento\Sales\Controller\Adminhtml\Order
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
-    public function __construct(
+    function __construct(
         Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\App\Response\Http\FileFactory $fileFactory,
@@ -66,7 +66,7 @@ class Index extends \Magento\Sales\Controller\Adminhtml\Order
      *
      * @return \Magento\Framework\Controller\Result\Raw
      */
-    public function execute()
+    function execute()
     {
         $this->_initOrder();
         $layout = $this->layoutFactory->create();

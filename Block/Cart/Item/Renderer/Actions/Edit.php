@@ -15,7 +15,7 @@ class Edit extends \Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit
      *
      * @return string
      */
-    public function getConfigureUrl()
+    function getConfigureUrl()
     {
         return $this->getUrl(
             'checkout/cart/configure',
@@ -25,7 +25,7 @@ class Edit extends \Magento\Checkout\Block\Cart\Item\Renderer\Actions\Edit
             ]
         );
     }
-    public function test()
+    function test()
     {
        echo "string";
     }

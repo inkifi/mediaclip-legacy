@@ -18,7 +18,7 @@ class Account extends Action
      * @param Context     $context
      * @param PageFactory $resultPageFactory
      */
-    public function __construct(
+    function __construct(
         Context $context,
         PageFactory $resultPageFactory
  
@@ -28,7 +28,7 @@ class Account extends Action
  
     }
  
-    public function execute()
+    function execute()
     {
         $resultPage = $this->_resultPageFactory->create();
         return $resultPage;

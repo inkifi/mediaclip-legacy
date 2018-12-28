@@ -15,7 +15,7 @@ class SupplierInformation extends \Magento\Backend\Block\Widget\Form\Generic imp
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param array $data
      */
-    public function __construct(
+    function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
@@ -94,7 +94,7 @@ class SupplierInformation extends \Magento\Backend\Block\Widget\Form\Generic imp
      *
      * @return string
      */
-    public function getTabLabel()
+    function getTabLabel()
     {
         return __('Theme Information');
     }
@@ -104,7 +104,7 @@ class SupplierInformation extends \Magento\Backend\Block\Widget\Form\Generic imp
      *
      * @return string
      */
-    public function getTabTitle()
+    function getTabTitle()
     {
         return __('Theme Information');
     }
@@ -112,7 +112,7 @@ class SupplierInformation extends \Magento\Backend\Block\Widget\Form\Generic imp
     /**
      * {@inheritdoc}
      */
-    public function canShowTab()
+    function canShowTab()
     {
         return true;
     }
@@ -120,7 +120,7 @@ class SupplierInformation extends \Magento\Backend\Block\Widget\Form\Generic imp
     /**
      * {@inheritdoc}
      */
-    public function isHidden()
+    function isHidden()
     {
         return false;
     }

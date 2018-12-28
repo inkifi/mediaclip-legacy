@@ -17,7 +17,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
     private $categorySetupFactory;
     private $eavSetupFactory;
 
-    public function __construct(
+    function __construct(
         EavSetupFactory $eavSetupFactory,
         AttributeSetFactory $attributeSetFactory,
         CategorySetupFactory $categorySetupFactory,
@@ -29,7 +29,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
         $this->setup2 = $setup2;
     }
 
-    public function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
+    function upgrade(SchemaSetupInterface $setup, ModuleContextInterface $context)
     {
         $setup->startSetup();
         

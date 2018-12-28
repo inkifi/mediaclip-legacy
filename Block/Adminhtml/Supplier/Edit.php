@@ -45,7 +45,7 @@ class Edit extends \Magento\Backend\Block\Widget\Form\Container
      *
      * @return string
      */
-    public function getHeaderText()
+    function getHeaderText()
     {
         if ($this->_coreRegistry->registry('checkmodule_checkmodel')->getId()) {
             return __("Edit Item '%1'", $this->escapeHtml($this->_coreRegistry->registry('checkmodule_checkmodel')->getTitle()));

@@ -12,7 +12,7 @@ class Orderneo implements \Magento\Framework\Event\ObserverInterface
     /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      */
-    public function __construct(
+    function __construct(
         \Mangoit\MediaclipHub\Model\OrdersFactory $replenish,
         \Magento\Framework\ObjectManagerInterface $objectManager,
         \Psr\Log\LoggerInterface $logger,
@@ -23,7 +23,7 @@ class Orderneo implements \Magento\Framework\Event\ObserverInterface
         $this->logger = $logger;
         $this->order = $order;
     }
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    function execute(\Magento\Framework\Event\Observer $observer)
     {
         //$orderId = $observer->getEvent()->getOrderIds();
         $order = $observer->getEvent()->getOrder();

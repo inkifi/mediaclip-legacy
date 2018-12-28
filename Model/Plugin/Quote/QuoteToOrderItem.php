@@ -13,7 +13,7 @@ class QuoteToOrderItem
      * @return \Magento\Sales\Model\Order\Item
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-  public function aroundConvert(
+  function aroundConvert(
         \Magento\Quote\Model\Quote\Item\ToOrderItem $subject,
         Closure $proceed,
         \Magento\Quote\Model\Quote\Item\AbstractItem $item,

@@ -7,7 +7,7 @@ namespace Mangoit\MediaclipHub\Block\Cart\Item;
 
 class Renderer extends \Magento\Checkout\Block\Cart\Item\Renderer
 {
-    public function getProductUrl($mediaclipProjectid = 0)
+    function getProductUrl($mediaclipProjectid = 0)
     {
         if ($this->_productUrl !== null) {
             return $this->_productUrl;

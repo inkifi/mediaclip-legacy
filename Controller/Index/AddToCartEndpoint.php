@@ -18,7 +18,7 @@ class AddToCartEndpoint extends Action
      * @param Context     $context
      * @param PageFactory $resultPageFactory
      */
-    public function __construct(
+    function __construct(
         Context $context,
         PageFactory $resultPageFactory
  
@@ -28,7 +28,7 @@ class AddToCartEndpoint extends Action
  
     }
  
-    public function execute()
+    function execute()
     {
         $json = file_get_contents('php://input');
         $obj = json_decode($json, true);

@@ -13,7 +13,7 @@ class Giftingproduct extends \Magento\Eav\Model\Entity\Attribute\Source\Abstract
      * Get all options
      * @return array
      */
-    public function getAllOptions()
+    function getAllOptions()
     {
         if (!$this->_options) {
             $this->_options = mc_h()->getGiftingProduct();

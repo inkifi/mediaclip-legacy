@@ -19,7 +19,7 @@ class PwintyOrderStatusUpdate extends Action
      * @param Context     $context
      * @param PageFactory $resultPageFactory
      */
-    public function __construct(
+    function __construct(
         Context $context,
         \Magento\Sales\Model\Order\Shipment\TrackFactory $trackFactory,
         PageFactory $resultPageFactory
@@ -31,7 +31,7 @@ class PwintyOrderStatusUpdate extends Action
  
     }
  
-    public function execute()
+    function execute()
     {
         
         /*$writer = new \Zend\Log\Writer\Stream(BP . '/var/log/pwinty_orders_status.log');
@@ -126,7 +126,7 @@ class PwintyOrderStatusUpdate extends Action
         //print_r($obj);
         die('57');
     }
-    /*public function FunctionName($value='')
+    /*function FunctionName($value='')
     {
         // Load the order increment ID
         $order = $this->_objectManager->create('Magento\Sales\Model\Order')->loadByIncrementID($incrementid);

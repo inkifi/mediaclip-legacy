@@ -47,7 +47,7 @@ class Config extends \Magento\Framework\DataObject
      * @param \Magento\Framework\App\Config\ValueFactory $configValueFactory,
      * @param array $data
      */
-    public function __construct(
+    function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Framework\App\Config\ValueInterface $backendModel,
@@ -69,7 +69,7 @@ class Config extends \Magento\Framework\DataObject
      * Function for getting Config value of current store
      * @param string $path,
      */
-    public function getCurrentStoreConfigValue($path)
+    function getCurrentStoreConfigValue($path)
     {
         return $this->_scopeConfig->getValue($path, 'store', $this->_storeCode);
     }
@@ -79,7 +79,7 @@ class Config extends \Magento\Framework\DataObject
      * @param string $path,
      * @param string $value,
      */
-    public function setCurrentStoreConfigValue($path, $value)
+    function setCurrentStoreConfigValue($path, $value)
     {
         $data = [
                     'path' => $path,

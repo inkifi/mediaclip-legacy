@@ -15,7 +15,7 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param array $data
      */
-    public function __construct(
+    function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
@@ -41,7 +41,7 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
      *
      * @return string
      */
-    public function getTabLabel()
+    function getTabLabel()
     {
         return __('General Information');
     }
@@ -51,7 +51,7 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
      *
      * @return string
      */
-    public function getTabTitle()
+    function getTabTitle()
     {
         return __('General Information');
     }
@@ -59,7 +59,7 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
     /**
      * {@inheritdoc}
      */
-    public function canShowTab()
+    function canShowTab()
     {
         return true;
     }
@@ -67,7 +67,7 @@ class General extends \Magento\Backend\Block\Widget\Form\Generic implements \Mag
     /**
      * {@inheritdoc}
      */
-    public function isHidden()
+    function isHidden()
     {
         return false;
     }

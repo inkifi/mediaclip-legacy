@@ -15,7 +15,7 @@ class ProductInformation extends \Magento\Backend\Block\Widget\Form\Generic impl
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param array $data
      */
-    public function __construct(
+    function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
@@ -182,7 +182,7 @@ class ProductInformation extends \Magento\Backend\Block\Widget\Form\Generic impl
      *
      * @return string
      */
-    public function getTabLabel()
+    function getTabLabel()
     {
         return __('Product Information');
     }
@@ -192,7 +192,7 @@ class ProductInformation extends \Magento\Backend\Block\Widget\Form\Generic impl
      *
      * @return string
      */
-    public function getTabTitle()
+    function getTabTitle()
     {
         return __('Product Information');
     }
@@ -200,7 +200,7 @@ class ProductInformation extends \Magento\Backend\Block\Widget\Form\Generic impl
     /**
      * {@inheritdoc}
      */
-    public function canShowTab()
+    function canShowTab()
     {
         return true;
     }
@@ -208,7 +208,7 @@ class ProductInformation extends \Magento\Backend\Block\Widget\Form\Generic impl
     /**
      * {@inheritdoc}
      */
-    public function isHidden()
+    function isHidden()
     {
         return false;
     }

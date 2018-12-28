@@ -17,7 +17,7 @@ class Edit extends \Magento\Framework\App\Action\Action {
      * @param \Magento\Framework\App\Action\Context  $context
      * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      */
-    public function __construct(
+    function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\UrlInterface $response,
         \Magento\Framework\View\Result\PageFactory $resultPageFactory
@@ -138,7 +138,7 @@ class Edit extends \Magento\Framework\App\Action\Action {
         $resultRedirect->setPath($customizeProjectUrl);
         return $resultRedirect;
     }
-    public function getMediaClipModule($_product){
+    function getMediaClipModule($_product){
        
         $option_id = $_product->getMediaclipModule();
         $mediaclipModule = NULL;
@@ -151,14 +151,14 @@ class Edit extends \Magento\Framework\App\Action\Action {
         }
         return $mediaclipModule;
     }
-    public function getModuleID($module_name){
+    function getModuleID($module_name){
         $model = $this->_objectManager->create('Mangoit\MediaclipHub\Model\Modules')->load($module_name, 'module_name');
         $module_id = $model->getData('id');
         
         return $module_id;
     }
 
-    public function getMediaClipProduct($_product, $_module = false){
+    function getMediaClipProduct($_product, $_module = false){
         $stepData = $this->getStepData($_product->getId());
         
 
@@ -186,7 +186,7 @@ class Edit extends \Magento\Framework\App\Action\Action {
         return false;
     }
 
-    public function getStepData($productId){
+    function getStepData($productId){
         //$session = Mage::getSingleton('checkout/session');
         //$stepData = $session->getStepData(self::SESSIONSTEP);
         $stepData = $this->getRequest()->getParams();
@@ -202,7 +202,7 @@ class Edit extends \Magento\Framework\App\Action\Action {
         return false;
     }
 
-    public function getMediaClipProductSku($stepData, $productOptions, $_module){
+    function getMediaClipProductSku($stepData, $productOptions, $_module){
         
         foreach ($stepData['options'] as $oid => $ovalue) {
             if ($productOptions) {
@@ -235,7 +235,7 @@ class Edit extends \Magento\Framework\App\Action\Action {
         return false;
     }
 
-    public function getMediaclipProductData($_product, $_module){
+    function getMediaclipProductData($_product, $_module){
        
         if ($_module == 'Photobook') {
             $option_id = $_product->getMediaclipPhotobookProduct();
@@ -256,7 +256,7 @@ class Edit extends \Magento\Framework\App\Action\Action {
         return false;
     }
 
-    public function getMediaClipProductDateOptions($_product){
+    function getMediaClipProductDateOptions($_product){
         $productId = $_product->getId();
         $stepData = $this->getStepData($productId);
         $mediaClipProductDateOptions = false;

@@ -15,7 +15,7 @@ class ThemeInformation extends \Magento\Backend\Block\Widget\Form\Generic implem
      * @param \Magento\Store\Model\System\Store $systemStore
      * @param array $data
      */
-    public function __construct(
+    function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Framework\Registry $registry,
         \Magento\Framework\Data\FormFactory $formFactory,
@@ -84,7 +84,7 @@ class ThemeInformation extends \Magento\Backend\Block\Widget\Form\Generic implem
      *
      * @return string
      */
-    public function getTabLabel()
+    function getTabLabel()
     {
         return __('Theme Information');
     }
@@ -94,7 +94,7 @@ class ThemeInformation extends \Magento\Backend\Block\Widget\Form\Generic implem
      *
      * @return string
      */
-    public function getTabTitle()
+    function getTabTitle()
     {
         return __('Theme Information');
     }
@@ -102,7 +102,7 @@ class ThemeInformation extends \Magento\Backend\Block\Widget\Form\Generic implem
     /**
      * {@inheritdoc}
      */
-    public function canShowTab()
+    function canShowTab()
     {
         return true;
     }
@@ -110,7 +110,7 @@ class ThemeInformation extends \Magento\Backend\Block\Widget\Form\Generic implem
     /**
      * {@inheritdoc}
      */
-    public function isHidden()
+    function isHidden()
     {
         return false;
     }

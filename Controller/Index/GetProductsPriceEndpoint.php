@@ -18,7 +18,7 @@ class GetProductsPriceEndpoint extends Action
      * @param Context     $context
      * @param PageFactory $resultPageFactory
      */
-    public function __construct(
+    function __construct(
         Context $context,
         \Psr\Log\LoggerInterface $logger,
         PageFactory $resultPageFactory
@@ -30,7 +30,7 @@ class GetProductsPriceEndpoint extends Action
  
     }
  
-    public function execute()
+    function execute()
     {
 
         $json = file_get_contents('php://input');

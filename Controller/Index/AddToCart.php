@@ -18,7 +18,7 @@ class AddToCart extends \Magento\Framework\App\Action\Action
      * @param Context     $context
      * @param PageFactory $resultPageFactory
      */
-    public function __construct(
+    function __construct(
         Context $context,
         CustomerCart $cart,
         PageFactory $resultPageFactory
@@ -30,7 +30,7 @@ class AddToCart extends \Magento\Framework\App\Action\Action
  
     }
  
-    public function execute()
+    function execute()
     {
        
         $projectId = $this->getRequest()->getParam('projectId');
@@ -224,11 +224,11 @@ class AddToCart extends \Magento\Framework\App\Action\Action
         }
     }
 
-    public function getMediaClipProject($projectId){
+    function getMediaClipProject($projectId){
         return $this->_objectManager->get('\Mangoit\MediaclipHub\Model\Mediaclip')->load($projectId, 'project_id');
     }
 
-    public function checkToAppendQty($product){
+    function checkToAppendQty($product){
      
         $response = true;
         if ($product->getMediaclipMinimumPrintsAllow() && $product->getMediaclipMinimumPrintsCount() != '' && $product->getMediaclipExtraPrintsPrice() != '') {
@@ -237,7 +237,7 @@ class AddToCart extends \Magento\Framework\App\Action\Action
         return $response;
     }
 
-    public function getProductQuantity($items){
+    function getProductQuantity($items){
         $quantity = 0;
         if (!empty($items)) {
             foreach ($items as $item) {
@@ -247,7 +247,7 @@ class AddToCart extends \Magento\Framework\App\Action\Action
         return $quantity;
     }
 
-    public function getProductCalculatedPrice($product_id, $mediaclip_obj, $quantity){
+    function getProductCalculatedPrice($product_id, $mediaclip_obj, $quantity){
 
         $price = 0;
         
@@ -327,7 +327,7 @@ class AddToCart extends \Magento\Framework\App\Action\Action
         return $price;
     }
 
-    public function getProductAdditionalPriceAmount($productId){
+    function getProductAdditionalPriceAmount($productId){
         $product = $this->_objectManager->create('\Magento\Catalog\Model\Product')->load($productId);
         if ($product->getMediaClipExtrasheetamt() && is_numeric($product->getMediaClipExtrasheetamt())) {
             $additionalAmount = $product->getMediaClipExtrasheetamt();
