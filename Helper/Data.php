@@ -497,7 +497,11 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 			print_r($currentUserId);
 			print_r('$projectUserId=>');
 			print_r($projectUserId);die();*/
-			if ($currentUserId == $projectUserId) {
+			// 2018-11-26 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+			// «Improve Mediaclip integration with Magento 2: fix the frontend reordering scenario»
+			// https://www.upwork.com/ab/f/contracts/21123596
+			// I have just added the `true ||` condition.
+			if (true || $currentUserId == $projectUserId) {
 				$tokenObj = $session->getMediaClipToken();
 				if ($tokenObj) {
 					$initialTimeZone = date_default_timezone_get();
