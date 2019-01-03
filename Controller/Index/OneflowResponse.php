@@ -15,10 +15,10 @@ class OneflowResponse extends \Magento\Framework\App\Action\Action {
 	 */
 	function execute() {
 		$writer = new \Zend\Log\Writer\Stream(BP . '/var/log/oneflow_status.log');
-		$logger = new \Zend\Log\Logger();
-		$logger->addWriter($writer);
+		$l = new \Zend\Log\Logger();
+		$l->addWriter($writer);
 		$json = file_get_contents('php://input');
-		$logger->info($json);
+		$l->info($json);
 		/**
 		 * 2018-12-28 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 		 * "Improve MediaClip module for Magento 2: handle shipping notifications for the US store":
@@ -40,7 +40,13 @@ class OneflowResponse extends \Magento\Framework\App\Action\Action {
 		 */
 		$json = preg_replace('#"Carrier":\s*(\w+)#', '"Carrier": "$1",', $json);
 		$req = json_decode($json, true);
-		if (!empty($req) && isset($req['OrderStatus']) && 'shipped' === $req['OrderStatus']) {
+		/**
+		 * 2019-01-03 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+		 * As you can see in the example above, for the US store, the status is «Shipped», not «shipped».
+		 * https://www.upwork.com/messages/rooms/room_759684bcafe746240e5c091d3745e787/story_243ee6d47456e76732d9bb4c80ae869e
+		 * So I have added @uses strtolower() now.
+		 */
+		if (!empty($req) && isset($req['OrderStatus']) && 'shipped' === strtolower($req['OrderStatus'])) {
 			$oid = intval($req['SourceOrderId']); /** @var int $oid */
 			$trackingNumber = $req['TrackingNumber'] ?: 'N/A'; /** @var string $trackingNumber */
 			$o = df_new_om(O::class)->load($oid); /** @var O $o */
