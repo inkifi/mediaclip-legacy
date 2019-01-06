@@ -38,6 +38,18 @@ class OneflowResponse extends \Magento\Framework\App\Action\Action {
 		 *	}
 		 * I make it valid.
 		 */
+		/*if (df_my_local()) {
+			$json = '{
+				"TimeStamp": "2018-12-08T05:52:56.584Z",
+				"SourceOrderId": "53297",
+				"SourceItemId": "",
+				"SourceShipmentId": "",
+				"ShipmentIndex": "0",
+				"TrackingNumber": "9405515901453214355474",
+				"Carrier": shqcustomc_po_pm
+				"OrderStatus": "Shipped"
+			}';
+		} */
 		$json = preg_replace('#"Carrier":\s*(\w+)#', '"Carrier": "$1",', $json);
 		$req = json_decode($json, true);
 		/**
@@ -48,7 +60,6 @@ class OneflowResponse extends \Magento\Framework\App\Action\Action {
 		 */
 		if (!empty($req) && isset($req['OrderStatus']) && 'shipped' === strtolower($req['OrderStatus'])) {
 			$oid = intval($req['SourceOrderId']); /** @var int $oid */
-			$trackingNumber = $req['TrackingNumber'] ?: 'N/A'; /** @var string $trackingNumber */
 			$o = df_new_om(O::class)->load($oid); /** @var O $o */
 			if (!$o->canShip()) {
 				throw new LE( __("You can't create an shipment."));
@@ -68,15 +79,34 @@ class OneflowResponse extends \Magento\Framework\App\Action\Action {
 			$o['is_in_process'] = true;
 			try {
 				$track = df_new_om(Track::class); /** @var Track $track */
-				$track->setCarrierCode('OneFlow');
-				$track->setDescription('OneFlow');
-				$track->setNumber($trackingNumber);
-				$track->setTitle('Royal Mail');
-				//$track->setUrl($value['trackingUrl']);
+				if (!($carrier = dfa($req, 'Carrier'))) { /** @var string|null $carrier */
+					$track->setCarrierCode('OneFlow');
+					$track->setDescription('OneFlow');
+					$track->setTitle('Royal Mail');
+				}
+				else {
+					// 2019-01-05 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+					// «Improve MediaClip module for Magento 2: add USPS shipping tracking URLs to emails»
+					// https://www.upwork.com/ab/f/contracts/21337553
+					$track->setDescription($carrier);
+					$tn = dfa($req, 'TrackingNumber'); /** @var string $tn */
+					$track->setNumber($tn);
+					if (df_contains($carrier, 'ups')) {
+						//track->setCarrierCode('ups');
+						$track->setCarrierCode($carrier);
+						$track->setTitle('United Parcel Service');
+					}
+					else {
+						//$track->setCarrierCode('usps');
+						$track->setCarrierCode($carrier);
+						$track->setTitle('United States Postal Service');
+					}
+				}
 				$shipment->addTrack($track);
 				$shipment->save();
 				$o->save();
-				df_new_om(ShipmentNotifier::class)->notify($shipment);
+				$notifier = df_new_om(ShipmentNotifier::class); /** @var ShipmentNotifier $notifier */
+				$notifier->notify($shipment);
 				$shipment->save();
 			} 
 			catch (\Exception $e) {
