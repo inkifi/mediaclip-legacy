@@ -6,7 +6,7 @@ namespace Mangoit\MediaclipHub\Helper;
 // 2018-08-17 Dmitry Fedyuk
 // «Force Mediaclip to use the relevant API credentials in the multi-store mode»
 // https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/4
-use Inkifi\Core\Settings as S;
+use Inkifi\Mediaclip\Settings as S;
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
 
