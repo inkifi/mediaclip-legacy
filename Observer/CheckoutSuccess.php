@@ -39,7 +39,9 @@ final class CheckoutSuccess implements ObserverInterface {
 
 	/**
 	 * 2018-06-26
-	 * @used-by execute()
+	 * @used-by execute() 
+	 * @used-by \Inkifi\MissingOrder\Processor::post()
+	 * @used-by \Mangoit\MediaclipHub\Observer\OrderSaveBefore::execute()
 	 * @param O $o
 	 */
     static function post(O $o) {
