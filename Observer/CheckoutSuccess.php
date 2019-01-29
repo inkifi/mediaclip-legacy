@@ -178,19 +178,15 @@ final class CheckoutSuccess implements ObserverInterface {
 			$order_shipping['money']['currency'] = $o->getOrderCurrencyCode();
 			$order_shipping['money']['value'] = $o->getShippingAmount();
 			$order_shipping['description']['value'] = $o->getShippingDescription();
-			if ($o->getCustomerId() === NULL){
-				$customer_id = $o->getCustomerId();
+			$session = $om->create(Session::class);
+			if ($session->getMediaClipUserId()) {
+				$customer_id = $session->getMediaClipUserId();
 			}
 			else {
-				$session = $om->create(Session::class);
-				if ($session->getMediaClipUserId()) {
-					$customer_id = $session->getMediaClipUserId();
-				}
-				else {
-					$op = $o->getPayment(); /** @var OP $op */
-					$customer_id = $op->getAdditionalInformation('df_mediaclip_customer_id');					        if (!$customer_id) {
-						$customer_id = $o->getCustomerName();
-					}
+				$op = $o->getPayment(); /** @var OP $op */
+				$customer_id = $op->getAdditionalInformation('df_mediaclip_customer_id');
+				if (!$customer_id) {
+					$customer_id = $o->getCustomerName();
 				}
 			}
 			$contact_details['idReference']['identifier'] = $customer_id;
@@ -223,8 +219,10 @@ final class CheckoutSuccess implements ObserverInterface {
 				df_report("oneflow/request-$oidE.json", df_json_encode($mediaClipOrderRequest));
 			}
 			$hubHelper = $om->create(mHelper::class); /** @var mHelper $hubHelper */
-			$chekcoutMediaclipResponse =  $hubHelper->CheckoutWithSingleProduct($mediaClipOrderRequest);
-			if ($chekcoutMediaclipResponse  && is_array($chekcoutMediaclipResponse)) {
+			$chekcoutMediaclipResponse = $hubHelper->CheckoutWithSingleProduct(
+				$mediaClipOrderRequest, $o->getStore()
+			);
+			if ($chekcoutMediaclipResponse && is_array($chekcoutMediaclipResponse)) {
 				$mediaClipData['magento_order_id'] = $oidE;
 				$mediaClipData['mediaclip_order_id'] = $chekcoutMediaclipResponse['id'];
 				$mediaClipData['mediaclip_order_details'] = json_encode($chekcoutMediaclipResponse);

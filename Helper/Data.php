@@ -7,6 +7,7 @@ namespace Mangoit\MediaclipHub\Helper;
 // «Force Mediaclip to use the relevant API credentials in the multi-store mode»
 // https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/4
 use Inkifi\Mediaclip\Settings as S;
+use Magento\Store\Model\Store;
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
 
@@ -471,12 +472,26 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 		return $userTokenInfo;
 	}
 
-	private function GetStoreAuthorizationHeader() {
+	/**
+	 * 2019-01-29
+	 * @used-by CheckoutWithSingleProduct()
+	 * @used-by consolidateCustomerAndGetCustomerToken()
+	 * @used-by getMediaClipOrderLinesDetails()
+	 * @used-by getMediaClipOrders()
+	 * @used-by getMediaClipProjects()
+	 * @used-by GetTokenForEndUser()
+	 * @used-by renewMediaClipToken()
+	 * @used-by RenewToken()
+	 * @param Store $store [optional]
+	 * @return string
+	 */
+	private function GetStoreAuthorizationHeader(Store $store = null) {
 		// 2018-08-17 Dmitry Fedyuk
 		// «Force Mediaclip to use the relevant API credentials in the multi-store mode»
 		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/4
-		$this->STOREAPPID = S::s()->id();
-		$this->STORESECRET = S::s()->key();
+		$s = S::s($store);
+		$this->STOREAPPID = $s->id();
+		$this->STORESECRET = $s->key();
 		$authorizationHeader = 'HubApi ' . base64_encode($this->STOREAPPID . ":" . $this->STORESECRET);
 		return $authorizationHeader;
 	}
@@ -618,7 +633,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 		}
 		return $token;
 	}
-	public  function CheckoutWithSingleProduct($postRequestBody)
+
+	/**
+	 * 2019-01-29
+	 * @used-by \Mangoit\MediaclipHub\Observer\CheckoutSuccess::post()
+	 * @param array(string => mixed) $postRequestBody
+	 * @param Store $store
+	 * @return mixed
+	 */
+	function CheckoutWithSingleProduct(array $postRequestBody, Store $store)
 	{
 	   // print_r(json_encode($postRequestBody)); die();
 		$checkoutWriter = new \Zend\Log\Writer\Stream(BP . '/var/log/checkout.log');
@@ -632,13 +655,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 		// 2018-08-17 Dmitry Fedyuk
 		// «Force Mediaclip to use the relevant API credentials in the multi-store mode»
 		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/4
-		$this->HUBURL = S::s()->url();
-		$this->STOREAPPID = S::s()->id();
-		$curl = $this->BuildCurl("POST", $this->HUBURL . "/stores/" . $this->STOREAPPID . "/orders", $this->GetStoreAuthorizationHeader(), $postRequestBody);
+		$s = S::s($store);  /** @var S $s */
+		$this->HUBURL = $s->url();
+		$this->STOREAPPID = $s->id();
+		$curl = $this->BuildCurl('POST'
+			,"$this->HUBURL/stores/$this->STOREAPPID/orders"
+			,$this->GetStoreAuthorizationHeader($store)
+			,$postRequestBody
+		);
 		$response = curl_exec($curl);
-
 		$checkoutLogger->info(json_encode($response));
-
 		if($response) {
 			$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 			curl_close($curl);
