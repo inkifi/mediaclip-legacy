@@ -89,8 +89,7 @@ class OneflowResponse extends \Magento\Framework\App\Action\Action {
 					// «Improve MediaClip module for Magento 2: add USPS shipping tracking URLs to emails»
 					// https://www.upwork.com/ab/f/contracts/21337553
 					$track->setDescription($carrier);
-					$tn = dfa($req, 'TrackingNumber'); /** @var string $tn */
-					$track->setNumber($tn);
+					$track->setNumber(dfa($req, 'TrackingNumber'));
 					if (df_contains($carrier, 'ups')) {
 						//track->setCarrierCode('ups');
 						$track->setCarrierCode($carrier);
@@ -101,6 +100,20 @@ class OneflowResponse extends \Magento\Framework\App\Action\Action {
 						$track->setCarrierCode($carrier);
 						$track->setTitle('United States Postal Service');
 					}
+				}
+				/**
+				 * 2019-01-30 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+				 * https://github.com/Inkifi-Connect/Media-Clip-Inkifi/blob/4d3325d8/Controller/Index/OneflowResponse.php#L48-L52
+				 * «The US shipping emails are working well now.
+				 * But since this was implemented the UK store shipping emails have stopped working.
+				 * I asked my printer and they said that when they post back they now get the response:
+				 * "Cannot save track:\nNumber is a required field".
+				 * The problem is not all the UK orders have a tracking number, many are sent untracked.
+				 * Would you be able to update the code to get the UK shipping emails working again please?»
+				 * https://www.upwork.com/messages/rooms/room_759684bcafe746240e5c091d3745e787/story_57747a8340bd7d33c86a4247e893e150
+				 */
+				if (!$track->getNumber()) {
+					$track->setNumber('N/A');
 				}
 				$shipment->addTrack($track);
 				$shipment->save();
