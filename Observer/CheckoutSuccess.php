@@ -66,13 +66,13 @@ final class CheckoutSuccess implements ObserverInterface {
 		// because it is used outside of the loop below.
 		$item_supplier_id = [];
 		foreach ($o->getAllItems() as $oi) { /** @var OI $oi */
-			if ($oi->getMediaclipProjectId()) {
+			if ($mcProjectId = ikf_oi_pid($oi)) { /** @var string|null $mcProjectId */
 				$item_supplier_id = [];
 				$p = $om->create(P::class)->load($oi->getProductId());  /** @var P $p */
 				$pid = $oi->getProductId();
 				$product_desc = $p->getShortDescription();
 				$item_id['buyerPartId'] = $pid;   //{YOUR-STORE-PRODUCT-ID}
-				$item_id['supplierPartAuxiliaryId'] = $oi->getMediaclipProjectId();   //{HUB-PROJECT-ID}
+				$item_id['supplierPartAuxiliaryId'] = $mcProjectId;   //{HUB-PROJECT-ID}
 				if ($p->getMediaclipProductSupplier()) {
 					if ($supplierData) {
 						$supplierId = $p->getMediaclipProductSupplier();
