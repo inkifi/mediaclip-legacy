@@ -1,31 +1,13 @@
 <?php 
 namespace Mangoit\MediaclipHub\Controller\Index;
 use Magento\Framework\App\Action\Action;
-use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\LocalizedException as LE;
-use Magento\Framework\View\Result\PageFactory;
 use Magento\Sales\Model\Order as O;
 use Magento\Sales\Model\Order\Shipment\Track;
 use Magento\Shipping\Model\ShipmentNotifier;
 use Mangoit\MediaclipHub\Model\Orders as mOrders;
 use pwinty\PhpPwinty;
 class PwintyOrderStatusUpdate extends Action {
-	/**
-     * @var Magento\Framework\View\Result\PageFactory
-     */
-    protected $_resultPageFactory;
-    /**
-     * @param Context     $context
-     * @param PageFactory $resultPageFactory
-     */
-    function __construct(
-        Context $context,
-        PageFactory $resultPageFactory
-    ) {
-        $this->_resultPageFactory = $resultPageFactory;
-        parent::__construct($context);
-    }
- 
     function execute() {
         /*$writer = new \Zend\Log\Writer\Stream(BP . '/var/log/pwinty_orders_status.log');
         $logger = new \Zend\Log\Logger();
