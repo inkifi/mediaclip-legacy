@@ -6,6 +6,7 @@ use Magento\Sales\Model\Convert\Order as Converter;
 use Magento\Sales\Model\Order as O;
 use Magento\Sales\Model\Order\Item as OI;
 use Magento\Sales\Model\Order\Shipment;
+use Magento\Sales\Model\Order\Shipment\Item as SI;
 use Magento\Sales\Model\Order\Shipment\Track;
 use Magento\Shipping\Model\ShipmentNotifier;
 use Mangoit\MediaclipHub\Model\Orders as mOrders;
@@ -40,7 +41,6 @@ class PwintyOrderStatusUpdate extends Action {
 						// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
 						ikf_eti($mediaclipOrder->getData()[0]['magento_order_id'])
 					); /** @var O $order */
-                    // Check if order can be shipped or has already shipped
                     if (!$order->canShip()) {
                         throw new LE(__('You can\'t create an shipment.'));
                     }
@@ -49,18 +49,16 @@ class PwintyOrderStatusUpdate extends Action {
                         $trackingValue->setTrackingUrl($value['trackingUrl']);
                         $trackingValue->save();
                     }
-                    // Initialize the order shipment object
                     $converter = df_new_om(Converter::class); /** @var Converter $converter */
                     $shipment = $converter->toShipment($order); /** @var Shipment $shipment */
-                    // Loop through order items
                     foreach ($order->getAllItems() as $oi) { /** @var OI $oi */
                         if ($oi->getQtyToShip() && !$oi->getIsVirtual()) {
 							$qtyShipped = $oi->getQtyToShip();
-							$shipmentItem = $converter->itemToShipmentItem($oi)->setQty($qtyShipped);
-							$shipment->addItem($shipmentItem);
+							$si = $converter->itemToShipmentItem($oi); /** @var SI $si */
+							$si->setQty($qtyShipped);
+							$shipment->addItem($si);
                         }
                     }
-                    // Register shipment
                     $shipment->register();
                     $shipment->getOrder()->setIsInProcess(true);
                     try {
@@ -71,10 +69,8 @@ class PwintyOrderStatusUpdate extends Action {
                         $track->setTitle('Pwinty');
                         $track->setUrl($value['trackingUrl']);
                         $shipment->addTrack($track);
-                        // Save created shipment and order
                         $shipment->save();
                         $shipment->getOrder()->save();
-                        // Send email
                         df_new_om(ShipmentNotifier::class)->notify($shipment);
                         $shipment->save();
                     } catch (\Exception $e) {
@@ -83,7 +79,6 @@ class PwintyOrderStatusUpdate extends Action {
                 }
             }
         }
-        //print_r($obj);
         die('57');
     }
     /**
