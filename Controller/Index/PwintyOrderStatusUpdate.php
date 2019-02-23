@@ -107,66 +107,12 @@ class PwintyOrderStatusUpdate extends Action {
         //print_r($obj);
         die('57');
     }
-    /*function FunctionName($value='')
-    {
-        // Load the order increment ID
-        $order = df_new_om('Magento\Sales\Model\Order')->loadByIncrementID($incrementid);
-
-        // OR
-        $order = df_new_om('Magento\Sales\Model\Order')
-            ->loadByAttribute('increment_id', '000000001');
-
-
-        //load by order 
-        $order = df_new_om('Magento\Sales\Model\Order')
-            ->load('1');
-
-        // Check if order can be shipped or has already shipped
-        if (! $order->canShip()) {
-            throw new LE(
-                            __('You can\'t create an shipment.')
-                        );
-        }
-
-        // Initialize the order shipment object
-        $convertOrder = df_new_om('Magento\Sales\Model\Convert\Order');
-        $shipment = $convertOrder->toShipment($order);
-
-        // Loop through order items
-        foreach ($order->getAllItems() AS $orderItem) {
-            // Check if order item has qty to ship or is virtual
-            if (! $orderItem->getQtyToShip() || $orderItem->getIsVirtual()) {
-                continue;
-            }
-
-            $qtyShipped = $orderItem->getQtyToShip();
-
-            // Create shipment item with qty
-            $shipmentItem = $convertOrder->itemToShipmentItem($orderItem)->setQty($qtyShipped);
-
-            // Add shipment item to shipment
-            $shipment->addItem($shipmentItem);
-        }
-
-        // Register shipment
-        $shipment->register();
-
-        $shipment->getOrder()->setIsInProcess(true);
-
-        try {
-            // Save created shipment and order
-            $shipment->save();
-            $shipment->getOrder()->save();
-
-            // Send email
-            df_new_om('Magento\Shipping\Model\ShipmentNotifier')
-                ->notify($shipment);
-
-            $shipment->save();
-        } catch (\Exception $e) {
-            throw new LE(
-                            __($e->getMessage())
-                        );
-        }
-    }*/
+    /**
+	 * 2019-02-23 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+	 * «Port a Pwinty's integration from Magento 1 to Magento 2»
+	 * https://www.upwork.com/ab/f/contracts/21642484
+	 * https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/10
+	 * It was a disabled code here:
+	 * https://github.com/Inkifi-Connect/Media-Clip-Inkifi/blob/cd2b7930/Controller/Index/PwintyOrderStatusUpdate.php#L110-L171
+	 */
 }
