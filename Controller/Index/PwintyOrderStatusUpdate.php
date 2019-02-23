@@ -2,6 +2,7 @@
 namespace Mangoit\MediaclipHub\Controller\Index;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\Exception\LocalizedException as LE;
+use Magento\Sales\Model\Convert\Order as Converter;
 use Magento\Sales\Model\Order as O;
 use Magento\Sales\Model\Order\Shipment\Track;
 use Magento\Shipping\Model\ShipmentNotifier;
@@ -47,8 +48,8 @@ class PwintyOrderStatusUpdate extends Action {
                         $trackingValue->save();
                     }
                     // Initialize the order shipment object
-                    $convertOrder = df_new_om('Magento\Sales\Model\Convert\Order');
-                    $shipment = $convertOrder->toShipment($order);
+                    $converter = df_new_om(Converter::class); /** @var Converter $converter */
+                    $shipment = $converter->toShipment($order);
                     // Loop through order items
                     foreach ($order->getAllItems() AS $orderItem) {
                         // Check if order item has qty to ship or is virtual
@@ -57,7 +58,7 @@ class PwintyOrderStatusUpdate extends Action {
                         }
                         $qtyShipped = $orderItem->getQtyToShip();
                         // Create shipment item with qty
-                        $shipmentItem = $convertOrder->itemToShipmentItem($orderItem)->setQty($qtyShipped);
+                        $shipmentItem = $converter->itemToShipmentItem($orderItem)->setQty($qtyShipped);
                         // Add shipment item to shipment
                         $shipment->addItem($shipmentItem);
                     }
@@ -66,10 +67,10 @@ class PwintyOrderStatusUpdate extends Action {
                     $shipment->getOrder()->setIsInProcess(true);
                     try {
                         $track = df_new_om(Track::class); /** @var Track $track */
-                        $track->setNumber($value['trackingNumber']);
                         $track->setCarrierCode('Pwinty');
-                        $track->setTitle('Pwinty');
                         $track->setDescription("Pwinty");
+                        $track->setNumber($value['trackingNumber']);
+                        $track->setTitle('Pwinty');
                         $track->setUrl($value['trackingUrl']);
                         $shipment->addTrack($track);
                         // Save created shipment and order
