@@ -4,6 +4,9 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Exception\LocalizedException as LE;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Sales\Model\Order as O;
+use Magento\Shipping\Model\ShipmentNotifier;
+use Mangoit\MediaclipHub\Model\Orders as mOrders;
 use pwinty\PhpPwinty;
 class PwintyOrderStatusUpdate extends Action {
 	/**
@@ -42,23 +45,23 @@ class PwintyOrderStatusUpdate extends Action {
             foreach ($obj['shipments'] as $value) {
                 if ($value['status'] == 'shipped') {
                     $pwintyorderId = $obj['id'] ;
-                    $mediaclipOrderModel = df_new_om('Mangoit\MediaclipHub\Model\Orders');
+                    $mediaclipOrderModel = df_new_om(mOrders::class); /** @var mOrders $mediaclipOrderModel */
                     $mediaclipOrderModelCollection = $mediaclipOrderModel->getCollection();
-                    $mediaclipOrder = $mediaclipOrderModelCollection->addFieldToFilter('pwinty_order_id', array('eq' => '682012'));
+                    $mediaclipOrder = $mediaclipOrderModelCollection->addFieldToFilter(
+                    	'pwinty_order_id', ['eq' => '682012']
+					);
                     //print_r($mediaclipOrder->getData()[0]['magento_order_id']);
-                    $order = df_new_om('Magento\Sales\Model\Order')->load(
+                    $order = df_new_om(O::class)->load(
 						// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 						// «Modify orders numeration for Mediaclip»
 						// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
 						ikf_eti($mediaclipOrder->getData()[0]['magento_order_id'])
-					);
+					); /** @var O $order */
                     // Check if order can be shipped or has already shipped
-                    if (! $order->canShip()) {
+                    if (!$order->canShip()) {
                         throw new LE(__('You can\'t create an shipment.'));
                     }
-
                     foreach ($mediaclipOrder as $key => $trackingValue) {
-
                         $trackingValue->setTrackingNumber($value['trackingNumber']);
                         $trackingValue->setTrackingUrl($value['trackingUrl']);
                         $trackingValue->save();
@@ -66,28 +69,21 @@ class PwintyOrderStatusUpdate extends Action {
                     // Initialize the order shipment object
                     $convertOrder = df_new_om('Magento\Sales\Model\Convert\Order');
                     $shipment = $convertOrder->toShipment($order);
-
                     // Loop through order items
                     foreach ($order->getAllItems() AS $orderItem) {
                         // Check if order item has qty to ship or is virtual
                         if (! $orderItem->getQtyToShip() || $orderItem->getIsVirtual()) {
                             continue;
                         }
-
                         $qtyShipped = $orderItem->getQtyToShip();
-
                         // Create shipment item with qty
                         $shipmentItem = $convertOrder->itemToShipmentItem($orderItem)->setQty($qtyShipped);
-                        
                         // Add shipment item to shipment
                         $shipment->addItem($shipmentItem);
                     }
-
                     // Register shipment
                     $shipment->register();
-
                     $shipment->getOrder()->setIsInProcess(true);
-
                     try {
                         $track = $this->trackFactory->create();
                         $track->setNumber($value['trackingNumber']);
@@ -96,19 +92,14 @@ class PwintyOrderStatusUpdate extends Action {
                         $track->setDescription("Pwinty");
                         $track->setUrl($value['trackingUrl']);
                         $shipment->addTrack($track);
-
                         // Save created shipment and order
                         $shipment->save();
                         $shipment->getOrder()->save();
                         // Send email
-                        df_new_om('Magento\Shipping\Model\ShipmentNotifier')
-                            ->notify($shipment);
-
+                        df_new_om(ShipmentNotifier::class)->notify($shipment);
                         $shipment->save();
                     } catch (\Exception $e) {
-                        throw new LE(
-                                        __($e->getMessage())
-                                    );
+                        throw new LE(__($e->getMessage()));
                     }
                 }
             }
