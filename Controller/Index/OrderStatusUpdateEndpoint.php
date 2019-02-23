@@ -102,14 +102,14 @@ class OrderStatusUpdateEndpoint extends Action {
                 $helper = mc_h();
 				//Set mediaclip order status to 1 as the order is downloaded
 				$model = df_new_om(Orders::class);
-				$mediaclipOrder = $model->getCollection();
-				$mediaclipOrderData = $mediaclipOrder->addFieldToFilter('magento_order_id', [
+				$mOrder = $model->getCollection();
+				$mOrderData = $mOrder->addFieldToFilter('magento_order_id', [
 					'eq' => $oidE
 				]);
 				// 2018-08-17 Dmitry Fedyuk
-				if ($mediaclipOrderData = df_first($mediaclipOrderData->getData())) {
-					$this->l('mediaclipOrderData'); $this->l($mediaclipOrderData);
-					$model->setId($mediaclipOrderData['id']);
+				if ($mOrderData = df_first($mOrderData->getData())) {
+					$this->l('mediaclipOrderData'); $this->l($mOrderData);
+					$model->setId($mOrderData['id']);
 					$model->setOrderDownloadStatus(1);
 					$model->save();
 					$product_id = $obj['storeData']['productId'];
@@ -156,8 +156,8 @@ class OrderStatusUpdateEndpoint extends Action {
 							$orderIncrementId = $order['increment_id'];
 							$entityId = $order->getEntityId();
 							$orderDate = $order['created_at'];
-							$mediaclipOrderDetails = $helper->getMediaClipOrders($entityId);
-							foreach ($mediaclipOrderDetails->lines as $lines){
+							$mOrderDetails = $helper->getMediaClipOrders($entityId);
+							foreach ($mOrderDetails->lines as $lines){
 								$projectId = $lines->projectId;
 								$projectData = df_new_om(Mediaclip::class)
 									->load($projectId, 'project_id')->getData();
@@ -256,11 +256,11 @@ class OrderStatusUpdateEndpoint extends Action {
 							$logger->info($order);
 							$pwintyOrderId = $order['id'];
 							//save pwinty id to custom table
-							$mediaclipOrderModel = df_new_om(Orders::class);
-							$mediaclipOrderModelCollection = $mediaclipOrderModel->getCollection();
-							$mediaclipOrder = $mediaclipOrderModelCollection
+							$mOrderModel = df_new_om(Orders::class);
+							$mOrderModelCollection = $mOrderModel->getCollection();
+							$mOrder = $mOrderModelCollection
 								->addFieldToFilter('magento_order_id', array('eq' => $oidE));
-							foreach ($mediaclipOrder as $key => $value) {
+							foreach ($mOrder as $key => $value) {
 								$value->setPwintyOrderId($pwintyOrderId);
 								$value->save();
 							}
@@ -297,11 +297,11 @@ class OrderStatusUpdateEndpoint extends Action {
 						$orderIncrementId = $order['increment_id'];
 						$entityId = $order->getEntityId();
 						$orderDate = $order['created_at'];
-						$mediaclipOrderDetails = $helper->getMediaClipOrders($entityId);
+						$mOrderDetails = $helper->getMediaClipOrders($entityId);
 						$orderDirDate = $helper->createOrderDirectoryDate($orderDate);
 						$array = [];
-						$this->l('mediaclipOrderDetails->lines count: ' . count($mediaclipOrderDetails->lines));
-						foreach ($mediaclipOrderDetails->lines as $lines) {
+						$this->l('mediaclipOrderDetails->lines count: ' . count($mOrderDetails->lines));
+						foreach ($mOrderDetails->lines as $lines) {
 							$this->l('A line:');  $this->l($lines);
 							$projectId = $lines->projectId;
 							$projectData = df_new_om(Mediaclip::class)->load($projectId, 'project_id')->getData();
@@ -338,7 +338,7 @@ class OrderStatusUpdateEndpoint extends Action {
 								$this->l("filesUploadPath: $filesUploadPath");
 								$logger->info(json_encode($filesUploadPath));
 								$array['destination']['name'] = 'pureprint';
-								$array['orderData']['sourceOrderId'] = $mediaclipOrderDetails->storeData->orderId;
+								$array['orderData']['sourceOrderId'] = $mOrderDetails->storeData->orderId;
 								$linesDetails = $helper->getMediaClipOrderLinesDetails($lines->id);
 								$this->l('linesDetails->files count: ' . count($linesDetails->files));
 if (count($linesDetails->files)) {
