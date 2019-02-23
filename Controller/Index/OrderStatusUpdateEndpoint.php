@@ -103,9 +103,7 @@ class OrderStatusUpdateEndpoint extends Action {
 				//Set mediaclip order status to 1 as the order is downloaded
 				$mOrders = df_new_om(mOrders::class); /** @var mOrders $mOrders */
 				$mOrder = $mOrders->getCollection();
-				$mOrderData = $mOrder->addFieldToFilter('magento_order_id', [
-					'eq' => $oidE
-				]);
+				$mOrderData = $mOrder->addFieldToFilter('magento_order_id', ['eq' => $oidE]);
 				// 2018-08-17 Dmitry Fedyuk
 				if ($mOrderData = df_first($mOrderData->getData())) {
 					$this->l('mediaclipOrderData'); $this->l($mOrderData);
