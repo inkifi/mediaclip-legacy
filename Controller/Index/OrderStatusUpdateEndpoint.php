@@ -8,7 +8,6 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Config\ScopeConfigInterface as IScopeConfig;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\DB\Transaction;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Sales\Model\Order as O;
 use Magento\Sales\Model\Order\Item as OI;
@@ -67,7 +66,7 @@ class OrderStatusUpdateEndpoint extends Action {
 				$this->pAvailableForDownload();
             }
             else if ('Shipped' === $s) {
-				$this->pShipped();
+				\Inkifi\Mediaclip\H\Shipped::p();
             }
         }
     }
@@ -490,76 +489,6 @@ $array['orderData']['items'][] = [
 					$this->sftp->close();
 				}
 			}
-		}
-	}
-
-	/**
-	 * 2019-02-24 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
-	 * @used-by execute()
-	 */
-    private function pShipped() {
-    	$ev = $this->ev(); /** @var Event $ev */
-		$projectId = $ev['projectId'];
-		try {
-			// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
-			// «Modify orders numeration for Mediaclip»
-			// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
-			$order = df_new_om(O::class)->load($ev->oidI());
-			$order_items = $order->getItemsCollection();
-			$item_qtys = [];
-			foreach ($order_items as $item) {
-				if (($item->getQtyToShip() > 0) && (!$item->getIsVirtual())) {
-					$_productId = $item->getProductId();
-					$_product = df_new_om(Product::class)->load($_productId);
-					$attributeSet = df_new_om(IAttributeSetRepository::class);
-					$attributeSetRepository = $attributeSet->get($_product->getAttributeSetId());
-					$attribute_set_name = $attributeSetRepository->getAttributeSetName();
-					if ($attribute_set_name == 'Photobook') {
-						if (
-							$item->getMediaclipProjectId() != ''
-							&& ($item->getMediaclipProjectId() == $projectId)
-						) {
-							$itemId = $item->getItemId();
-							$item_qtys[$itemId] = $item->getQtyToShip();
-						}
-					}
-				}
-			}
-			if (!empty($item_qtys)) {
-				// Create Shipment
-				$shipment = $order->prepareShipment($item_qtys);
-				$shipment->register();
-				$shipment->sendEmail(true)->setEmailSent(true)->save();
-				df_new_om(Transaction::class)
-					->addObject($shipment)
-					->addObject($shipment->getOrder())
-					->save()
-				;
-				// Update Magento Order State/Status to Processing/Sent To Picking
-				$order->setStatus('complete')->save();
-				// Success
-				$loggers = $ev->oidE()." Shipment created successfully ".json_decode($item_qtys);
-			} else {
-				$loggers = $ev->oidE()." No item found to make shipment.";
-			}
-			$writer = new \Zend\Log\Writer\Stream(
-				BP . '/var/log/mediaclip_orders_shipped_dispactched_status.log'
-			);
-			$logger = new \Zend\Log\Logger();
-			$logger->addWriter($writer);
-			$logger->info($loggers);
-		}
-		catch (\Exception $e) {
-			// Log Error On Order Comment History
-			$order->addStatusHistoryComment('Failed to create shipment - '. $e->getMessage())->save();
-			// Error
-			$loggers = $ev->oidE()." Failed to create shipment";
-			$writer = new \Zend\Log\Writer\Stream(
-				BP . '/var/log/mediaclip_orders_shipped_dispactched_status.log'
-			);
-			$logger = new \Zend\Log\Logger();
-			$logger->addWriter($writer);
-			$logger->info($loggers);
 		}
 	}
 
