@@ -9,7 +9,7 @@ use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Shipment\Item as SI;
 use Magento\Sales\Model\Order\Shipment\Track;
 use Magento\Shipping\Model\ShipmentNotifier;
-use Mangoit\MediaclipHub\Model\Orders as mOrders;
+use Mangoit\MediaclipHub\Model\Orders as mOrder;
 use pwinty\PhpPwinty;
 class PwintyOrderStatusUpdate extends Action {
     function execute() {
@@ -29,9 +29,9 @@ class PwintyOrderStatusUpdate extends Action {
             foreach ($obj['shipments'] as $value) {
                 if ($value['status'] == 'shipped') {
                     $pwintyorderId = $obj['id'] ;
-                    $mOrders = df_new_om(mOrders::class); /** @var mOrders $mOrders */
-                    $mOrdersC = $mOrders->getCollection();
-                    $mOrder = $mOrdersC->addFieldToFilter('pwinty_order_id', ['eq' => '682012']);
+                    $mOrder = df_new_om(mOrder::class); /** @var mOrder $mOrder */
+                    $mOrderC = $mOrder->getCollection();
+                    $mOrder = $mOrderC->addFieldToFilter('pwinty_order_id', ['eq' => '682012']);
                     //print_r($mediaclipOrder->getData()[0]['magento_order_id']);
                     $order = df_new_om(O::class)->load(
 						// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro

@@ -13,7 +13,7 @@ use Magento\Sales\Model\Order as O;
 use Magento\Sales\Model\Order\Item as OI;
 use Magento\Store\Model\StoreManagerInterface as IStoreManager;
 use Mangoit\MediaclipHub\Model\Mediaclip;
-use Mangoit\MediaclipHub\Model\Orders as mOrders;
+use Mangoit\MediaclipHub\Model\Orders as mOrder;
 use Mangoit\MediaclipHub\Model\Product as mP;
 use pwinty\PhpPwinty;
 // 2018-11-02
@@ -101,15 +101,15 @@ class OrderStatusUpdateEndpoint extends Action {
                 $logger->info($json);
                 $helper = mc_h();
 				//Set mediaclip order status to 1 as the order is downloaded
-				$mOrders = df_new_om(mOrders::class); /** @var mOrders $mOrders */
-				$mOrder = $mOrders->getCollection();
-				$mOrderData = $mOrder->addFieldToFilter('magento_order_id', ['eq' => $oidE]);
+				$mOrder = df_new_om(mOrder::class); /** @var mOrder $mOrder */
+				$mOrderC = $mOrder->getCollection();
+				$mOrderC->addFieldToFilter('magento_order_id', ['eq' => $oidE]);
 				// 2018-08-17 Dmitry Fedyuk
-				if ($mOrderData = df_first($mOrderData->getData())) {
+				if ($mOrderData = df_first($mOrderC->getData())) {
 					$this->l('mediaclipOrderData'); $this->l($mOrderData);
-					$mOrders->setId($mOrderData['id']);
-					$mOrders->setOrderDownloadStatus(1);
-					$mOrders->save();
+					$mOrder->setId($mOrderData['id']);
+					$mOrder->setOrderDownloadStatus(1);
+					$mOrder->save();
 					$product_id = $obj['storeData']['productId'];
 					$product = df_new_om(Product::class)->load($product_id);
 					$uploadfolder = $product->getMediaclipUploadFolder();
@@ -254,7 +254,7 @@ class OrderStatusUpdateEndpoint extends Action {
 							$logger->info($order);
 							$pwintyOrderId = $order['id'];
 							//save pwinty id to custom table
-							$mOrderModel = df_new_om(mOrders::class);
+							$mOrderModel = df_new_om(mOrder::class);
 							$mOrderModelCollection = $mOrderModel->getCollection();
 							$mOrder = $mOrderModelCollection
 								->addFieldToFilter('magento_order_id', array('eq' => $oidE));
