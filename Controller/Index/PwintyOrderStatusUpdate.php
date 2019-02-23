@@ -29,22 +29,20 @@ class PwintyOrderStatusUpdate extends Action {
             foreach ($obj['shipments'] as $value) {
                 if ($value['status'] == 'shipped') {
                     $pwintyorderId = $obj['id'] ;
-                    $mediaclipOrderModel = df_new_om(mOrders::class); /** @var mOrders $mediaclipOrderModel */
-                    $mediaclipOrderModelCollection = $mediaclipOrderModel->getCollection();
-                    $mediaclipOrder = $mediaclipOrderModelCollection->addFieldToFilter(
-                    	'pwinty_order_id', ['eq' => '682012']
-					);
+                    $mOrders = df_new_om(mOrders::class); /** @var mOrders $mOrders */
+                    $mOrdersC = $mOrders->getCollection();
+                    $mOrder = $mOrdersC->addFieldToFilter('pwinty_order_id', ['eq' => '682012']);
                     //print_r($mediaclipOrder->getData()[0]['magento_order_id']);
                     $order = df_new_om(O::class)->load(
 						// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 						// «Modify orders numeration for Mediaclip»
 						// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
-						ikf_eti($mediaclipOrder->getData()[0]['magento_order_id'])
+						ikf_eti($mOrder->getData()[0]['magento_order_id'])
 					); /** @var O $order */
                     if (!$order->canShip()) {
                         throw new LE(__('You can\'t create an shipment.'));
                     }
-                    foreach ($mediaclipOrder as $key => $trackingValue) {
+                    foreach ($mOrder as $key => $trackingValue) {
                         $trackingValue->setTrackingNumber($value['trackingNumber']);
                         $trackingValue->setTrackingUrl($value['trackingUrl']);
                         $trackingValue->save();
