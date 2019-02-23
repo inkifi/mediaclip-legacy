@@ -4,6 +4,7 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\Exception\LocalizedException as LE;
 use Magento\Sales\Model\Convert\Order as Converter;
 use Magento\Sales\Model\Order as O;
+use Magento\Sales\Model\Order\Item as OI;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Shipment\Track;
 use Magento\Shipping\Model\ShipmentNotifier;
@@ -52,16 +53,12 @@ class PwintyOrderStatusUpdate extends Action {
                     $converter = df_new_om(Converter::class); /** @var Converter $converter */
                     $shipment = $converter->toShipment($order); /** @var Shipment $shipment */
                     // Loop through order items
-                    foreach ($order->getAllItems() as $orderItem) {
-                        // Check if order item has qty to ship or is virtual
-                        if (! $orderItem->getQtyToShip() || $orderItem->getIsVirtual()) {
-                            continue;
+                    foreach ($order->getAllItems() as $oi) { /** @var OI $oi */
+                        if ($oi->getQtyToShip() && !$oi->getIsVirtual()) {
+							$qtyShipped = $oi->getQtyToShip();
+							$shipmentItem = $converter->itemToShipmentItem($oi)->setQty($qtyShipped);
+							$shipment->addItem($shipmentItem);
                         }
-                        $qtyShipped = $orderItem->getQtyToShip();
-                        // Create shipment item with qty
-                        $shipmentItem = $converter->itemToShipmentItem($orderItem)->setQty($qtyShipped);
-                        // Add shipment item to shipment
-                        $shipment->addItem($shipmentItem);
                     }
                     // Register shipment
                     $shipment->register();
