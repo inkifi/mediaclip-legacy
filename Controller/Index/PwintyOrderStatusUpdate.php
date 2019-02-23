@@ -4,6 +4,7 @@ use Magento\Framework\App\Action\Action;
 use Magento\Framework\Exception\LocalizedException as LE;
 use Magento\Sales\Model\Convert\Order as Converter;
 use Magento\Sales\Model\Order as O;
+use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Shipment\Track;
 use Magento\Shipping\Model\ShipmentNotifier;
 use Mangoit\MediaclipHub\Model\Orders as mOrders;
@@ -49,9 +50,9 @@ class PwintyOrderStatusUpdate extends Action {
                     }
                     // Initialize the order shipment object
                     $converter = df_new_om(Converter::class); /** @var Converter $converter */
-                    $shipment = $converter->toShipment($order);
+                    $shipment = $converter->toShipment($order); /** @var Shipment $shipment */
                     // Loop through order items
-                    foreach ($order->getAllItems() AS $orderItem) {
+                    foreach ($order->getAllItems() as $orderItem) {
                         // Check if order item has qty to ship or is virtual
                         if (! $orderItem->getQtyToShip() || $orderItem->getIsVirtual()) {
                             continue;
