@@ -652,7 +652,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
                     'default' => '',
                     'comment' => 'Mediaclip Project Id',
                 ],
-                'item_download_status' => [
+                self::OI__ITEM_DOWNLOAD_STATUS => [
                     'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                     'nullable' => true,
                     'default' => 0,
@@ -718,10 +718,13 @@ class UpgradeSchema implements UpgradeSchemaInterface
                 $connection->addColumn($tableName, $name, $definition);
             }
         }
-
-
-
-
         $setup->endSetup();
     }
+
+	/**
+	 * 2019-02-26 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+	 * @used-by upgrade()
+	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pwinty::_p()
+	 */
+    const OI__ITEM_DOWNLOAD_STATUS = 'item_download_status';
 }
