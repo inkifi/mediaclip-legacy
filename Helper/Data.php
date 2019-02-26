@@ -686,13 +686,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 		return null;
 	}
 
-	function consolidateCustomerAndGetCustomerToken($storeUserId, $anonymousCustomerId)
-	{
-
-		$checkoutWriter = new \Zend\Log\Writer\Stream(BP . '/var/log/checkout_login.log');
-		$checkoutLogger = new \Zend\Log\Logger();
-		$checkoutLogger->addWriter($checkoutWriter);
-
+	function consolidateCustomerAndGetCustomerToken($storeUserId, $anonymousCustomerId) {
+		$l = ikf_logger('checkout_login'); /** @var zL $l */
 		$postRequestBody['storeData'] = array("anonymousUserId" => $anonymousCustomerId);
 		// 2018-08-17 Dmitry Fedyuk
 		// «Force Mediaclip to use the relevant API credentials in the multi-store mode»
@@ -702,8 +697,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 		$curl = $this->BuildCurl("POST", $endPoint, $this->GetStoreAuthorizationHeader(), $postRequestBody);
 		$response = curl_exec($curl);
 		/* Consolidate customer response */
-		$checkoutLogger->info( "====Request for login ====" );
-		$checkoutLogger->info(
+		$l->info( "====Request for login ====" );
+		$l->info(
 					json_encode(
 						array(
 							"Request " =>array(
@@ -717,8 +712,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 					)
 				);
 
-		$checkoutLogger->info( "====Response for login ====" );
-		$checkoutLogger->info($response);
+		$l->info( "====Response for login ====" );
+		$l->info($response);
 
 
 		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
