@@ -1,9 +1,5 @@
-<?php 
-
-
+<?php
 namespace Mangoit\MediaclipHub\Controller\Product;
- 
-use Magento\Framework\Controller\ResultFactory; 
 class Edit extends \Magento\Framework\App\Action\Action {
 
     protected $resultPageFactory;
@@ -78,11 +74,8 @@ class Edit extends \Magento\Framework\App\Action\Action {
             }
             $helper = mc_h();
             $storeUserId = $helper->getCustomerId();
-            $checkoutWriter = new \Zend\Log\Writer\Stream(BP . '/var/log/request_token_productedit.log');
-            $checkoutLogger = new \Zend\Log\Logger();
-            $checkoutLogger->addWriter($checkoutWriter);
             $userToken = $helper->HandleUserToken($storeUserId, $session->getMediaClipToken());
-            $checkoutLogger->info(json_encode(["Request Token : " => $userToken]));
+            ikf_logger('request_token_productedit')->info(json_encode(["Request Token : " => $userToken]));
             $session->setMediaClipToken($userToken);
             $mediaclip_product_date_options = $this->getMediaClipProductDateOptions($product);
             $projectId = $helper->CreateProject(
