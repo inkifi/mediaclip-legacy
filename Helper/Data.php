@@ -8,6 +8,7 @@ namespace Mangoit\MediaclipHub\Helper;
 // https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/4
 use Inkifi\Mediaclip\Settings as S;
 use Magento\Store\Model\Store;
+use Zend\Log\Logger as zL;
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
 
@@ -406,11 +407,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 			$postRequestBody['roles'] = array("Anonymous");
 		}
 		$this->HUBURL = S::s()->url();
-		$checkoutWriter = new \Zend\Log\Writer\Stream(BP . '/var/log/checkout.log');
-		$checkoutLogger = new \Zend\Log\Logger();
-		$checkoutLogger->addWriter($checkoutWriter);
+		$checkoutLogger = ikf_logger('checkout'); /** @var zL $checkoutLogger */
 		$endPoint = $this->HUBURL."/auth/jwt";
-
 		$checkoutLogger->info(
 						json_encode(
 							array(
@@ -418,7 +416,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 							), JSON_PRETTY_PRINT
 						)
 					);
-
 		$checkoutLogger->info(
 						json_encode(
 							array(
