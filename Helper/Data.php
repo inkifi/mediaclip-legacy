@@ -786,6 +786,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 	 * "It looks like the «Mediaclip Order Status» tab on a backend order page is always empty
 	 * because it is wrongly programmed":
 	 * https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/2
+	 * @used-by \Mangoit\MediaclipHub\Controller\Adminhtml\Order\Download::execute()
 	 * @param $orderId
 	 * @return bool
 	 */
@@ -1091,16 +1092,16 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 	 * @used-by downloadAndUploadOrderFilesToServer()
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::_p()
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pwinty::_p()
-	 * @param $storeOrderId
+	 * @param int $oid
 	 * @return array|mixed
 	 */
-	function getMediaClipOrders($storeOrderId) {
+	function getMediaClipOrders($oid) {
 		// GET https://api.mediacliphub.com/stores/{YOUR-KEY}/orders/{YOUR-ORDER-ID}
 		// 2018-08-17 Dmitry Fedyuk
 		// «Force Mediaclip to use the relevant API credentials in the multi-store mode»
 		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/4
 		/** @var resource $c */
-		$c = curl_init(S::s()->url() . '/stores/' . S::s()->id() . '/orders/' . $storeOrderId);
+		$c = curl_init(S::s()->url() . '/stores/' . S::s()->id() . '/orders/' . $oid);
 		curl_setopt($c, CURLOPT_RETURNTRANSFER, true);
 		curl_setopt($c, CURLOPT_HTTPHEADER, [
 			'Accept: application/json', "Authorization: {$this->GetStoreAuthorizationHeader()}"
