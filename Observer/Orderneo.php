@@ -1,6 +1,6 @@
 <?php
 namespace Mangoit\MediaclipHub\Observer;
-
+use Zend\Log\Logger as zL;
 class Orderneo implements \Magento\Framework\Event\ObserverInterface
 {   /**
      * @var ObjectManagerInterface
@@ -28,10 +28,7 @@ class Orderneo implements \Magento\Framework\Event\ObserverInterface
         //$orderId = $observer->getEvent()->getOrderIds();
         $order = $observer->getEvent()->getOrder();
         //$order = $this->order->load($orderId);
-    	$writer = new \Zend\Log\Writer\Stream(BP . '/var/log/new_observer_check.log');
-        $loggerNew = new \Zend\Log\Logger();
-        $loggerNew->addWriter($writer);
-        $loggerNew->info('inObserver1');
+        ikf_logger('new_observer_check')->info('inObserver1');
         /*$loggerNew->info(json_encode($order->debug()));
         $supplierModel = $this->_objectManager->create('Mangoit\MediaclipHub\Model\Supplier');
         $supplierDataCollection = $supplierModel->getCollection()->getData();
