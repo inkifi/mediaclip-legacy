@@ -4,92 +4,9 @@
     </div>
 </div>
 <div id="mediaclip_order_status_container" class="box">
-    <?php 
-       /* $availableForDownload = false;
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $formKey = $objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey();
-        $hubHelper = $objectManager->create('Mangoit\MediaclipHub\Helper\Data');
-        $order = $this->getOrder();
-        $orderId = $order->getId();
-        $mediaclipOrder = $objectManager->create('Mangoit\MediaclipHub\Model\Orders')->getCollection();
-        $mediaclipOrderData = $mediaclipOrder->addFieldToFilter('magento_order_id', array('eq' => $orderId));
-        $mediaclipOrderData = $mediaclipOrderData->getData()[0];
-        print_r($mediaclipOrderData);;
-        die();
-        if (!empty($mediaclipOrderData)) {
-        	
-            if ($mediaclipOrderData['order_download_status'] == 0) {
-                $mediaclipOrder = $hubHelper->getMediaClipOrders($orderId);
-
-
-                if ($mediaclipOrder) {
-                    foreach ($mediaclipOrder->lines as $lines) {
-                    	
-                        if ($lines->status->value == 'AvailableForDownload') {
-                            $product_id = $lines->storeData->productId;
-                            $product = $objectManager->create('Magento\Catalog\Model\Product')->load($product_id);
-                            $attributeSet = $objectManager->create('Magento\Eav\Api\AttributeSetRepositoryInterface');
-					        $attributeSetRepository = $attributeSet->get($product->getAttributeSetId());
-					        $attribute_set_name = $attributeSetRepository->getAttributeSetName();
-                            if ($product->getAttributeSetId() != 4) {
-                                if ( ($attribute_set_name == 'Print' && $product->getMediaclipPrintProduct()) || ($attribute_set_name == 'Gifting') ) {
-                                    $availableForDownload = true;
-                                }
-                            }
-                        }
-                    }
-                }
-                //echo "</pre>";
-
-                if ($availableForDownload) {
-                    ?>
-                    <p class="subdue"><?php echo __('Order available for download'); ?></p>
-                    <a href="javascript:void(0)" class="downloadMediaclipOrder" ><?php echo __('Download Order'); ?></a>
-                    <?php
-                }
-            } else if($mediaclipOrderData['order_download_status'] == 1){
-                ?>
-                <p class="subdue"><?php echo __('Order already download!'); ?></p>
-                <?php
-            }
-        } else {
-            ?>
-            <p class="subdue"><?php echo __('No order detail found. There is some problem with these order!'); ?></p>
-            <?php
-        }
-    ?>
-</div>
-<script type="text/javascript">
-    require([
-        'jquery'
-        ],
-    function($) {
-    $('.downloadMediaclipOrder').click(function(){
-    	var orderId = "<?php echo $orderId; ?>";
-		var ajaxUrl = "<?php echo $this->getUrl('mediacliphub/order/download'); ?>";
-        $("#loading-mask").show();
-        var formkey = "<?php echo $formKey; ?>";
-        var folder = $('#ftp_upload_folder').val();
-        $.ajax({
-            url: ajaxUrl,
-            type: 'post',
-            dataType: 'json',
-            showLoader: true,
-            data : {
-                form_key : formkey,
-                order_id : orderId,
-                //upload: folder,
-                isAjax : true,
-            },
-            success: function(response){
-                $("#loading-mask").hide();
-                if (response.message) {
-                    alert(response.message);
-                }
-            },
-        });
-    });
-});
-
-</script>
-*/
+<!-- 2019-02-26 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+1) It was the following commented out code block here:
+https://github.com/Inkifi-Connect/Media-Clip-Inkifi/blob/04a97afdcd87bbe710717c45acd54a3e8ab9bb1a/view/adminhtml/templates/order/download.phtml#L8-L95
+2) "It looks like the «Mediaclip Order Status» tab on a backend order page is always empty
+because it is wrongly programmed": https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/2
+-->
