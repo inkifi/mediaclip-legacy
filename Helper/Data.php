@@ -1096,6 +1096,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
 	/**
 	 * 2019-02-26
+	 * @used-by downloadAndUploadOrderFilesToServer()
+	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::_p()
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pwinty::_p()
 	 * @param $storeOrderId
 	 * @return array|mixed
@@ -1121,6 +1123,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 		curl_close($curl);
 		return 200 != $httpCode ? [] : json_decode($curl_response);
 	}
+
 	function createDirectory($path){
 		if(!is_dir($path)){
 			mkdir($path, 0777);
