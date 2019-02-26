@@ -1,40 +1,26 @@
 <?php
-
 namespace Mangoit\MediaclipHub\Observer;
-
 use Magento\Framework\Event\ObserverInterface;
-
-class CustomerLogin implements ObserverInterface
-{
-    function execute(\Magento\Framework\Event\Observer $observer)
-    {
-
+use Zend\Log\Logger as zL;
+class CustomerLogin implements ObserverInterface {
+    function execute(\Magento\Framework\Event\Observer $observer) {
         $customer = $observer->getEvent()->getCustomer();
         //Mage::app()->cleanCache();
         //Mage::dispatchEvent('adminhtml_cache_flush_system');
-
         //$customer = $observer->getCustomer();
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        
         $session = $objectManager->get('Magento\Customer\Model\Session');
-        
         $storeUserId = $customer->getEntityId();
         $hubHelper = mc_h();
-
-        $userConsolidationWriter = new \Zend\Log\Writer\Stream(BP . '/var/log/user_login_consolidation.log');
-        $userConsolidatedLog = new \Zend\Log\Logger();
-        $userConsolidatedLog->addWriter($userConsolidationWriter);
-
-
-        
+        $l = ikf_logger('user_login_consolidation'); /** @var zL $l */
         if ($session->getMediaClipUserId() && $session->getMediaClipUserType() == 'anonymous') {
             $anonymousCustomerId = $session->getMediaClipUserId();
-            $userConsolidatedLog->info("==============Anonymous User==================");
+            $l->info("==============Anonymous User==================");
             try{
 
                 $token = $hubHelper->consolidateCustomerAndGetCustomerToken($storeUserId, $anonymousCustomerId);
 
-                $userConsolidatedLog->info(
+                $l->info(
                     json_encode(
                         array(
                             "Response token" =>array(
