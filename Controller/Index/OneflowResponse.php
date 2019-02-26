@@ -14,11 +14,8 @@ class OneflowResponse extends \Magento\Framework\App\Action\Action {
 	 * @throws LE
 	 */
 	function execute() {
-		$writer = new \Zend\Log\Writer\Stream(BP . '/var/log/oneflow_status.log');
-		$l = new \Zend\Log\Logger();
-		$l->addWriter($writer);
 		$json = file_get_contents('php://input');
-		$l->info($json);
+		ikf_logger('oneflow_status')->info($json);
 		/**
 		 * 2018-12-28 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 		 * "Improve MediaClip module for Magento 2: handle shipping notifications for the US store":
