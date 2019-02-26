@@ -23,11 +23,6 @@ final class OrderSaveBefore implements ObserverInterface {
 		if ($id = $o->getId()) {
 			$o2 = OM::getInstance()->create(O::class);
 			$o2->load($id);
-			//$writer = new \Zend\Log\Writer\Stream(BP . '/var/log/mage2pro.log');
-			//$l = new \Zend\Log\Logger();
-			//$l->addWriter($writer);
-			//$l->info(__CLASS__);
-			//$l->info(json_encode(['old status' => $o2->getStatus(), 'new status' => $o->getStatus()]));
 			if ('pending_payment' === $o2->getStatus()
 				&& !in_array($o->getStatus(), [
 					'canceled', 'closed', 'fraud', 'holded', 'payment_review', 'pending_payment',
