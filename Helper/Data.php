@@ -3,10 +3,10 @@
  * Copyright © 2015 Mangoit . All rights reserved.
  */
 namespace Mangoit\MediaclipHub\Helper;
-// 2018-08-17 Dmitry Fedyuk
-// «Force Mediaclip to use the relevant API credentials in the multi-store mode»
-// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/4
+use Inkifi\Mediaclip\API\Entity\Order\Item as mOI;
+use Inkifi\Mediaclip\API\Entity\Project;
 use Inkifi\Mediaclip\Settings as S;
+use Magento\Catalog\Model\Product;
 use Magento\Store\Model\Store;
 use Zend\Log\Logger as zL;
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
@@ -821,13 +821,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 		$csvContent['postcode'] = $shipping_address['postcode'];
 		$csvContent['telephone'] = $shipping_address['telephone'];
 		$csvContent['email'] = $order->getCustomerEmail();
-
-		$mediaclipOrderDetails = $this->getMediaClipOrders($orderId);
 		$linesArray = array();
-		foreach ($mediaclipOrderDetails->lines as $lines) {
-			if ($lines->status->value == 'AvailableForDownload') {
-				$product_id = $lines->storeData->productId;
-				$product = $objectManager->create('Magento\Catalog\Model\Product')->load($product_id);
+		foreach (ikf_api_oi($orderId) as $mOI) { /** @var mOI $mOI */
+			if ($mOI->isAvailableForDownload()) {
+				$product = $mOI->product(); /** @var Product $product */
 				$attributeSet = $objectManager->create('Magento\Eav\Api\AttributeSetRepositoryInterface');
 				$attributeSetRepository = $attributeSet->get($product->getAttributeSetId());
 				$attribute_set_name = $attributeSetRepository->getAttributeSetName();
@@ -835,13 +832,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 				if ($product->getAttributeSetId() != 4) {
 					//echo "<br> Product Module ".$product->getMediaclipModule();
 					if ($attribute_set_name == 'Print' || $attribute_set_name == 'Gifting') {
-						$projectId = $lines->projectId;
-						$projectData = $objectManager->create('Mangoit\MediaclipHub\Model\Mediaclip')->load($projectId, 'project_id')->getData();
-						$projectDetails = json_decode($projectData['project_details'], true);
-
-						if (isset($projectDetails['properties']['option_details'])) {
-							$itemoptions = json_decode($projectDetails['properties']['option_details'], true);
-
+						$project = $mOI->project(); /** @var Project $project */
+						$mOI_ID = $mOI->id(); /** @var string $mOI_ID */
+						if (isset($project['properties']['option_details'])) {
+							$itemoptions = json_decode($project['properties']['option_details'], true);
 							$productOptions = $product->getOptions();
 							if ($productOptions) {
 								foreach($productOptions as $optionDetail){
@@ -850,9 +844,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 										foreach ($optionValues as $_value) {
 											if ($_value->getOptionTypeId() == $itemoptions[$optionDetail->getData('option_id')]) {
 												if($_value->getSku() != ''){
-													$linesArray[$lines->id]['product_sku'] = $_value->getSku();
-													$linesArray[$lines->id]['product_module'] = $attribute_set_name;
-													$linesArray[$lines->id]['upload_folder'] = $product->getMediaclipUploadFolder();
+													$linesArray[$mOI_ID]['product_sku'] = $_value->getSku();
+													$linesArray[$mOI_ID]['product_module'] = $attribute_set_name;
+													$linesArray[$mOI_ID]['upload_folder'] = $product->getMediaclipUploadFolder();
 												}
 											}
 										}
@@ -862,13 +856,13 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
 						} else {
 							if ($attribute_set_name == 'Print' && $product->getMediaclipPrintProduct()) {
-								$linesArray[$lines->id]['product_sku'] = $product->getMediaclipPrintProduct();
-								$linesArray[$lines->id]['product_module'] = $attribute_set_name;
-								$linesArray[$lines->id]['upload_folder'] = $product->getMediaclipUploadFolder();
+								$linesArray[$mOI_ID]['product_sku'] = $product->getMediaclipPrintProduct();
+								$linesArray[$mOI_ID]['product_module'] = $attribute_set_name;
+								$linesArray[$mOI_ID]['upload_folder'] = $product->getMediaclipUploadFolder();
 							} else if ($attribute_set_name == 'Gifting' && $product->getMediaclipGiftingProduct()) {
-								$linesArray[$lines->id]['product_sku'] = $product->getMediaclipGiftingProduct();
-								$linesArray[$lines->id]['product_module'] = $attribute_set_name;
-								$linesArray[$lines->id]['upload_folder'] = $product->getMediaclipUploadFolder();
+								$linesArray[$mOI_ID]['product_sku'] = $product->getMediaclipGiftingProduct();
+								$linesArray[$mOI_ID]['product_module'] = $attribute_set_name;
+								$linesArray[$mOI_ID]['upload_folder'] = $product->getMediaclipUploadFolder();
 							}
 						}
 					}
