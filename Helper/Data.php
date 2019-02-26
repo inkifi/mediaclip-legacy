@@ -641,14 +641,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 	function CheckoutWithSingleProduct(array $postRequestBody, Store $store)
 	{
 	   // print_r(json_encode($postRequestBody)); die();
-		$checkoutWriter = new \Zend\Log\Writer\Stream(BP . '/var/log/checkout.log');
-		$checkoutLogger = new \Zend\Log\Logger();
-		$checkoutLogger->addWriter($checkoutWriter);
-		$writer = new \Zend\Log\Writer\Stream(BP . '/var/log/helper.log');
-		$logger = new \Zend\Log\Logger();
-		$logger->addWriter($writer);
-		$logger->info(json_encode($postRequestBody));
-		$checkoutLogger->info(json_encode($postRequestBody));
+		$lCheckout = ikf_logger('checkout'); /** @var zL $lCheckout */
+		$lHelper = ikf_logger('helper'); /** @var zL $lHelper */
+		$lHelper->info(json_encode($postRequestBody));
+		$lCheckout->info(json_encode($postRequestBody));
 		// 2018-08-17 Dmitry Fedyuk
 		// «Force Mediaclip to use the relevant API credentials in the multi-store mode»
 		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/4
@@ -661,7 +657,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 			,$postRequestBody
 		);
 		$response = curl_exec($curl);
-		$checkoutLogger->info(json_encode($response));
+		$lCheckout->info(json_encode($response));
 		if($response) {
 			$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 			curl_close($curl);
@@ -671,12 +667,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 					if ($response && $httpCode == 201){
 						$checkoutInformation = json_decode($response, true);
 
-						$logger->info($response);
+						$lHelper->info($response);
 						return $checkoutInformation;
 					}
-					$logger->info($response);
+					$lHelper->info($response);
 				} catch (\Exception $e) {
-					$checkoutLogger->info(
+					$lCheckout->info(
 						json_encode(
 							array(
 							"Checkout error  " => $e->getMessage()
@@ -687,7 +683,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 					echo $e->getMessage();
 				}
 		}
+		return null;
 	}
+
 	function consolidateCustomerAndGetCustomerToken($storeUserId, $anonymousCustomerId)
 	{
 
