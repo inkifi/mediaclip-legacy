@@ -959,14 +959,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 		return $response;
 	}
 
-	/**
-	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pwinty::_p()
-	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::_p()
-	 * @param $d
-	 * @return false|string
-	 */
-	function createOrderDirectoryDate($d) {return date('d-m-Y', strtotime($d));}
-
 	function createOrderDirectory($orderId, $order_created_at, $supplierDirName , $orderItemID){
 		$order_day = date('D', strtotime($order_created_at));
 		$present = strtotime($order_created_at);
