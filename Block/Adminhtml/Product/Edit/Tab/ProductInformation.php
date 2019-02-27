@@ -1,8 +1,9 @@
 <?php
 namespace Mangoit\MediaclipHub\Block\Adminhtml\Product\Edit\Tab;
-
-class ProductInformation extends \Magento\Backend\Block\Widget\Form\Generic implements \Magento\Backend\Block\Widget\Tab\TabInterface
-{
+use Mangoit\MediaclipHub\Model\Product as mProduct;
+class ProductInformation
+	extends \Magento\Backend\Block\Widget\Form\Generic
+	implements \Magento\Backend\Block\Widget\Tab\TabInterface {
     /**
      * @var \Magento\Store\Model\System\Store
      */
@@ -133,10 +134,10 @@ class ProductInformation extends \Magento\Backend\Block\Widget\Form\Generic impl
             ]
         );
         $fieldset->addField(
-           'ftp_json',
+           mProduct::F__FTP_JSON,
            'select',
             [
-               'name' => 'ftp_json',
+               'name' => mProduct::F__FTP_JSON,
                'label' => __('Send Json'),
                'title' => __('Send Json'),
                'options' => ['0' => __('No'),'1' => __('Yes') ],

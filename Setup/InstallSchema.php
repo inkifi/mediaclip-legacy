@@ -1,19 +1,10 @@
 <?php
-/**
- * Copyright © 2015 Mangoit. All rights reserved.
- */
-
 namespace Mangoit\MediaclipHub\Setup;
-
 use Magento\Framework\Setup\InstallSchemaInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\SchemaSetupInterface;
-
-/**
- * @codeCoverageIgnore
- */
-class InstallSchema implements InstallSchemaInterface
-{
+use Mangoit\MediaclipHub\Model\Product as mProduct;
+class InstallSchema implements InstallSchemaInterface {
     /**
      * {@inheritdoc}
      */
@@ -151,7 +142,7 @@ class InstallSchema implements InstallSchemaInterface
             'Dust Jacket Popup'
         )
         ->addColumn(
-            'ftp_json',
+            mProduct::F__FTP_JSON,
             \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
             null,
             '64k',

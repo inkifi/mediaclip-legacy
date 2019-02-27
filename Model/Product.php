@@ -1,18 +1,6 @@
 <?php
-/**
- * Copyright © 2015 Mangoit. All rights reserved.
- */
-
 namespace Mangoit\MediaclipHub\Model;
-
-use Magento\Framework\Exception\ProductException;
-
-/**
- * Producttab product model
- */
-class Product extends \Magento\Framework\Model\AbstractModel
-{
-
+class Product extends \Magento\Framework\Model\AbstractModel {
     /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
@@ -31,12 +19,13 @@ class Product extends \Magento\Framework\Model\AbstractModel
     }
 
     /**
+	 * 2019-02-27
+	 * @override
+	 * @see \Magento\Framework\Model\AbstractModel::_construct()
      * @return void
      */
-    function _construct()
-    {
-        $this->_init('Mangoit\MediaclipHub\Model\ResourceModel\Product');
-    }
+    protected function _construct() {$this->_init('Mangoit\MediaclipHub\Model\ResourceModel\Product');}
+
     function getMediaClipProductByLabel($label, $_module){
         $collection = $this->getCollection();
         if ($label) {
@@ -54,7 +43,21 @@ class Product extends \Magento\Framework\Model\AbstractModel
             $collection->addFieldToFilter('plu', $sku);
             $collection->addFieldToFilter('module', $module);
         }
-
         return $collection->getData();
     }
+
+	/**
+	 * 2019-02-27
+	 * @return bool
+	 */
+    function sendJson() {return !!$this[self::F__FTP_JSON];}
+
+	/**
+	 * 2019-02-27
+	 * @used-by sendJson()
+	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::pOI()
+	 * @used-by \Mangoit\MediaclipHub\Block\Adminhtml\Product\Edit\Tab\ProductInformation::_prepareForm()
+	 * @used-by \Mangoit\MediaclipHub\Setup\InstallSchema::install()
+	 */
+    const F__FTP_JSON = 'ftp_json';
 }
