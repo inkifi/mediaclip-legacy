@@ -1,18 +1,14 @@
 <?php
-
 namespace Mangoit\MediaclipHub\Setup;
-
-use Magento\Eav\Model\Entity\Attribute\SetFactory as AttributeSetFactory;
-use Magento\Framework\Setup\ModuleDataSetupInterface;
-use Magento\Framework\Setup\UpgradeSchemaInterface;
-use Magento\Framework\Setup\ModuleContextInterface;
-use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Catalog\Setup\CategorySetupFactory;
+use Magento\Eav\Model\Entity\Attribute\SetFactory as AttributeSetFactory;
 use Magento\Eav\Setup\EavSetupFactory;
-use Magento\Framework\DB\Ddl\Table;
-
-class UpgradeSchema implements UpgradeSchemaInterface
-{
+use Magento\Framework\Setup\ModuleContextInterface;
+use Magento\Framework\Setup\ModuleDataSetupInterface;
+use Magento\Framework\Setup\SchemaSetupInterface;
+use Magento\Framework\Setup\UpgradeSchemaInterface;
+use Mangoit\MediaclipHub\Model\Product as mProduct;
+class UpgradeSchema implements UpgradeSchemaInterface {
     private $attributeSetFactory;
     private $categorySetupFactory;
     private $eavSetupFactory;
@@ -688,7 +684,7 @@ class UpgradeSchema implements UpgradeSchemaInterface
             $tableName = $setup->getTable('mediacliphub_product');
             // Changes here.
             $columns = [
-                'include_quantity_in_json' => [
+                mProduct::F__INCLUDE_QUANTITY_IN_JSON => [
                     'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                     'nullable' => true,
                     'default' => 0,

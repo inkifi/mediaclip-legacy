@@ -145,10 +145,10 @@ class ProductInformation
         );
 
         $fieldset->addField(
-           'include_quantity_in_json',
+           mProduct::F__INCLUDE_QUANTITY_IN_JSON,
            'select',
             [
-               'name' => 'include_quantity_in_json',
+               'name' => mProduct::F__INCLUDE_QUANTITY_IN_JSON,
                'label' => __('Include Quantity In JSON'),
                'title' => __('Include Quantity In JSON'),
                'options' => ['0' => __('No'),'1' => __('Yes') ],

@@ -48,6 +48,14 @@ class Product extends \Magento\Framework\Model\AbstractModel {
 
 	/**
 	 * 2019-02-27
+	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::pOI()
+	 * @return bool
+	 */
+    function includeQuantityInJson() {return !!$this[self::F__INCLUDE_QUANTITY_IN_JSON];}
+
+	/**
+	 * 2019-02-27
+	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::pOI()
 	 * @return bool
 	 */
     function sendJson() {return !!$this[self::F__FTP_JSON];}
@@ -55,9 +63,16 @@ class Product extends \Magento\Framework\Model\AbstractModel {
 	/**
 	 * 2019-02-27
 	 * @used-by sendJson()
-	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::pOI()
 	 * @used-by \Mangoit\MediaclipHub\Block\Adminhtml\Product\Edit\Tab\ProductInformation::_prepareForm()
 	 * @used-by \Mangoit\MediaclipHub\Setup\InstallSchema::install()
 	 */
     const F__FTP_JSON = 'ftp_json';
+
+	/**
+	 * 2019-02-27
+	 * @used-by includeQuantityInJson()
+	 * @used-by \Mangoit\MediaclipHub\Block\Adminhtml\Product\Edit\Tab\ProductInformation::_prepareForm()
+	 * @used-by \Mangoit\MediaclipHub\Setup\UpgradeSchema::upgrade()
+	 */
+    const F__INCLUDE_QUANTITY_IN_JSON = 'include_quantity_in_json';
 }
