@@ -384,6 +384,15 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 		$initialTimeZone = date_default_timezone_get();
 		date_default_timezone_set("UTC");
 
+		/**
+		 * 2019-03-02 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+		 * The «Trying to get property of non-object» error here means that
+		 * the Mediaclip API KEY is incorrect.
+		 * Mediaclip responds «Request must have a valid AppId authentication key and secret»
+		 * and returns an empty array as a token, so the $token->expirationUtc expression fails.
+		 * https://www.upwork.com/messages/rooms/room_9b50f413f4e119199fc9ccdf574a7e18/story_f0e5d6545846fbe4de29171e3a58f26c
+		 * https://www.upwork.com/messages/rooms/room_9b50f413f4e119199fc9ccdf574a7e18/story_503606a3e5eb8a0060d55b133773cf29
+		 */
 		if (is_null($token) || (strtotime($token->expirationUtc) - 60) < time()) {
 
 			$token = $this->GetTokenForEndUser($storeUserId);
@@ -966,6 +975,12 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 		}
 	}
 
+	/**
+	 * 2019-02-27
+	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::pOI()
+	 * @param $storeOrderLineId
+	 * @return array|mixed
+	 */
 	function getMediaClipOrderLinesDetails($storeOrderLineId){
 		//GET https://api.mediacliphub.com/stores/{YOUR-KEY}/orders/{YOUR-ORDER-ID}
 		// 2018-08-17 Dmitry Fedyuk
