@@ -1,5 +1,7 @@
 <?php
 namespace Mangoit\MediaclipHub\Controller\Product;
+use Mangoit\MediaclipHub\Model\Product as mProduct;
+use Mangoit\MediaclipHub\Model\ResourceModel\Product\Collection as mPC;
 class Edit extends \Magento\Framework\App\Action\Action {
 
     protected $resultPageFactory;
@@ -242,9 +244,10 @@ class Edit extends \Magento\Framework\App\Action\Action {
             foreach ($_module as  $value) {
                 $val['id'] = $value['id'];
             }
-
-            $collection = $this->_objectManager->create('Mangoit\MediaclipHub\Model\Product')->getCollection()->addFieldToFilter('plu', $option_id)->addFieldToFilter('module', $val['id'])->getData();
-            return $collection;
+            $r = ikf_product_c(); /** @var mPC $r */
+            $r->addFieldToFilter(mProduct::F__PLU, $option_id);
+            $r->addFieldToFilter('module', $val['id'])->getData();
+            return $r;
         }
         return false;
     }

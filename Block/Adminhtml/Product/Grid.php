@@ -1,8 +1,7 @@
 <?php
 namespace Mangoit\MediaclipHub\Block\Adminhtml\Product;
-
-class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
-{
+use Mangoit\MediaclipHub\Model\Product as mProduct;
+class Grid extends \Magento\Backend\Block\Widget\Grid\Extended {
     /**
      * @var \Magento\Framework\Module\Manager
      */
@@ -160,11 +159,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended
             ]
         );
         $this->addColumn(
-            'plu',
+            mProduct::F__PLU,
             [
                 'header' => __('PLU'),
-                'index' => 'plu',
-                'class' => 'plu'
+                'index' => mProduct::F__PLU,
+                'class' => mProduct::F__PLU
             ]
         );
         $this->addColumn(

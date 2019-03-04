@@ -38,12 +38,12 @@ class Product extends \Magento\Framework\Model\AbstractModel {
     }
 
     function getMediaClipProductBySku($sku, $module){
-        $collection = $this->getCollection();
+        $c = ikf_product_c();
         if ($sku) {
-            $collection->addFieldToFilter('plu', $sku);
-            $collection->addFieldToFilter('module', $module);
+            $c->addFieldToFilter(self::F__PLU, $sku);
+            $c->addFieldToFilter('module', $module);
         }
-        return $collection->getData();
+        return $c->getData();
     }
 
 	/**
@@ -58,7 +58,13 @@ class Product extends \Magento\Framework\Model\AbstractModel {
 	 * @used-by ikf_product()
 	 * @param string $v «INKIFI-VP»
 	 */
-    function loadByPlu($v) {$this->load($v, 'plu');}
+    function loadByPlu($v) {$this->load($v, self::F__PLU);}
+
+	/**
+	 * 2019-03-04
+	 * @return string «INKIFI-VP»
+	 */
+    function plu() {return $this[self::F__PLU];}
 
 	/**
 	 * 2019-02-27
@@ -82,4 +88,20 @@ class Product extends \Magento\Framework\Model\AbstractModel {
 	 * @used-by \Mangoit\MediaclipHub\Setup\UpgradeSchema::upgrade()
 	 */
     const F__INCLUDE_QUANTITY_IN_JSON = 'include_quantity_in_json';
+
+    /**
+	 * 2019-03-04
+	 * @used-by getMediaClipProductBySku()
+	 * @used-by loadByPlu()
+	 * @used-by plu()
+	 * @used-by \Mangoit\MediaclipHub\Block\Adminhtml\Product\Edit\Tab\ProductInformation::_prepareForm()
+	 * @used-by \Mangoit\MediaclipHub\Block\Adminhtml\Product\Grid::_prepareColumns()
+	 * @used-by \Mangoit\MediaclipHub\Controller\Product\Edit::getMediaclipProductData()
+	 * @used-by \Mangoit\MediaclipHub\Helper\Data::getGiftingProduct()
+	 * @used-by \Mangoit\MediaclipHub\Helper\Data::getMediaClipProductName()
+	 * @used-by \Mangoit\MediaclipHub\Helper\Data::getPhotobookProduct()
+	 * @used-by \Mangoit\MediaclipHub\Helper\Data::getPrintProduct()
+	 * @used-by \Mangoit\MediaclipHub\Setup\InstallSchema::install()
+	 */
+    const F__PLU = 'plu';
 }

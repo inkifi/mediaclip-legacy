@@ -93,10 +93,10 @@ class ProductInformation
             ]
         );
         $fieldset->addField(
-            'plu',
+            mProduct::F__PLU,
             'text',
             [
-                'name' => 'plu',
+                'name' => mProduct::F__PLU,
                 'label' => __('PLU'),
                 'title' => __('PLU'),
                 'required' => true,

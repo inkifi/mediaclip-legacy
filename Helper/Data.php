@@ -1,17 +1,10 @@
 <?php
-/**
- * Copyright © 2015 Mangoit . All rights reserved.
- */
 namespace Mangoit\MediaclipHub\Helper;
-use Inkifi\Mediaclip\API\Entity\Order\Item as mOI;
-use Inkifi\Mediaclip\API\Entity\Project;
 use Inkifi\Mediaclip\Settings as S;
-use Magento\Catalog\Model\Product;
 use Magento\Store\Model\Store;
+use Mangoit\MediaclipHub\Model\Product as mProduct;
 use Zend\Log\Logger as zL;
-class Data extends \Magento\Framework\App\Helper\AbstractHelper
-{
-
+class Data extends \Magento\Framework\App\Helper\AbstractHelper {
 	/**
 	 * @param \Magento\Framework\App\Helper\Context $context
 	 */
@@ -140,10 +133,8 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 				$options = $photobookProduct->getData();
 				$arr = array();
 				if ($options) {
-
 					foreach ($options as $option) {
-
-						$arr['value'] = $option['plu'];
+						$arr['value'] = $option[mProduct::F__PLU];
 						$arr['label'] = $option['product_label'];
 						$finalOptions[] = $arr;
 					}
@@ -174,7 +165,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
 					foreach ($options as $option) {
 
-						$arr['value'] = $option['plu'];
+						$arr['value'] = $option[mProduct::F__PLU];
 						$arr['label'] = $option['product_label'];
 						$finalOptions[] = $arr;
 					}
@@ -206,7 +197,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 
 					foreach ($options as $option) {
 
-						$arr['value'] = $option['plu'];
+						$arr['value'] = $option[mProduct::F__PLU];
 						$arr['label'] = $option['product_label'];
 						$finalOptions[] = $arr;
 					}
@@ -1022,7 +1013,10 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
 		$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
 		$modulename = $objectManager->create('Mangoit\MediaclipHub\Model\Modules')->getCollection()->addFieldToFilter('module_name', $module);
 		$module = $modulename->getFirstItem()->getData('id');
-		$_mediaclip_product = $objectManager->create('Mangoit\MediaclipHub\Model\Product')->getCollection()->addFieldToFilter('plu', $sku)->addFieldToFilter('module', $module)->getFirstItem();
+		$c = ikf_product_c();
+		$c->addFieldToFilter(mProduct::F__PLU, $sku);
+		$c->addFieldToFilter('module', $module);
+		$_mediaclip_product = $c->getFirstItem();
 		$label = false;
 
 		if ($_mediaclip_product) {

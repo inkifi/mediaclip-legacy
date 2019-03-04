@@ -92,7 +92,7 @@ class InstallSchema implements InstallSchemaInterface {
             'Update Time'
         )
         ->addColumn(
-            'plu',
+            mProduct::F__PLU,
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             '64k',
             [],
