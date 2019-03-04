@@ -62,6 +62,7 @@ class Product extends \Magento\Framework\Model\AbstractModel {
 
 	/**
 	 * 2019-03-04
+	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::pOI()
 	 * @return string «INKIFI-VP»
 	 */
     function plu() {return $this[self::F__PLU];}
