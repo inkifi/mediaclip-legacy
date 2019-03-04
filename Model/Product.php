@@ -54,6 +54,13 @@ class Product extends \Magento\Framework\Model\AbstractModel {
     function includeQuantityInJson() {return !!$this[self::F__INCLUDE_QUANTITY_IN_JSON];}
 
 	/**
+	 * 2019-03-04
+	 * @used-by ikf_product()
+	 * @param string $v «INKIFI-VP»
+	 */
+    function loadByPlu($v) {$this->load($v, 'plu');}
+
+	/**
 	 * 2019-02-27
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::pOI()
 	 * @return bool
