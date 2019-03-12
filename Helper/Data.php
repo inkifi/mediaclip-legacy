@@ -135,7 +135,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper {
 				if ($options) {
 					foreach ($options as $option) {
 						$arr['value'] = $option[mProduct::F__PLU];
-						$arr['label'] = $option['product_label'];
+						$arr['label'] = $option[mProduct::F__LABEL];
 						$finalOptions[] = $arr;
 					}
 				}
@@ -166,7 +166,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper {
 					foreach ($options as $option) {
 
 						$arr['value'] = $option[mProduct::F__PLU];
-						$arr['label'] = $option['product_label'];
+						$arr['label'] = $option[mProduct::F__LABEL];
 						$finalOptions[] = $arr;
 					}
 				}
@@ -198,7 +198,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper {
 					foreach ($options as $option) {
 
 						$arr['value'] = $option[mProduct::F__PLU];
-						$arr['label'] = $option['product_label'];
+						$arr['label'] = $option[mProduct::F__LABEL];
 						$finalOptions[] = $arr;
 					}
 				}

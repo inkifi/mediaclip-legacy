@@ -72,7 +72,7 @@ class InstallSchema implements InstallSchemaInterface {
             'mediacliphub_product'
         )
         ->addColumn(
-            'product_label',
+            mProduct::F__LABEL,
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             '64k',
             [],

@@ -151,11 +151,11 @@ class Grid extends \Magento\Backend\Block\Widget\Grid\Extended {
             ]
         );
         $this->addColumn(
-            'product_label',
+            mProduct::F__LABEL,
             [
                 'header' => __('Product Label'),
-                'index' => 'product_label',
-                'class' => 'product_label'
+                'index' => mProduct::F__LABEL,
+                'class' => mProduct::F__LABEL
             ]
         );
         $this->addColumn(

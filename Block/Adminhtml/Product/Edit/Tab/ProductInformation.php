@@ -73,10 +73,10 @@ class ProductInformation
             ]
         );
         $fieldset->addField(
-            'product_label',
+            mProduct::F__LABEL,
             'text',
             [
-                'name' => 'product_label',
+                'name' => mProduct::F__LABEL,
                 'label' => __('Name'),
                 'title' => __('Name'),
                 'required' => true,
