@@ -62,7 +62,7 @@ class Product extends \Magento\Framework\Model\AbstractModel {
 
 	/**
 	 * 2019-03-12
-	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::pOI()
+	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::writeLocal()
 	 * @return string|null
 	 */
 	function label() {return $this[self::F__LABEL];}
