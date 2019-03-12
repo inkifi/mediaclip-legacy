@@ -473,7 +473,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper {
 	 * 2019-01-29
 	 * @used-by CheckoutWithSingleProduct()
 	 * @used-by consolidateCustomerAndGetCustomerToken()
-	 * @used-by getMediaClipOrderLinesDetails()
 	 * @used-by getMediaClipProjects()
 	 * @used-by GetTokenForEndUser()
 	 * @used-by renewMediaClipToken()
@@ -966,48 +965,6 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper {
 		}
 	}
 
-	/**
-	 * 2019-02-27
-	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::pOI()
-	 * @param $storeOrderLineId
-	 * @return array|mixed
-	 */
-	function getMediaClipOrderLinesDetails($storeOrderLineId){
-		//GET https://api.mediacliphub.com/stores/{YOUR-KEY}/orders/{YOUR-ORDER-ID}
-		// 2018-08-17 Dmitry Fedyuk
-		// «Force Mediaclip to use the relevant API credentials in the multi-store mode»
-		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/4
-		$service_url = S::s()->url().'/lines/'.$storeOrderLineId;
-		$curl = curl_init($service_url);
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-		$authorization = $this->GetStoreAuthorizationHeader();
-		curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-			'Accept: application/json',
-			'Authorization: ' . $authorization,
-		));
-
-		$curl_response = curl_exec($curl);
-
-		if ($curl_response === false) {
-			$info = curl_getinfo($curl);
-			curl_close($curl);
-			die('error occured during curl exec. Additioanl info: ' . var_export($info));
-		}
-
-		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-
-		curl_close($curl);
-
-		if ($httpCode != 200)
-		{
-			return array();
-			//self::ThrowHttpException("Error in the request made: ", $httpCode, $response);
-		}
-
-		$decoded = json_decode($curl_response);
-
-		return $decoded;
-	}
 	function getMediaClipProductName($sku, $module){
 
 		$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
