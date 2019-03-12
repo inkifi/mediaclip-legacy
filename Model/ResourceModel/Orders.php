@@ -1,21 +1,7 @@
 <?php
-/**
- * Copyright © 2015 Mangoit. All rights reserved.
- */
 namespace Mangoit\MediaclipHub\Model\ResourceModel;
-
-/**
- * Modules resource
- */
-class Orders extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
-{
-    /**
-     * Initialize resource
-     *
-     * @return void
-     */
-    function _construct()
-    {
-        $this->_init('mediaclip_orders', 'id');
-    }
+// 2019-03-13
+class Orders extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb {
+	/** 2019-03-13 */
+	function _construct() {$this->_init('mediaclip_orders', 'id');}
 }
