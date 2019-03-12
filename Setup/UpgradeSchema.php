@@ -721,14 +721,16 @@ class UpgradeSchema implements UpgradeSchemaInterface {
 	/**
 	 * 2019-02-26 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 	 * @used-by upgrade()
-	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pwinty::_p()
+	 * @used-by \Inkifi\Mediaclip\Event::_areAllOIAvailableForDownload()
+	 * @used-by \Inkifi\Mediaclip\Event::markOIAsAvailableForDownload()
 	 */
 	const OI__ITEM_DOWNLOAD_STATUS = 'item_download_status';
 
 	/**
 	 * 2019-03-13 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 	 * @used-by upgrade()
-	 * @used-by \Inkifi\Mediaclip\Event::folder()
+	 * @used-by \Inkifi\Mediaclip\Event::oiOfTheSameType()
+	 * @used-by \Inkifi\Mediaclip\Event::type()
 	 */
 	const P__UPLOAD_FOLDER = 'mediaclip_upload_folder';
 }

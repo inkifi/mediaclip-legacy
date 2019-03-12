@@ -21,10 +21,10 @@ class Orders extends \Magento\Framework\Model\AbstractModel {
 	function _construct() {$this->_init(R::class);}
 
 	/**
-	 * 2019-03-13
+	 * 2019-03-13 This flag is never used.
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload::_p()
 	 */
-	function markAsDownloaded() {
+	function markAsAvailableForDownload() {
 		$this->setData(self::F__DOWNLOAD_STATUS, 1);
 		$this->save();
 	}
@@ -44,7 +44,7 @@ class Orders extends \Magento\Framework\Model\AbstractModel {
 
 	/**
 	 * 2019-03-13
-	 * @used-by markAsDownloaded()
+	 * @used-by markAsAvailableForDownload()
 	 * @used-by \Mangoit\MediaclipHub\Setup\UpgradeSchema::upgrade()
 	 */
 	const F__DOWNLOAD_STATUS = 'order_download_status';
