@@ -53,6 +53,13 @@ class Product extends \Magento\Framework\Model\AbstractModel {
 	 */
     function includeQuantityInJson() {return !!$this[self::F__INCLUDE_QUANTITY_IN_JSON];}
 
+ 	/**
+	 * 2019-03-12
+	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::pOI()
+	 * @return string|null
+	 */
+    function jsonCode() {return $this[self::F__JSON_CODE];}
+
 	/**
 	 * 2019-03-04
 	 * @used-by ikf_product()
@@ -89,6 +96,14 @@ class Product extends \Magento\Framework\Model\AbstractModel {
 	 * @used-by \Mangoit\MediaclipHub\Setup\UpgradeSchema::upgrade()
 	 */
     const F__INCLUDE_QUANTITY_IN_JSON = 'include_quantity_in_json';
+
+  	/**
+	 * 2019-03-12
+	 * @used-by jsonCode()
+	 * @used-by \Mangoit\MediaclipHub\Block\Adminhtml\Product\Edit\Tab\ProductInformation::_prepareForm()
+	 * @used-by \Mangoit\MediaclipHub\Setup\UpgradeSchema::upgrade()
+	 */
+    const F__JSON_CODE = 'json_code';
 
     /**
 	 * 2019-03-04

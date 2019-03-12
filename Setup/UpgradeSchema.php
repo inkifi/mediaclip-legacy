@@ -702,7 +702,7 @@ class UpgradeSchema implements UpgradeSchemaInterface {
             $tableName = $setup->getTable('mediacliphub_product');
             // Changes here.
             $columns = [
-                'json_code' => [
+                mProduct::F__JSON_CODE => [
                     'type' => \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
                     'nullable' => false,
                     'comment' => 'json code will show in json file',

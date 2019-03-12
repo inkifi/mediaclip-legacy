@@ -154,20 +154,16 @@ class ProductInformation
                'options' => ['0' => __('No'),'1' => __('Yes') ],
             ]
         );
-
-        
-        
         $fieldset->addField(
-            'json_code',
+            mProduct::F__JSON_CODE,
             'text',
             [
-                'name' => 'json_code',
+                'name' => mProduct::F__JSON_CODE,
                 'label' => __('JSON code'),
                 'title' => __('JSON code'),
                 'required' => false,
             ]
         );
-
         if (!$model->getId()) {
             $model->setData('status', $isElementDisabled ? '2' : '1');
         }
