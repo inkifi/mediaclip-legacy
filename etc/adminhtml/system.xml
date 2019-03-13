@@ -33,18 +33,6 @@
                     <validate>required-entry</validate>
                 </field>
             </group>
-            <group id="pwinty_api_auth" translate="label" type="text"  sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Pwinty</label>
-                <!-- create text type field -->
-                <field id="merchant_id" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Merchant ID</label>
-                    <validate>required-entry</validate>
-                </field>
-                <field id="pwinty_api_key" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>API Key</label>
-                    <validate>required-entry</validate>
-                </field>
-            </group>
         </section>
         <section id="configuration" translate="label" type="text" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Configuration</label>
