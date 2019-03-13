@@ -1,30 +1,14 @@
 <?php
 namespace Mangoit\MediaclipHub\Model;
+use Mangoit\MediaclipHub\Model\ResourceModel\Product as R;
 class Product extends \Magento\Framework\Model\AbstractModel {
-	/**
-	 * @param \Magento\Framework\Model\Context $context
-	 * @param \Magento\Framework\Registry $registry
-	 * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-	 * @param \Magento\Framework\Data\Collection\Db $resourceCollection
-	 * @param array $data
-	 */
-	function __construct(
-		\Magento\Framework\Model\Context $context,
-		\Magento\Framework\Registry $registry,
-		\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-		\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-		array $data = []
-	) {
-		parent::__construct($context, $registry, $resource, $resourceCollection, $data);
-	}
-
 	/**
 	 * 2019-02-27
 	 * @override
 	 * @see \Magento\Framework\Model\AbstractModel::_construct()
 	 * @return void
 	 */
-	protected function _construct() {$this->_init('Mangoit\MediaclipHub\Model\ResourceModel\Product');}
+	protected function _construct() {$this->_init(R::class);}
 
 	function getMediaClipProductByLabel($label, $_module){
 		$collection = $this->getCollection();
