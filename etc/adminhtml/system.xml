@@ -34,14 +34,14 @@
                 </field>
             </group>
             <group id="pwinty_api_auth" translate="label" type="text"  sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Pwinty API Authentication</label>
+                <label>Pwinty</label>
                 <!-- create text type field -->
                 <field id="merchant_id" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Pwinty MerchantId</label>
+                    <label>Merchant ID</label>
                     <validate>required-entry</validate>
                 </field>
                 <field id="pwinty_api_key" translate="label" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Pwinty API Key</label>
+                    <label>API Key</label>
                     <validate>required-entry</validate>
                 </field>
             </group>
