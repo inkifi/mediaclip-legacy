@@ -1,33 +1,28 @@
 <?php
 namespace Mangoit\MediaclipHub\Model;
 use Mangoit\MediaclipHub\Model\ResourceModel\Product as R;
+// 2019-03-13
 class Product extends \Magento\Framework\Model\AbstractModel {
 	/**
 	 * 2019-02-27
 	 * @override
 	 * @see \Magento\Framework\Model\AbstractModel::_construct()
-	 * @return void
 	 */
 	protected function _construct() {$this->_init(R::class);}
 
-	function getMediaClipProductByLabel($label, $_module){
-		$collection = $this->getCollection();
-		if ($label) {
-			$collection->addFieldToFilter(self::F__LABEL, $label);
-		}
-		if ($_module) {
-			$collection->addFieldToFilter('module', $_module);
-		}
-		return $collection->getData();
-	}
-
+	/**
+	 * @used-by \Mangoit\MediaclipHub\Controller\Product\Edit::getMediaClipProductSku()
+	 * @param string $sku
+	 * @param string $module
+	 * @return Product|null
+	 */
 	function getMediaClipProductBySku($sku, $module){
 		$c = ikf_product_c();
 		if ($sku) {
 			$c->addFieldToFilter(self::F__PLU, $sku);
 			$c->addFieldToFilter('module', $module);
 		}
-		return $c->getData();
+		return $c->count() ? $c->getFirstItem() : null;
 	}
 
 	/**
@@ -115,7 +110,6 @@ class Product extends \Magento\Framework\Model\AbstractModel {
 	/**
 	 * 2019-03-12
 	 * @used-by label()
-	 * @used-by getMediaClipProductByLabel()
 	 * @used-by \Mangoit\MediaclipHub\Block\Adminhtml\Product\Edit\Tab\ProductInformation::_prepareForm()
 	 * @used-by \Mangoit\MediaclipHub\Block\Adminhtml\Product\Grid::_prepareColumns()
 	 * @used-by \Mangoit\MediaclipHub\Helper\Data::getGiftingProduct()

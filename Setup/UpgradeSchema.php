@@ -728,6 +728,7 @@ class UpgradeSchema implements UpgradeSchemaInterface {
 
 	/**
 	 * 2019-03-13 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+	 * @used-by ikf_product_printer()
 	 * @used-by upgrade()
 	 * @used-by \Inkifi\Mediaclip\Event::oiOfTheSameType()
 	 * @used-by \Inkifi\Mediaclip\Event::type()
