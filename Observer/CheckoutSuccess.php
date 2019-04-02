@@ -14,6 +14,7 @@ use Magento\Sales\Model\Order\Item as OI;
 use Magento\Sales\Model\Order\Payment as OP;
 use Magento\Sales\Model\OrderRepository;
 use Mangoit\MediaclipHub\Helper\Data as mHelper;
+use Mangoit\MediaclipHub\Model\Orders as mOrder;
 use Mangoit\MediaclipHub\Model\Supplier as mSupplier;
 /**
  * 2018-06-26 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
@@ -219,27 +220,27 @@ final class CheckoutSuccess implements ObserverInterface {
 				df_report("oneflow/request-$oidE.json", df_json_encode($mediaClipOrderRequest));
 			}
 			$hubHelper = $om->create(mHelper::class); /** @var mHelper $hubHelper */
-			$chekcoutMediaclipResponse = $hubHelper->CheckoutWithSingleProduct(
+			$checkoutMediaclipResponse = $hubHelper->CheckoutWithSingleProduct(
 				$mediaClipOrderRequest, $o->getStore()
 			);
-			if ($chekcoutMediaclipResponse && is_array($chekcoutMediaclipResponse)) {
-				$mediaClipData['magento_order_id'] = $oidE;
-				$mediaClipData['mediaclip_order_id'] = $chekcoutMediaclipResponse['id'];
-				$mediaClipData['mediaclip_order_details'] = json_encode($chekcoutMediaclipResponse);
+			if ($checkoutMediaclipResponse && is_array($checkoutMediaclipResponse)) {
+				// 2019-04-03 «ca05b846-cff9-4669-9498-f8b4dea30eb6»
+				$mediaclipOrderId = $checkoutMediaclipResponse['id']; /** @var string $mediaclipOrderId */
+				$details = json_encode($checkoutMediaclipResponse); /** @var string $details */
 				$resource = $om->get(ResourceConnection::class);
 				$connection = $resource->getConnection();
 				$tableName = $resource->getTableName('mediaclip_orders');
+				$f_MAGENTO_ORDER_ID = mOrder::F__MAGENTO_ORDER_ID; /** @var string $f_MAGENTO_ORDER_ID */
+				/** @var string $f_MEDIACLIP_ORDER_DETAILS */
+				$f_MEDIACLIP_ORDER_DETAILS = mOrder::F__MEDIACLIP_ORDER_DETAILS; 				
+				/** @var string $f_MEDIACLIP_ORDER_ID */
+				$f_MEDIACLIP_ORDER_ID = mOrder::F__MEDIACLIP_ORDER_ID;
 // 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 // «Modify orders numeration for Mediaclip»
 // https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
 $sql =
-	"INSERT INTO $tableName (magento_order_id, mediaclip_order_id, mediaclip_order_details) "
-	. "VALUES ( "
-		. "'{$mediaClipData['magento_order_id']}'"
-		. ", '{$mediaClipData['mediaclip_order_id']}'"
-		. ", '{$mediaClipData['mediaclip_order_details']}'"
-	.")"
-;
+	"INSERT INTO $tableName ($f_MAGENTO_ORDER_ID, $f_MEDIACLIP_ORDER_ID, $f_MEDIACLIP_ORDER_DETAILS) "
+	. "VALUES ('$oidE', '$mediaclipOrderId', '$details')";
 				$connection->query($sql);
 			}
 		}

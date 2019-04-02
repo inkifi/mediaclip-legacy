@@ -10,7 +10,6 @@ use Magento\Sales\Model\Order\Shipment\Item as SI;
 use Magento\Sales\Model\Order\Shipment\Track;
 use Magento\Shipping\Model\ShipmentNotifier;
 use Mangoit\MediaclipHub\Model\Orders as mOrder;
-use pwinty\PhpPwinty;
 class PwintyOrderStatusUpdate extends Action {
     function execute() {
         /*$writer = new \Zend\Log\Writer\Stream(BP . '/var/log/pwinty_orders_status.log');
@@ -28,17 +27,15 @@ class PwintyOrderStatusUpdate extends Action {
         if (isset($obj['shipments'])) {
             foreach ($obj['shipments'] as $value) {
                 if ($value['status'] == 'shipped') {
-                    $pwintyorderId = $obj['id'] ;
-                    $mOrder = df_new_om(mOrder::class); /** @var mOrder $mOrder */
-                    $mOrderC = $mOrder->getCollection();
-                    $mOrder = $mOrderC->addFieldToFilter('pwinty_order_id', ['eq' => '682012']);
-                    //print_r($mediaclipOrder->getData()[0]['magento_order_id']);
-                    $order = df_new_om(O::class)->load(
-						// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
-						// «Modify orders numeration for Mediaclip»
-						// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
-						ikf_eti($mOrder->getData()[0]['magento_order_id'])
-					); /** @var O $order */
+                	// 2019-04-03 «775277»
+                    $oidP = (int)$obj['id']; /** @var int $oidP */
+					/**
+					 * 2019-04-03
+					 * The `pwinty_order_id` field is initialized by 
+					 * @see \Inkifi\Pwinty\AvailableForDownload::_p()
+					 */
+                    $mOrder = mOrder::byPwintyOrderId($oidP);
+                    $order = $mOrder->o(); /** @var O $order */
                     if (!$order->canShip()) {
                         throw new LE(__('You can\'t create an shipment.'));
                     }

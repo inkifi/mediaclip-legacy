@@ -1,5 +1,7 @@
 <?php
 namespace Mangoit\MediaclipHub\Model;
+use Inkifi\Pwinty\Setup\UpgradeSchema as Schema;
+use Magento\Sales\Model\Order as O;
 use Mangoit\MediaclipHub\Model\ResourceModel\Orders as R;
 use Mangoit\MediaclipHub\Model\ResourceModel\Orders\Collection as C;
 /**
@@ -30,14 +32,60 @@ class Orders extends \Magento\Framework\Model\AbstractModel {
 	}
 
 	/**
+	 * 2019-04-03
+	 * @used-by \Mangoit\MediaclipHub\Controller\Index\PwintyOrderStatusUpdate::execute()
+	 * @return O
+	 */
+	function o() {return dfc($this, function() {return df_order($this->oidMagento());});}
+
+	/**
+	 * 2019-04-03
+	 * @param string $v «58312» or «staging-58312»
+	 */
+	function oidMagentoSet($v) {$this[self::F__MAGENTO_ORDER_ID] = $v;}
+
+	/**
+	 * 2019-04-03
+	 * @used-by o()
+	 * @return int
+	 */
+	private function oidMagento() {return ikf_eti($this[self::F__MAGENTO_ORDER_ID]);}
+
+	/**
 	 * 2019-03-13
+		 * 2019-04-02
+		 * There are no Mediaclip orders assigned to multiple Magento orders at once.
+		 * SELECT magento_order_id, COUNT(*) c FROM mediaclip_orders GROUP BY magento_order_id HAVING c > 1;
+		 * >  MySQL returned an empty result set (i.e. zero rows).
+		 * https://stackoverflow.com/a/688551
 	 * @used-by \Inkifi\Mediaclip\Event::mo()
 	 * @param string $oidE		«58312» or «staging-58312»
 	 * @return self
 	 */
-	static function byOIdE($oidE) {
+	static function byOIdE($oidE) {return self::by(self::F__MAGENTO_ORDER_ID, $oidE);}
+
+	/**
+	 * 2019-04-03
+	 * There are no Mediaclip orders assigned to multiple Pwinty orders at once:
+	 * @see \Inkifi\Pwinty\AvailableForDownload::_p()
+	 * https://github.com/inkifi/pwinty/blob/0.0.2/AvailableForDownload.php#L68-L91
+	 * @used-by \Mangoit\MediaclipHub\Controller\Index\PwintyOrderStatusUpdate::execute()
+	 * @param string $oidP		«775277»
+	 * @return self
+	 */
+	static function byPwintyOrderId($oidP) {return self::by(self::F__PWINTY_ORDER_ID, $oidP);}
+
+	/**
+	 * 2019-04-03
+	 * @used-by byOIdE()
+	 * @used-by byPwintyOrderId()
+	 * @param string $k
+	 * @param string $v
+	 * @return self
+	 */
+	private static function by($k, $v) {
 		$c = C::i();
-		$c->addFieldToFilter('magento_order_id', ['eq' => $oidE]);
+		$c->addFieldToFilter($k, ['eq' => $v]);
 		df_assert_eq(1, $c->count());
 		return $c->getFirstItem();
 	}
@@ -48,4 +96,37 @@ class Orders extends \Magento\Framework\Model\AbstractModel {
 	 * @used-by \Mangoit\MediaclipHub\Setup\UpgradeSchema::upgrade()
 	 */
 	const F__DOWNLOAD_STATUS = 'order_download_status';
+
+	/**
+	 * 2019-04-03
+	 * @used-by byOIdE()
+	 * @used-by oidMagento()
+	 * @used-by oidMagentoSet()
+	 * @used-by \Inkifi\MissingOrder\Observer\DataProvider\SearchResult::execute()
+	 * @used-by \Inkifi\MissingOrder\Processor::eligible()
+	 * @used-by \Mangoit\MediaclipHub\Observer\CheckoutSuccess::post()
+	 * @used-by \Mangoit\MediaclipHub\Setup\UpgradeSchema::upgrade()
+	 */
+	const F__MAGENTO_ORDER_ID = 'magento_order_id';
+
+	/**
+	 * 2019-04-03
+	 * @used-by \Mangoit\MediaclipHub\Observer\CheckoutSuccess::post()
+	 * @used-by \Mangoit\MediaclipHub\Setup\UpgradeSchema::upgrade()
+	 */
+	const F__MEDIACLIP_ORDER_DETAILS = 'mediaclip_order_details';
+
+	/**
+	 * 2019-04-03
+	 * @used-by \Mangoit\MediaclipHub\Observer\CheckoutSuccess::post()
+	 * @used-by \Mangoit\MediaclipHub\Setup\UpgradeSchema::upgrade()
+	 */
+	const F__MEDIACLIP_ORDER_ID = 'mediaclip_order_id';
+
+	/**
+	 * 2019-04-03
+	 * @used-by byPwintyOrderId()
+	 * @used-by \Inkifi\Pwinty\AvailableForDownload::_p()
+	 */
+	const F__PWINTY_ORDER_ID = 'pwinty_order_id';
 }

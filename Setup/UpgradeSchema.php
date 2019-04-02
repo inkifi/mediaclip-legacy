@@ -578,7 +578,7 @@ class UpgradeSchema implements UpgradeSchemaInterface {
 					'ID'
 				)
 				->addColumn(
-					'magento_order_id',
+					MO::F__MAGENTO_ORDER_ID,
 					\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
 					null,
 					['unsigned' => true],
@@ -598,13 +598,13 @@ class UpgradeSchema implements UpgradeSchemaInterface {
 					['nullable' => false, 'default' => \Magento\Framework\DB\Ddl\Table::TIMESTAMP_INIT_UPDATE],
 					'Update Time'
 				)->addColumn(
-					'mediaclip_order_id',
+					MO::F__MEDIACLIP_ORDER_ID,
 					\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
 					null,
 					['unsigned' => true],
 					'Media Clip Id'
 				)->addColumn(
-					'mediaclip_order_details',
+					MO::F__MEDIACLIP_ORDER_DETAILS,
 					\Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
 					null,
 					['unsigned' => true],
@@ -664,7 +664,8 @@ class UpgradeSchema implements UpgradeSchemaInterface {
 		}
 		if (version_compare($context->getVersion(), '1.0.7') < 0) {
 			$tableName = $setup->getTable('sales_order');
-			// Changes here.
+			// 2019-04-03 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+			// This column is never used.
 			$columns = [
 				'mediaclip_order_flag' => [
 					'type' => \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -673,14 +674,11 @@ class UpgradeSchema implements UpgradeSchemaInterface {
 					'comment' => 'Mediaclip Order Flag',
 				]
 			];
-
 			$connection = $setup->getConnection();
 			foreach ($columns as $name => $definition) {
 				$connection->addColumn($tableName, $name, $definition);
 			}
 		}
-
-
 		if (version_compare($context->getVersion(), '1.0.8') < 0) {
 			$tableName = $setup->getTable('mediacliphub_product');
 			// Changes here.
