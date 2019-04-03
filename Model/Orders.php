@@ -33,7 +33,7 @@ class Orders extends \Magento\Framework\Model\AbstractModel {
 
 	/**
 	 * 2019-04-03
-	 * @used-by \Mangoit\MediaclipHub\Controller\Index\PwintyOrderStatusUpdate::execute()
+	 * @used-by \Inkifi\Pwinty\Controller\Index\Index::execute()
 	 * @return O
 	 */
 	function o() {return dfc($this, function() {return df_order($this->oidMagento());});}
@@ -43,6 +43,20 @@ class Orders extends \Magento\Framework\Model\AbstractModel {
 	 * @param string $v «58312» or «staging-58312»
 	 */
 	function oidMagentoSet($v) {$this[self::F__MAGENTO_ORDER_ID] = $v;}
+
+	/**
+	 * 2019-04-03 Currently, the value is only set to the database, but it is never retrieved from there.
+	 * @used-by \Inkifi\Pwinty\Controller\Index\Index::execute()
+	 * @param string $v «MQ121286142GB»
+	 */
+	function trackingNumberSet($v) {$this[self::$F__TRACKING_NUMBER] = $v;}
+
+	/**
+	 * 2019-04-03 Currently, the value is only set to the database, but it is never retrieved from there.
+	 * @used-by \Inkifi\Pwinty\Controller\Index\Index::execute()
+	 * @param string $v «http://www.royalmail.com/portal/rm/track?trackNumber=MQ121286142GB»
+	 */
+	function trackingUrlSet($v) {$this[self::$F__TRACKING_URL] = $v;}
 
 	/**
 	 * 2019-04-03
@@ -69,7 +83,7 @@ class Orders extends \Magento\Framework\Model\AbstractModel {
 	 * There are no Mediaclip orders assigned to multiple Pwinty orders at once:
 	 * @see \Inkifi\Pwinty\AvailableForDownload::_p()
 	 * https://github.com/inkifi/pwinty/blob/0.0.2/AvailableForDownload.php#L68-L91
-	 * @used-by \Mangoit\MediaclipHub\Controller\Index\PwintyOrderStatusUpdate::execute()
+	 * @used-by \Inkifi\Pwinty\Controller\Index\Index::execute()
 	 * @param string $oidP		«775277»
 	 * @return self
 	 */
@@ -129,4 +143,16 @@ class Orders extends \Magento\Framework\Model\AbstractModel {
 	 * @used-by \Inkifi\Pwinty\AvailableForDownload::_p()
 	 */
 	const F__PWINTY_ORDER_ID = 'pwinty_order_id';
+
+	/**
+	 * 2019-04-03
+	 * @used-by trackingNumberSet()
+	 */
+	private static $F__TRACKING_NUMBER = 'tracking_number';
+
+	/**
+	 * 2019-04-03
+	 * @used-by trackingUrlSet()
+	 */
+	private static $F__TRACKING_URL = 'tracking_url';
 }
