@@ -84,7 +84,7 @@ class Orders extends \Magento\Framework\Model\AbstractModel {
 	 * @see \Inkifi\Pwinty\AvailableForDownload::_p()
 	 * https://github.com/inkifi/pwinty/blob/0.0.2/AvailableForDownload.php#L68-L91
 	 * @used-by \Inkifi\Pwinty\Controller\Index\Index::execute()
-	 * @param string $oidP		«775277»
+	 * @param int $oidP		«775277»
 	 * @return self
 	 */
 	static function byPwintyOrderId($oidP) {return self::by(self::F__PWINTY_ORDER_ID, $oidP);}
@@ -94,7 +94,7 @@ class Orders extends \Magento\Framework\Model\AbstractModel {
 	 * @used-by byOIdE()
 	 * @used-by byPwintyOrderId()
 	 * @param string $k
-	 * @param string $v
+	 * @param string|int $v
 	 * @return self
 	 */
 	private static function by($k, $v) {
