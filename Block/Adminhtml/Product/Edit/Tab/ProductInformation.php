@@ -103,20 +103,20 @@ class ProductInformation
             ]
         );
         $fieldset->addField(
-            'frame_colour',
+            mProduct::F__FRAME_COLOUR,
             'text',
             [
-                'name' => 'frame_colour',
+                'name' => mProduct::F__FRAME_COLOUR,
                 'label' => __('Frame Colour'),
                 'title' => __('Frame Colour'),
                 'required' => false,
             ]
         );
         $fieldset->addField(
-            'pwinty_product_name',
+            mProduct::F__PWINTY_PRODUCT_NAME,
             'text',
             [
-                'name' => 'pwinty_product_name',
+                'name' => mProduct::F__PWINTY_PRODUCT_NAME,
                 'label' => __('Pwinty Product Name'),
                 'title' => __('Pwinty Product Name'),
                 'required' => false,

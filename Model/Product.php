@@ -4,11 +4,11 @@ use Mangoit\MediaclipHub\Model\ResourceModel\Product as R;
 // 2019-03-13
 class Product extends \Magento\Framework\Model\AbstractModel {
 	/**
-	 * 2019-02-27
-	 * @override
-	 * @see \Magento\Framework\Model\AbstractModel::_construct()
+	 * 2019-04-11
+	 * @used-by \Inkifi\Pwinty\AvailableForDownload::images()
+	 * @return string «gold»
 	 */
-	protected function _construct() {$this->_init(R::class);}
+	function frameColor() {return $this[self::F__FRAME_COLOUR];}
 
 	/**
 	 * @used-by \Mangoit\MediaclipHub\Controller\Product\Edit::getMediaClipProductSku()
@@ -61,11 +61,34 @@ class Product extends \Magento\Framework\Model\AbstractModel {
 	function plu() {return $this[self::F__PLU];}
 
 	/**
+	 * 2019-04-11
+	 * @used-by \Inkifi\Pwinty\AvailableForDownload::images()
+	 * @return string «MiniFrame_16x16_LustrePaper_gb»
+	 */
+	function pwintyProduct() {return $this[self::F__PWINTY_PRODUCT_NAME];}
+
+	/**
 	 * 2019-02-27
 	 * @used-by \Inkifi\Mediaclip\H\AvailableForDownload\Pureprint::pOI()
+	 * @used-by \Inkifi\Pwinty\AvailableForDownload::images()
 	 * @return bool
 	 */
 	function sendJson() {return !!$this[self::F__FTP_JSON];}
+
+	/**
+	 * 2019-02-27
+	 * @override
+	 * @see \Magento\Framework\Model\AbstractModel::_construct()
+	 */
+	protected function _construct() {$this->_init(R::class);}
+
+	/**
+	 * 2019-04-11
+	 * @used-by frameColor()
+	 * @used-by \Mangoit\MediaclipHub\Block\Adminhtml\Product\Edit\Tab\ProductInformation::_prepareForm()
+	 * @used-by \Mangoit\MediaclipHub\Setup\UpgradeSchema::upgrade()
+	 */
+	const F__FRAME_COLOUR = 'frame_colour';
 
 	/**
 	 * 2019-02-27
@@ -118,4 +141,12 @@ class Product extends \Magento\Framework\Model\AbstractModel {
 	 * @used-by \Mangoit\MediaclipHub\Setup\InstallSchema::install()
 	 */
 	const F__LABEL = 'product_label';
+
+	/**
+	 * 2019-04-11
+	 * @used-by pwintyProduct()
+	 * @used-by \Mangoit\MediaclipHub\Block\Adminhtml\Product\Edit\Tab\ProductInformation::_prepareForm()
+	 * @used-by \Mangoit\MediaclipHub\Setup\UpgradeSchema::upgrade()
+	 */
+	const F__PWINTY_PRODUCT_NAME = 'pwinty_product_name';
 }
