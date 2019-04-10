@@ -45,6 +45,14 @@ class Orders extends \Magento\Framework\Model\AbstractModel {
 	function oidMagentoSet($v) {$this[self::F__MAGENTO_ORDER_ID] = $v;}
 
 	/**
+	 * 2019-04-10
+	 * @used-by \Inkifi\Pwinty\AvailableForDownload::_p()
+	 * @param string $v «58312» or «staging-58312»
+	 * @return $this
+	 */
+	function oidPwintySet($v) {$this[self::$F__PWINTY_ORDER_ID] = $v; return $this;}
+
+	/**
 	 * 2019-04-03 Currently, the value is only set to the database, but it is never retrieved from there.
 	 * @used-by \Inkifi\Pwinty\Controller\Index\Index::execute()
 	 * @param string $v «MQ121286142GB»
@@ -87,7 +95,7 @@ class Orders extends \Magento\Framework\Model\AbstractModel {
 	 * @param int $oidP		«775277»
 	 * @return self
 	 */
-	static function byPwintyOrderId($oidP) {return self::by(self::F__PWINTY_ORDER_ID, $oidP);}
+	static function byPwintyOrderId($oidP) {return self::by(self::$F__PWINTY_ORDER_ID, $oidP);}
 
 	/**
 	 * 2019-04-03
@@ -140,9 +148,10 @@ class Orders extends \Magento\Framework\Model\AbstractModel {
 	/**
 	 * 2019-04-03
 	 * @used-by byPwintyOrderId()
+	 * @used-by oidPwintySet()
 	 * @used-by \Inkifi\Pwinty\AvailableForDownload::_p()
 	 */
-	const F__PWINTY_ORDER_ID = 'pwinty_order_id';
+	private static $F__PWINTY_ORDER_ID = 'pwinty_order_id';
 
 	/**
 	 * 2019-04-03
