@@ -1,5 +1,8 @@
 <?php
 namespace Mangoit\MediaclipHub\Model;
+use Inkifi\Pwinty\API\B\Catalogue as bCatalogue;
+use Inkifi\Pwinty\API\Entity\Product as eProduct;
+use Magento\Store\Model\Store as S;
 use Mangoit\MediaclipHub\Model\ResourceModel\Product as R;
 // 2019-03-13
 class Product extends \Magento\Framework\Model\AbstractModel {
@@ -63,9 +66,14 @@ class Product extends \Magento\Framework\Model\AbstractModel {
 	/**
 	 * 2019-04-11
 	 * @used-by \Inkifi\Pwinty\AvailableForDownload::images()
-	 * @return string «MiniFrame_16x16_LustrePaper_gb»
+	 * @param S $s
+	 * @return eProduct|null
 	 */
-	function pwintyProduct() {return $this[self::F__PWINTY_PRODUCT_NAME];}
+	function pwintyProduct(S $s) {
+		/** @var string|null $n */  // «MiniFrame_16x16_LustrePaper_gb»
+		$n = $this[self::F__PWINTY_PRODUCT_NAME];
+		return !$n ? null : bCatalogue::get($n, $s);
+	}
 
 	/**
 	 * 2019-02-27
