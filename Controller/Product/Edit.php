@@ -1,5 +1,6 @@
 <?php
 namespace Mangoit\MediaclipHub\Controller\Product;
+use Magento\Catalog\Model\Product as P;
 use Mangoit\MediaclipHub\Model\Product as mProduct;
 use Mangoit\MediaclipHub\Model\ResourceModel\Product\Collection as mPC;
 class Edit extends \Magento\Framework\App\Action\Action {
@@ -222,28 +223,6 @@ class Edit extends \Magento\Framework\App\Action\Action {
 		return false;
 	}
 
-	function getMediaclipProductData($_product, $_module){
-
-		if ($_module == 'Photobook') {
-			$option_id = $_product->getMediaclipPhotobookProduct();
-		} else if ($_module == 'Gifting') {
-			$option_id = $_product->getMediaclipGiftingProduct();
-		} else if ($_module == 'Print') {
-			$option_id = $_product->getMediaclipPrintProduct();
-		}
-		if ($option_id) {
-			$_module = $this->_objectManager->create('Mangoit\MediaclipHub\Model\Modules')->getCollection()->addFieldToFilter('module_name', $_module)->getData();
-			foreach ($_module as  $value) {
-				$val['id'] = $value['id'];
-			}
-			$r = ikf_product_c(); /** @var mPC $r */
-			$r->addFieldToFilter(mProduct::F__PLU, $option_id);
-			$r->addFieldToFilter('module', $val['id'])->getData();
-			return $r;
-		}
-		return false;
-	}
-
 	function getMediaClipProductDateOptions($_product){
 		$productId = $_product->getId();
 		$stepData = $this->getStepData($productId);
@@ -269,6 +248,34 @@ class Edit extends \Magento\Framework\App\Action\Action {
 			}
 		}
 		return $mediaClipProductDateOptions;
+	}
+
+	/**
+	 * 2019-04-11
+	 * @used-by getMediaClipProduct()
+	 * @param P $p
+	 * @param string $module
+	 * @return bool|mPC
+	 */
+	private function getMediaclipProductData(P $p, $module){
+		if ($module == 'Photobook') {
+			$option_id = $p->getMediaclipPhotobookProduct();
+		} else if ($module == 'Gifting') {
+			$option_id = $p->getMediaclipGiftingProduct();
+		} else if ($module == 'Print') {
+			$option_id = $p->getMediaclipPrintProduct();
+		}
+		if ($option_id) {
+			$module = $this->_objectManager->create('Mangoit\MediaclipHub\Model\Modules')->getCollection()->addFieldToFilter('module_name', $module)->getData();
+			foreach ($module as  $value) {
+				$val['id'] = $value['id'];
+			}
+			$r = ikf_product_c(); /** @var mPC $r */
+			$r->addFieldToFilter(mProduct::F__PLU, $option_id);
+			$r->addFieldToFilter('module', $val['id'])->getData();
+			return $r;
+		}
+		return false;
 	}
 }
 
