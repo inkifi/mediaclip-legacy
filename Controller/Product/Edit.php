@@ -70,7 +70,7 @@ class Edit extends \Magento\Framework\App\Action\Action {
 			$mediaclip_product_id = $mediaclip_product['product_id'];
 			$additionalProprties = array();
 			$storeProductId = $product->getId();
-			$product_options = $this->getStepData($storeProductId);
+			$product_options = $this->stepData($storeProductId);
 			if (isset($product_options['options'])) {
 				$additionalProprties['option_details'] = json_encode($product_options['options']);
 			}
@@ -187,7 +187,7 @@ class Edit extends \Magento\Framework\App\Action\Action {
 
 	function getMediaClipProductDateOptions($_product){
 		$productId = $_product->getId();
-		$stepData = $this->getStepData($productId);
+		$stepData = $this->stepData($productId);
 		$mediaClipProductDateOptions = false;
 		if ($stepData) {
 			if (isset($stepData['options'])) {
@@ -215,20 +215,20 @@ class Edit extends \Magento\Framework\App\Action\Action {
 	/**
 	 * @used-by execute()
 	 * @param P $p
-	 * @param string $_module
+	 * @param string $module
 	 * @return mProduct|null
 	 */
-	private function mProduct(P $p, $_module) {
+	private function mProduct(P $p, $module) {
 		$r = null;
-		if ($stepData = $this->getStepData($p->getId())) {
+		if ($stepData = $this->stepData($p->getId())) {
 			if (!isset($stepData['options'])) {
-				$r = mProduct::byProduct($p, $_module);
+				$r = mProduct::byProduct($p, $module);
 			}
 			else {
-				$r = $this->getMediaClipProductSku($stepData, $p->getOptions(), $_module);
+				$r = $this->getMediaClipProductSku($stepData, $p->getOptions(), $module);
 				print_r($r);
 				if (!$r) {
-					$r = mProduct::byProduct($p, $_module);
+					$r = mProduct::byProduct($p, $module);
 				}
 			}
 		}
@@ -240,7 +240,7 @@ class Edit extends \Magento\Framework\App\Action\Action {
 	 * @param $productId
 	 * @return array|bool
 	 */
-	private function getStepData($productId){
+	private function stepData($productId){
 		$stepData = $this->getRequest()->getParams();
 		if (!empty($stepData)) {
 			if (isset($stepData['options'])) {
