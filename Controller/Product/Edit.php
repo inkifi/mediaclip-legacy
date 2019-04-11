@@ -212,27 +212,17 @@ class Edit extends \Magento\Framework\App\Action\Action {
 	}
 
 	/**
+	 * 2019-04-11
 	 * @used-by execute()
 	 * @param P $p
-	 * @param string $module
+	 * @param string $m
 	 * @return mProduct|null
 	 */
-	private function mProduct(P $p, $module) {
-		$r = null;
-		if ($stepData = $this->stepData($p)) {
-			if (!isset($stepData['options'])) {
-				$r = mProduct::byProduct($p, $module);
-			}
-			else {
-				$r = $this->getMediaClipProductSku($stepData, $p->getOptions(), $module);
-				print_r($r);
-				if (!$r) {
-					$r = mProduct::byProduct($p, $module);
-				}
-			}
-		}
-		return $r;
-	}
+	private function mProduct(P $p, $m) {return !($d = $this->stepData($p)) ? null : (
+		!isset($d['options']) ? mProduct::byProduct($p, $m) : (
+			$this->getMediaClipProductSku($d, $p->getOptions(), $m) ?: mProduct::byProduct($p, $m)
+		)
+	);}
 
 	/**
 	 * 2019-04-11
