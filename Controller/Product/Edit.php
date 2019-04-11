@@ -1,5 +1,6 @@
 <?php
 namespace Mangoit\MediaclipHub\Controller\Product;
+use Magento\Catalog\Model\Product as P;
 use Mangoit\MediaclipHub\Model\Product as mProduct;
 class Edit extends \Magento\Framework\App\Action\Action {
 
@@ -221,25 +222,24 @@ class Edit extends \Magento\Framework\App\Action\Action {
 
 	/**
 	 * @used-by execute()
-	 * @param $_product
-	 * @param bool $_module
-	 * @return bool|mProduct|null
+	 * @param P $p
+	 * @param string $_module
+	 * @return mProduct|null
 	 */
-	private function getMediaClipProduct($_product, $_module = false) {
-		if ($stepData = $this->getStepData($_product->getId())) {
-			if (isset($stepData['options'])) {
-				$r = $this->getMediaClipProductSku($stepData, $_product->getOptions(), $_module);
-				print_r($r);
-				if (!$r) {
-					$r = mProduct::byProduct($_product, $_module);
-				}
-				return $r;
+	private function getMediaClipProduct(P $p, $_module) {
+		$r = null;
+		if ($stepData = $this->getStepData($p->getId())) {
+			if (!isset($stepData['options'])) {
+				$r = mProduct::byProduct($p, $_module);
 			}
 			else {
-				$r = mProduct::byProduct($_product, $_module);
-				return $r;
+				$r = $this->getMediaClipProductSku($stepData, $p->getOptions(), $_module);
+				print_r($r);
+				if (!$r) {
+					$r = mProduct::byProduct($p, $_module);
+				}
 			}
 		}
-		return false;
+		return $r;
 	}
 }
