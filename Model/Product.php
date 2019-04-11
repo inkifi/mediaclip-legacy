@@ -147,6 +147,7 @@ class Product extends \Magento\Framework\Model\AbstractModel {
 
 	/**
 	 * 2019-04-11
+	 * @used-by \Mangoit\MediaclipHub\Controller\Product\Edit::mProduct()
 	 * @param P $p
 	 * @param string $module
 	 * @return self|null

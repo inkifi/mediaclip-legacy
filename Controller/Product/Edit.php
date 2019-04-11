@@ -57,7 +57,7 @@ class Edit extends \Magento\Framework\App\Action\Action {
 				return $this;
 			}
 			$mediaclip_module = ucfirst(strtolower($mediaclip_module));
-			$mediaclip_product = $this->getMediaClipProduct($product, $mediaclip_module);
+			$mediaclip_product = $this->mProduct($product, $mediaclip_module);
 			if (!$mediaclip_product) {
 				$this->getResponse()->setRedirect($refererUrl);
 				return $this;
@@ -153,22 +153,14 @@ class Edit extends \Magento\Framework\App\Action\Action {
 		return $module_id;
 	}
 
-	function getStepData($productId){
-		//$session = Mage::getSingleton('checkout/session');
-		//$stepData = $session->getStepData(self::SESSIONSTEP);
-		$stepData = $this->getRequest()->getParams();
-
-		if (!empty($stepData)) {
-			if (isset($stepData['options'])) {
-				$stepData['options'] = json_decode($stepData['options']);
-			}
-			if (isset($stepData['product']) && $stepData['product'] == $productId) {
-				return $stepData;
-			}
-		}
-		return false;
-	}
-
+	/**
+	 * 2019-04-11
+	 * @used-by mProduct()
+	 * @param $stepData
+	 * @param $productOptions
+	 * @param $_module
+	 * @return bool
+	 */
 	function getMediaClipProductSku($stepData, $productOptions, $_module){
 		foreach ($stepData['options'] as $oid => $ovalue) {
 			if ($productOptions) {
@@ -226,7 +218,7 @@ class Edit extends \Magento\Framework\App\Action\Action {
 	 * @param string $_module
 	 * @return mProduct|null
 	 */
-	private function getMediaClipProduct(P $p, $_module) {
+	private function mProduct(P $p, $_module) {
 		$r = null;
 		if ($stepData = $this->getStepData($p->getId())) {
 			if (!isset($stepData['options'])) {
@@ -241,5 +233,23 @@ class Edit extends \Magento\Framework\App\Action\Action {
 			}
 		}
 		return $r;
+	}
+
+	/**
+	 * @used-by mProduct()
+	 * @param $productId
+	 * @return array|bool
+	 */
+	private function getStepData($productId){
+		$stepData = $this->getRequest()->getParams();
+		if (!empty($stepData)) {
+			if (isset($stepData['options'])) {
+				$stepData['options'] = json_decode($stepData['options']);
+			}
+			if (isset($stepData['product']) && $stepData['product'] == $productId) {
+				return $stepData;
+			}
+		}
+		return false;
 	}
 }
