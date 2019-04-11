@@ -70,7 +70,7 @@ class Edit extends \Magento\Framework\App\Action\Action {
 			$mediaclip_product_id = $mediaclip_product['product_id'];
 			$additionalProprties = array();
 			$storeProductId = $product->getId();
-			$product_options = $this->stepData($storeProductId);
+			$product_options = $this->stepData($product);
 			if (isset($product_options['options'])) {
 				$additionalProprties['option_details'] = json_encode($product_options['options']);
 			}
@@ -186,8 +186,7 @@ class Edit extends \Magento\Framework\App\Action\Action {
 	}
 
 	function getMediaClipProductDateOptions($_product){
-		$productId = $_product->getId();
-		$stepData = $this->stepData($productId);
+		$stepData = $this->stepData($_product);
 		$mediaClipProductDateOptions = false;
 		if ($stepData) {
 			if (isset($stepData['options'])) {
@@ -220,7 +219,7 @@ class Edit extends \Magento\Framework\App\Action\Action {
 	 */
 	private function mProduct(P $p, $module) {
 		$r = null;
-		if ($stepData = $this->stepData($p->getId())) {
+		if ($stepData = $this->stepData($p)) {
 			if (!isset($stepData['options'])) {
 				$r = mProduct::byProduct($p, $module);
 			}
@@ -236,20 +235,21 @@ class Edit extends \Magento\Framework\App\Action\Action {
 	}
 
 	/**
+	 * 2019-04-11
+	 * @used-by execute()
+	 * @used-by getMediaClipProductDateOptions()
 	 * @used-by mProduct()
-	 * @param $productId
-	 * @return array|bool
+	 * @param P $p
+	 * @return array(string => mixed)|false
 	 */
-	private function stepData($productId){
-		$stepData = $this->getRequest()->getParams();
-		if (!empty($stepData)) {
-			if (isset($stepData['options'])) {
-				$stepData['options'] = json_decode($stepData['options']);
-			}
-			if (isset($stepData['product']) && $stepData['product'] == $productId) {
-				return $stepData;
-			}
+	private function stepData(P $p){
+		$r = $this->getRequest()->getParams();  /** @var array(string => mixed)|false $r */
+		if (empty($r) || !isset($r['product']) || (int)$p->getId() !== (int)$r['product']) {
+			$r = false;
 		}
-		return false;
+		else if (isset($r['options'])) {
+			$r['options'] = json_decode($r['options']);
+		}
+		return $r;
 	}
 }
