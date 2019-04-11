@@ -2,7 +2,9 @@
 namespace Mangoit\MediaclipHub\Model;
 use Inkifi\Pwinty\API\B\Catalogue as bCatalogue;
 use Inkifi\Pwinty\API\Entity\Product as eProduct;
+use Magento\Catalog\Model\Product as P;
 use Magento\Store\Model\Store as S;
+use Mangoit\MediaclipHub\Model\ResourceModel\Modules as ModulesR;
 use Mangoit\MediaclipHub\Model\ResourceModel\Product as R;
 // 2019-03-13
 class Product extends \Magento\Framework\Model\AbstractModel {
@@ -12,21 +14,6 @@ class Product extends \Magento\Framework\Model\AbstractModel {
 	 * @return string «gold»
 	 */
 	function frameColor() {return $this[self::F__FRAME_COLOUR];}
-
-	/**
-	 * @used-by \Mangoit\MediaclipHub\Controller\Product\Edit::getMediaClipProductSku()
-	 * @param string $sku
-	 * @param string $module
-	 * @return Product|null
-	 */
-	function getMediaClipProductBySku($sku, $module){
-		$c = ikf_product_c();
-		if ($sku) {
-			$c->addFieldToFilter(self::F__PLU, $sku);
-			$c->addFieldToFilter('module', $module);
-		}
-		return $c->count() ? $c->getFirstItem() : null;
-	}
 
 	/**
 	 * 2019-02-27
@@ -157,4 +144,34 @@ class Product extends \Magento\Framework\Model\AbstractModel {
 	 * @used-by \Mangoit\MediaclipHub\Setup\UpgradeSchema::upgrade()
 	 */
 	const F__PWINTY_PRODUCT_NAME = 'pwinty_product_name';
+
+	/**
+	 * 2019-04-11
+	 * @param P $p
+	 * @param string $module
+	 * @return self|null
+	 */
+	static function byProduct(P $p, $module) {
+		$moduleCode = strtolower($module); /** @var string $moduleCode */
+		return !($optionId = $p["mediaclip_{$moduleCode}_product"]) ? null :
+			self::bySku($optionId, $moduleCode)
+		;
+	}
+
+	/**
+	 * 2019-04-11
+	 * @used-by byProduct()
+	 * @used-by \Mangoit\MediaclipHub\Controller\Product\Edit::getMediaClipProductSku()
+	 * @param string $sku
+	 * @param string|int $module
+	 * @return self|null
+	 */
+	static function bySku($sku, $module) {
+		$c = ikf_product_c();
+		if ($sku) {
+			$c->addFieldToFilter(self::F__PLU, $sku);
+			$c->addFieldToFilter('module', ctype_digit($module) ? $module : ModulesR::idByCode($module));
+		}
+		return $c->count() ? $c->getFirstItem() : null;
+	}
 }

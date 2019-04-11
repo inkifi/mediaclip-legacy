@@ -1,8 +1,6 @@
 <?php
 namespace Mangoit\MediaclipHub\Controller\Product;
-use Magento\Catalog\Model\Product as P;
 use Mangoit\MediaclipHub\Model\Product as mProduct;
-use Mangoit\MediaclipHub\Model\ResourceModel\Product\Collection as mPC;
 class Edit extends \Magento\Framework\App\Action\Action {
 
 	protected $resultPageFactory;
@@ -154,34 +152,6 @@ class Edit extends \Magento\Framework\App\Action\Action {
 		return $module_id;
 	}
 
-	function getMediaClipProduct($_product, $_module = false){
-		$stepData = $this->getStepData($_product->getId());
-
-
-		$attributeSet = $this->_objectManager->create('Magento\Eav\Api\AttributeSetRepositoryInterface');
-		$attributeSetRepository = $attributeSet->get($_product->getAttributeSetId());
-		$mediaclipModule = $attributeSetRepository->getAttributeSetName();
-		//$mediaclipModule = $_product->getMediaClipModule();
-		$productOptions = $_product->getOptions();
-
-		if ($stepData) {
-			if (isset($stepData['options'])) {
-				$mediaclip_product = $this->getMediaClipProductSku($stepData, $productOptions, $_module);
-				print_r($mediaclip_product);
-				if (!$mediaclip_product) {
-					$mediaclip_product = $this->getMediaclipProductData($_product, $_module);
-					$mediaclip_product = (empty($mediaclip_product)) ? false : $mediaclip_product[0];
-				}
-				return $mediaclip_product;
-			} else {
-				$mediaclip_product = $this->getMediaclipProductData($_product, $_module);
-				$mediaclip_product = (empty($mediaclip_product)) ? false : $mediaclip_product[0];
-					return $mediaclip_product;
-			}
-		}
-		return false;
-	}
-
 	function getStepData($productId){
 		//$session = Mage::getSingleton('checkout/session');
 		//$stepData = $session->getStepData(self::SESSIONSTEP);
@@ -210,8 +180,7 @@ class Edit extends \Magento\Framework\App\Action\Action {
 									if ($_value->getSku()) {
 										$model = $this->_objectManager->create(mProduct::class);
 										$_module = $this->getModuleID($_module);
-										return $model->getMediaClipProductBySku($_value->getSku(), $_module)
-											?: false;
+										return mProduct::bySku($_value->getSku(), $_module) ?: false;
 									}
 								}
 							}
@@ -251,31 +220,26 @@ class Edit extends \Magento\Framework\App\Action\Action {
 	}
 
 	/**
-	 * 2019-04-11
-	 * @used-by getMediaClipProduct()
-	 * @param P $p
-	 * @param string $module
-	 * @return bool|mPC
+	 * @used-by execute()
+	 * @param $_product
+	 * @param bool $_module
+	 * @return bool|mProduct|null
 	 */
-	private function getMediaclipProductData(P $p, $module){
-		if ($module == 'Photobook') {
-			$option_id = $p->getMediaclipPhotobookProduct();
-		} else if ($module == 'Gifting') {
-			$option_id = $p->getMediaclipGiftingProduct();
-		} else if ($module == 'Print') {
-			$option_id = $p->getMediaclipPrintProduct();
-		}
-		if ($option_id) {
-			$module = $this->_objectManager->create('Mangoit\MediaclipHub\Model\Modules')->getCollection()->addFieldToFilter('module_name', $module)->getData();
-			foreach ($module as  $value) {
-				$val['id'] = $value['id'];
+	private function getMediaClipProduct($_product, $_module = false) {
+		if ($stepData = $this->getStepData($_product->getId())) {
+			if (isset($stepData['options'])) {
+				$r = $this->getMediaClipProductSku($stepData, $_product->getOptions(), $_module);
+				print_r($r);
+				if (!$r) {
+					$r = mProduct::byProduct($_product, $_module);
+				}
+				return $r;
 			}
-			$r = ikf_product_c(); /** @var mPC $r */
-			$r->addFieldToFilter(mProduct::F__PLU, $option_id);
-			$r->addFieldToFilter('module', $val['id'])->getData();
-			return $r;
+			else {
+				$r = mProduct::byProduct($_product, $_module);
+				return $r;
+			}
 		}
 		return false;
 	}
 }
-
