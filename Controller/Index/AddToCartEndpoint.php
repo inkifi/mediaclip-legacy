@@ -1,37 +1,38 @@
-<?php 
-
-
+<?php
 namespace Mangoit\MediaclipHub\Controller\Index;
- 
-use Magento\Framework\App\Action\Action;
-use Magento\Framework\App\Action\Context;
-use Magento\Framework\View\Result\PageFactory;
- 
-class AddToCartEndpoint extends Action
-{
-        /**
-     * @var Magento\Framework\View\Result\PageFactory
-     */
-    protected $_resultPageFactory;
- 
-    /**
-     * @param Context     $context
-     * @param PageFactory $resultPageFactory
-     */
-    function __construct(
-        Context $context,
-        PageFactory $resultPageFactory
- 
-    ) {
-        $this->_resultPageFactory = $resultPageFactory;
-        parent::__construct($context);
- 
-    }
- 
-    function execute()
-    {
-        $json = file_get_contents('php://input');
-        $obj = json_decode($json, true);
-        $model = $this->_objectManager->create('Mangoit\MediaclipHub\Model\Mediaclip')->load($obj['projectId'], 'project_id')->setProjectDetails(json_encode($obj))->save();
-    }
+use Mangoit\MediaclipHub\Model\Mediaclip as M;
+// 2019-04-17
+class AddToCartEndpoint extends \Magento\Framework\App\Action\Action {
+	/**
+	 * 2019-04-17
+	 * A request:
+	 *	{
+	 *		"storeData": {
+	 *			"userId": "58147"
+	 *		},
+	 *		"projectId": "ee970c91-16d6-490a-9a71-1e205cfb4859",
+	 *		"properties": {
+	 *			"option_details": "{\"20530\":\"44379\",\"20639\":\"44847\"}",
+	 *			"storeProductId": "74134"
+	 *		},
+	 *		"items": [
+	 *			{
+	 *				"productId": "$(package:inkifi/prints)/products/framed-print-12x12-black",
+	 *				"plu": "INKIFI-IGF-12-BL",
+	 *				"quantity": 1,
+	 *				"properties": {
+	 *					"option_details": "{\"20530\":\"44379\",\"20639\":\"44847\"}",
+	 *					"storeProductId": "74134"
+	 *				}
+	 *			}
+	 *		]
+	 *	}
+	 */
+	function execute() {
+		$req = json_decode(file_get_contents('php://input'), true); /** @var array(string => mixed) $req */
+		$m = df_new_om(M::class); /** @var M $m */
+		$m->load($req['projectId'], 'project_id');
+		$m->setProjectDetails(json_encode($m));
+		$m->save();
+	}
 }
