@@ -720,6 +720,7 @@ class UpgradeSchema implements UpgradeSchemaInterface {
 	 * 2019-02-26 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 	 * @used-by upgrade()
 	 * @used-by \Inkifi\Mediaclip\Event::_areAllOIAvailableForDownload()
+	 * @used-by \Inkifi\Mediaclip\Event::isOIAvailableForDownload()
 	 * @used-by \Inkifi\Mediaclip\Event::markOIAsAvailableForDownload()
 	 */
 	const OI__ITEM_DOWNLOAD_STATUS = 'item_download_status';
