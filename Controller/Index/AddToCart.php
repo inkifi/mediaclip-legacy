@@ -101,8 +101,8 @@ class AddToCart extends \Magento\Framework\App\Action\Action {
 
 			//$formKey = $session->getFormKey();
 			$formKey = $this->_objectManager->get('Magento\Framework\Data\Form\FormKey')->getFormKey();
-			$obj = json_decode($mediaClipProject->getProjectDetails(), true);
-
+			$obj = df_json_decode($mediaClipProject->getProjectDetails());
+			df_assert($obj);
 			$quantity = 1;
 			$checkToAppendQty = $this->checkToAppendQty($product);
 			if ($checkToAppendQty) {

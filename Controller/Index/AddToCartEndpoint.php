@@ -32,7 +32,7 @@ class AddToCartEndpoint extends \Magento\Framework\App\Action\Action {
 		$req = json_decode(file_get_contents('php://input'), true); /** @var array(string => mixed) $req */
 		$m = df_new_om(M::class); /** @var M $m */
 		$m->load($req['projectId'], 'project_id');
-		$m->setProjectDetails(json_encode($m));
+		$m->setProjectDetails(json_encode($req));
 		$m->save();
 	}
 }
