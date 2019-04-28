@@ -35,7 +35,7 @@ class Product extends \Magento\Framework\Model\AbstractModel {
 
 	/**
 	 * 2019-03-04
-	 * @used-by ikf_product()
+	 * @used-by \Inkifi\Mediaclip\API\Entity\Order\Item::mProduct()
 	 * @param string $v «INKIFI-VP»
 	 */
 	function loadByPlu($v) {$this->load($v, self::F__PLU);}
