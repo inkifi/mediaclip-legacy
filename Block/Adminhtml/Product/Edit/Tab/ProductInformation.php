@@ -127,7 +127,7 @@ class ProductInformation
 		 * 2) API 3.0: «Possible values are `Budget`, `Standard`, `Express`, and `Overnight`»:
 		 * https://www.pwinty.com/api#orders-create
 		 */
-		$fieldset->addField(mProduct::F__FTP_JSON, 'select', [
+		$fieldset->addField(mProduct::F__PWINTY_SHIPPING_METHOD, 'select', [
 		   'label' => __('[Pwinty] Shipping Method')
 		   ,'name' => mProduct::F__PWINTY_SHIPPING_METHOD
 		   ,'options' => df_a_to_options(['Budget', 'Standard', 'Express', 'Overnight'])
