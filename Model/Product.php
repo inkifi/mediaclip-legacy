@@ -138,6 +138,14 @@ class Product extends \Magento\Framework\Model\AbstractModel {
 	const F__PWINTY_PRODUCT_NAME = 'pwinty_product_name';
 
 	/**
+	 * 2019-05-01
+	 * @used-by frameColor()
+	 * @used-by \Mangoit\MediaclipHub\Block\Adminhtml\Product\Edit\Tab\ProductInformation::_prepareForm()
+	 * @used-by \Inkifi\Pwinty\Setup\UpgradeSchema::_process()
+	 */
+	const F__PWINTY_SHIPPING_METHOD = 'shipping_method';
+
+	/**
 	 * 2019-04-11
 	 * @used-by \Mangoit\MediaclipHub\Controller\Product\Edit::mProduct()
 	 * @param P $p
