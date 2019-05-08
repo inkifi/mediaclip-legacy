@@ -84,7 +84,6 @@ class AddToCart extends \Magento\Framework\App\Action\Action {
 					//$session->addSuccess($message);
 
 					$addToCart = false;
-					$this->getResponse()->setRedirect('/checkout/cart/index');
 				}
 			}
 		}
@@ -179,8 +178,11 @@ class AddToCart extends \Magento\Framework\App\Action\Action {
 			}
 			catch (\Exception $e) {}
 			$quote->collectTotals()->save();
-			$this->getResponse()->setRedirect(df_url('checkout/cart/index')); // 2018-08-17 Dmitry Fedyuk
 		}
+		// 2019-05-08 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+		// «Fix the Mediaclip edit cart scenario for the US store»
+		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/12
+		$this->getResponse()->setRedirect(df_url('checkout/cart/index'));
 	}
 
 	function getMediaClipProject($projectId){
