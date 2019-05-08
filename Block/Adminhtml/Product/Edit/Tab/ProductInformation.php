@@ -111,10 +111,10 @@ class ProductInformation
 			]
 		);
 		$fieldset->addField(
-			mProduct::F__PWINTY_PRODUCT_NAME,
+			mProduct::F__PWINTY_PRODUCT_SKU,
 			'text',
 			[
-				'name' => mProduct::F__PWINTY_PRODUCT_NAME,
+				'name' => mProduct::F__PWINTY_PRODUCT_SKU,
 				'label' => __('Pwinty Product Name'),
 				'title' => __('Pwinty Product Name'),
 				'required' => false,
@@ -130,7 +130,7 @@ class ProductInformation
 		$fieldset->addField(mProduct::F__PWINTY_SHIPPING_METHOD, 'select', [
 		   'label' => __('[Pwinty] Shipping Method')
 		   ,'name' => mProduct::F__PWINTY_SHIPPING_METHOD
-		   ,'options' => df_a_to_options(['Budget', 'Standard', 'Express', 'Overnight'])
+		   ,'options' => dfa_combine_self(['Standard', 'Budget', 'Express', 'Overnight'])
 		   ,'title' => __('[Pwinty] Shipping Method')
 		]);
 		$fieldset->addField(

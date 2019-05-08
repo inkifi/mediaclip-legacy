@@ -126,7 +126,7 @@ class InstallSchema implements InstallSchemaInterface {
             'Frame Colour'
         )
         ->addColumn(
-            mProduct::F__PWINTY_PRODUCT_NAME,
+            mProduct::F__PWINTY_PRODUCT_SKU,
             \Magento\Framework\DB\Ddl\Table::TYPE_TEXT,
             null,
             '64k',

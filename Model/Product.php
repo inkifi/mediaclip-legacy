@@ -52,7 +52,16 @@ class Product extends \Magento\Framework\Model\AbstractModel {
 	 * @used-by \Inkifi\Pwinty\AvailableForDownload::images()
 	 * @return string|null «FRA-INSTA-30X30»
 	 */
-	function pwintyProductSku() {return $this[self::F__PWINTY_PRODUCT_NAME];}
+	function pwintyProductSku() {return $this[self::F__PWINTY_PRODUCT_SKU];}
+
+	/**
+	 * 2019-05-01
+	 * API 3.0: «Possible values are `Budget`, `Standard`, `Express`, and `Overnight`»:
+	 * https://www.pwinty.com/api#orders-create
+	 * @used-by \Inkifi\Pwinty\AvailableForDownload::_p()
+	 * @return string
+	 */
+	function pwintyShippingMethod() {return $this[self::F__PWINTY_SHIPPING_METHOD] ?: 'Standard';}
 
 	/**
 	 * 2019-02-27
@@ -131,15 +140,15 @@ class Product extends \Magento\Framework\Model\AbstractModel {
 
 	/**
 	 * 2019-04-11
-	 * @used-by pwintyProduct()
+	 * @used-by pwintyProductSku()
 	 * @used-by \Mangoit\MediaclipHub\Block\Adminhtml\Product\Edit\Tab\ProductInformation::_prepareForm()
 	 * @used-by \Mangoit\MediaclipHub\Setup\UpgradeSchema::upgrade()
 	 */
-	const F__PWINTY_PRODUCT_NAME = 'pwinty_product_name';
+	const F__PWINTY_PRODUCT_SKU = 'pwinty_product_name';
 
 	/**
 	 * 2019-05-01
-	 * @used-by frameColor()
+	 * @used-by pwintyShippingMethod()
 	 * @used-by \Mangoit\MediaclipHub\Block\Adminhtml\Product\Edit\Tab\ProductInformation::_prepareForm()
 	 * @used-by \Inkifi\Pwinty\Setup\UpgradeSchema::_process()
 	 */
