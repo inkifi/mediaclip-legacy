@@ -593,7 +593,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper {
 
 	/**                                        
 	 * 2018-09-11
-	 * The end user token has a short life span. A token can be extended.
+	 * 2019-05-10 https://doc.mediaclip.ca/hub/getting-started/launching-designer/#renew-token-endpoint
 	 * @used-by \Mangoit\MediaclipHub\Controller\Index\RenewMediaclipToken::execute()
 	 * @param object $req
 	 * @return array|mixed
