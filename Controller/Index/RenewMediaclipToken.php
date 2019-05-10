@@ -53,6 +53,8 @@ use Mangoit\MediaclipHub\Session as mSession;
  * that the token you receive in the `renew-token` page is indeed refreshed by the correct user.
  * You will need to store who owns the token (e.g. in a memory cache or temporary database),
  * and verify that the user (e.g. using the cookie/session) is still logged in, and owns that token.»
+ *
+ * 2019-05-10 https://doc.mediaclip.ca/hub/getting-started/launching-designer/#renew-token-endpoint
  */
 class RenewMediaclipToken extends Action {
 	/**
