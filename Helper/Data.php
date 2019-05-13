@@ -4,7 +4,7 @@ use Inkifi\Mediaclip\Settings as S;
 use Magento\Store\Model\Store;
 use Mangoit\MediaclipHub\Model\Product as mProduct;
 use Zend\Log\Logger as zL;
-class Data extends \Magento\Framework\App\Helper\AbstractHelper {
+final class Data extends \Magento\Framework\App\Helper\AbstractHelper {
 	/**
 	 * @param \Magento\Framework\App\Helper\Context $context
 	 */
@@ -598,7 +598,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper {
 	 * @param object $req
 	 * @return array|mixed
 	 */
-	final function RenewToken($req) {
+	function RenewToken($req) {
 		$this->HUBURL = S::s()->url();
 		$curl = $this->BuildCurl(
 			'POST', "{$this->HUBURL}/auth/jwt/renew", $this->GetStoreAuthorizationHeader(), $req
