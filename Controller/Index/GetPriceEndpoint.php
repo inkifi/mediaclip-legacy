@@ -47,8 +47,13 @@ class GetPriceEndpoint extends Action {
 		return $response;
 	}
 
-	function getProductQuantity($items){
-
+	/**
+	 * 2019-05-14
+	 * @used-by execute()
+	 * @param $items
+	 * @return int
+	 */
+	private function getProductQuantity($items){
 		$quantity = 0;
 		if (!empty($items)) {
 			foreach ($items as $item) {
@@ -57,25 +62,27 @@ class GetPriceEndpoint extends Action {
 		}
 		return $quantity;
 	}
-	function getProductCalculatedPrice($product_id, $mediaclip_obj, $quantity){
 
+	/**
+	 * 2019-05-14
+	 * @used-by execute()
+	 * @param $product_id
+	 * @param $mediaclip_obj
+	 * @param $quantity
+	 * @return float|int
+	 */
+	private function getProductCalculatedPrice($product_id, $mediaclip_obj, $quantity){
 		$price = 0;
-
 		$product = $this->_objectManager->create('\Magento\Catalog\Model\Product');
 		$product->load($product_id);
-
 		if ($product) {
 			$product_price = $product->getPrice();
 			$custom_option_price = 0;
 			$additionalPrice = 0;
-
 			if (isset($mediaclip_obj['properties']['option_details']) && !empty($mediaclip_obj['properties']['option_details'])) {
 				$option_details = json_decode($mediaclip_obj['properties']['option_details']);
-
 				$product_options = $product->getOptions();
-
 				foreach ($option_details as $oid => $ovalue) {
-
 					foreach ($product_options as $pvalue) {
 						 //print_r($pvalue->getData('option_id'));
 					 //print_r($pvalue);
@@ -102,7 +109,6 @@ class GetPriceEndpoint extends Action {
 					}
 				}
 			}
-
 			if ($product->getMediaclipMinimumPrintsAllow()) {
 				$min_allow = $product->getMediaclipMinimumPrintsCount();
 				$add_price = $product->getMediaclipExtraPrintsPrice();
@@ -126,15 +132,19 @@ class GetPriceEndpoint extends Action {
 					}
 				}
 			}
-
 			$price = $product_price + $custom_option_price + $additionalPrice;
 			$price = $price*$quantity;
 		}
-
 		return $price;
 	}
 
-	function getProductAdditionalPriceAmount($productId){
+	/**
+	 * 2019-05-14
+	 * @used-by getProductCalculatedPrice()
+	 * @param $productId
+	 * @return int
+	 */
+	private function getProductAdditionalPriceAmount($productId){
 		$product = $this->_objectManager->create('\Magento\Catalog\Model\Product')->load($productId);
 		if ($product->getMediaClipExtrasheetamt() && is_numeric($product->getMediaClipExtrasheetamt())) {
 			$additionalAmount = $product->getMediaClipExtrasheetamt();
@@ -144,13 +154,9 @@ class GetPriceEndpoint extends Action {
 	}
 
 	function getPriceHtml($productPrice){
-
 		$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-
 		$priceHelper = $objectManager->create('Magento\Framework\Pricing\Helper\Data');
-
 		$formattedPrice = $priceHelper->currency($productPrice, true, false);
-	 return $formattedPrice ;
-
+	 	return $formattedPrice;
 	}
 }
