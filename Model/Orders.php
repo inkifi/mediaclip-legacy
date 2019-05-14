@@ -45,14 +45,6 @@ class Orders extends \Magento\Framework\Model\AbstractModel {
 	function oidMagentoSet($v) {$this[self::F__MAGENTO_ORDER_ID] = $v;}
 
 	/**
-	 * 2019-04-10
-	 * @used-by \Inkifi\Pwinty\AvailableForDownload::_p()
-	 * @param string $v «58312» or «staging-58312»
-	 * @return $this
-	 */
-	function oidPwintySet($v) {$this[self::$F__PWINTY_ORDER_ID] = $v; return $this;}
-
-	/**
 	 * 2019-04-03 Currently, the value is only set to the database, but it is never retrieved from there.
 	 * @used-by \Inkifi\Pwinty\Controller\Index\Index::execute()
 	 * @param string $v «MQ121286142GB»
@@ -75,32 +67,20 @@ class Orders extends \Magento\Framework\Model\AbstractModel {
 
 	/**
 	 * 2019-03-13
-		 * 2019-04-02
-		 * There are no Mediaclip orders assigned to multiple Magento orders at once.
-		 * SELECT magento_order_id, COUNT(*) c FROM mediaclip_orders GROUP BY magento_order_id HAVING c > 1;
-		 * >  MySQL returned an empty result set (i.e. zero rows).
-		 * https://stackoverflow.com/a/688551
+	 * 2019-04-02
+	 * There are no Mediaclip orders assigned to multiple Magento orders at once.
+	 * SELECT magento_order_id, COUNT(*) c FROM mediaclip_orders GROUP BY magento_order_id HAVING c > 1;
+	 * >  MySQL returned an empty result set (i.e. zero rows).
+	 * https://stackoverflow.com/a/688551
 	 * @used-by \Inkifi\Mediaclip\Event::mo()
 	 * @param string $oidE		«58312» or «staging-58312»
 	 * @return self
 	 */
-	static function byOIdE($oidE) {return self::by(self::F__MAGENTO_ORDER_ID, $oidE);}
+	static function byOId($oidE) {return self::by(self::F__MAGENTO_ORDER_ID, ikf_ite($oidE));}
 
 	/**
 	 * 2019-04-03
-	 * There are no Mediaclip orders assigned to multiple Pwinty orders at once:
-	 * @see \Inkifi\Pwinty\AvailableForDownload::_p()
-	 * https://github.com/inkifi/pwinty/blob/0.0.2/AvailableForDownload.php#L68-L91
-	 * @used-by \Inkifi\Pwinty\Controller\Index\Index::execute()
-	 * @param int $oidP		«775277»
-	 * @return self
-	 */
-	static function byPwintyOrderId($oidP) {return self::by(self::$F__PWINTY_ORDER_ID, $oidP);}
-
-	/**
-	 * 2019-04-03
-	 * @used-by byOIdE()
-	 * @used-by byPwintyOrderId()
+	 * @used-by byOId()
 	 * @param string $k
 	 * @param string|int $v
 	 * @return self
@@ -121,7 +101,7 @@ class Orders extends \Magento\Framework\Model\AbstractModel {
 
 	/**
 	 * 2019-04-03
-	 * @used-by byOIdE()
+	 * @used-by byOId()
 	 * @used-by oidMagento()
 	 * @used-by oidMagentoSet()
 	 * @used-by \Inkifi\MissingOrder\Observer\DataProvider\SearchResult::execute()
@@ -144,14 +124,6 @@ class Orders extends \Magento\Framework\Model\AbstractModel {
 	 * @used-by \Mangoit\MediaclipHub\Setup\UpgradeSchema::upgrade()
 	 */
 	const F__MEDIACLIP_ORDER_ID = 'mediaclip_order_id';
-
-	/**
-	 * 2019-04-03
-	 * @used-by byPwintyOrderId()
-	 * @used-by oidPwintySet()
-	 * @used-by \Inkifi\Pwinty\AvailableForDownload::_p()
-	 */
-	private static $F__PWINTY_ORDER_ID = 'pwinty_order_id';
 
 	/**
 	 * 2019-04-03
