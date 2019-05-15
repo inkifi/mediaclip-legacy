@@ -52,7 +52,14 @@ class Orders extends \Magento\Framework\Model\AbstractModel {
 	function trackingNumberSet($v) {$this[self::$F__TRACKING_NUMBER] = $v;}
 
 	/**
-	 * 2019-04-03 Currently, the value is only set to the database, but it is never retrieved from there.
+	 * 2019-05-15
+	 * @used-by \Inkifi\Pwinty\Plugin\Shipping\Model\Order\Track::aroundGetNumberDetail()
+	 * @return string $v «http://www.royalmail.com/portal/rm/track?trackNumber=MQ121286142GB»
+	 */
+	function trackingUrlGet() {return $this[self::$F__TRACKING_URL];}
+
+	/**
+	 * 2019-04-03
 	 * @used-by \Inkifi\Pwinty\Controller\Index\Index::execute()
 	 * @param string $v «http://www.royalmail.com/portal/rm/track?trackNumber=MQ121286142GB»
 	 */
@@ -73,6 +80,7 @@ class Orders extends \Magento\Framework\Model\AbstractModel {
 	 * >  MySQL returned an empty result set (i.e. zero rows).
 	 * https://stackoverflow.com/a/688551
 	 * @used-by \Inkifi\Mediaclip\Event::mo()
+	 * @used-by \Inkifi\Pwinty\Plugin\Shipping\Model\Order\Track::aroundGetNumberDetail()
 	 * @param string $oidE		«58312» or «staging-58312»
 	 * @return self
 	 */
@@ -133,6 +141,7 @@ class Orders extends \Magento\Framework\Model\AbstractModel {
 
 	/**
 	 * 2019-04-03
+	 * @used-by trackingUrlGet()
 	 * @used-by trackingUrlSet()
 	 */
 	private static $F__TRACKING_URL = 'tracking_url';
