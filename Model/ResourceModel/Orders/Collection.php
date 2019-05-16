@@ -9,7 +9,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
 	/**
 	 * 2019-03-13
-	 * @used-by \Mangoit\MediaclipHub\Model\Orders::by()
+	 * @used-by \Mangoit\MediaclipHub\Model\Orders::byOId()
 	 * @return self
 	 */
 	static function i() {return df_new_om(__CLASS__);}

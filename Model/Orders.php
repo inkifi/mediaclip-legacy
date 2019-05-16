@@ -81,22 +81,17 @@ class Orders extends \Magento\Framework\Model\AbstractModel {
 	 * https://stackoverflow.com/a/688551
 	 * @used-by \Inkifi\Mediaclip\Event::mo()
 	 * @used-by \Inkifi\Pwinty\Plugin\Shipping\Model\Order\Track::aroundGetNumberDetail()
-	 * @param string $oidE		«58312» or «staging-58312»
+	 * @param string $oid		«58312» or «staging-58312»
 	 * @return self
 	 */
-	static function byOId($oidE) {return self::by(self::F__MAGENTO_ORDER_ID, ikf_ite($oidE));}
-
-	/**
-	 * 2019-04-03
-	 * @used-by byOId()
-	 * @param string $k
-	 * @param string|int $v
-	 * @return self
-	 */
-	private static function by($k, $v) {
+	static function byOId($oid) {
 		$c = C::i();
-		$c->addFieldToFilter($k, ['eq' => $v]);
-		df_assert_eq(1, $c->count());
+		$c->addFieldToFilter(self::F__MAGENTO_ORDER_ID, ['eq' => ikf_ite($oid)]);
+		$count = $c->count(); /** @var int $count */
+		df_assert_le(1, $count);
+		if (!$count) {
+			df_error("No Mediaclip order found for the Magento order %s.", ikf_eti($oid));
+		}
 		return $c->getFirstItem();
 	}
 
