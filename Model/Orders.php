@@ -86,7 +86,16 @@ class Orders extends \Magento\Framework\Model\AbstractModel {
 	 */
 	static function byOId($oid) {
 		$c = C::i();
-		$c->addFieldToFilter(self::F__MAGENTO_ORDER_ID, ['eq' => ikf_ite($oid)]);
+		$c->addFieldToFilter(self::F__MAGENTO_ORDER_ID, !df_my() ? ['eq' => ikf_ite($oid)] :
+			/**
+			 * 2019-05-17                         
+			 * The collection generates an SQL code like:
+			 * 		SELECT `main_table`.* FROM `mediaclip_orders` AS `main_table`
+			 * 		WHERE (((`magento_order_id` = 'staging-65938') OR (`magento_order_id` = 65938)))
+			 * https://stackoverflow.com/a/7851884
+			 */
+			[['eq' => ikf_ite($oid)], ['eq' => ikf_eti($oid)]]
+		);
 		$count = $c->count(); /** @var int $count */
 		df_assert_le(1, $count);
 		if (!$count) {
