@@ -7,7 +7,6 @@ use Magento\Sales\Model\Order\Item as OI;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Shipment\Item as SI;
 use Magento\Sales\Model\Order\Shipment\Track;
-use Magento\Shipping\Model\ShipmentNotifier;
 class OneflowResponse extends \Magento\Framework\App\Action\Action {
 	/**          
 	 * 2018-12-28
@@ -116,8 +115,7 @@ class OneflowResponse extends \Magento\Framework\App\Action\Action {
 				$shipment->addTrack($track);
 				$shipment->save();
 				$o->save();
-				$notifier = df_new_om(ShipmentNotifier::class); /** @var ShipmentNotifier $notifier */
-				$notifier->notify($shipment);
+				df_mail_shipment($shipment);
 				$shipment->save();
 			} 
 			catch (\Exception $e) {
