@@ -86,7 +86,7 @@ class Orders extends \Magento\Framework\Model\AbstractModel {
 	 */
 	static function byOId($oid) {
 		$c = C::i();
-		$c->addFieldToFilter(self::F__MAGENTO_ORDER_ID, !df_my() ? ['eq' => ikf_ite($oid)] :
+		$c->addFieldToFilter(self::F__MAGENTO_ORDER_ID, !df_my_local() ? ['eq' => ikf_ite($oid)] :
 			/**
 			 * 2019-05-17                         
 			 * The collection generates an SQL code like:
