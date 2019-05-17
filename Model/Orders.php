@@ -96,8 +96,7 @@ class Orders extends \Magento\Framework\Model\AbstractModel {
 			 */
 			[['eq' => ikf_ite($oid)], ['eq' => ikf_eti($oid)]]
 		);
-		$count = $c->count(); /** @var int $count */
-		df_assert_le(1, $count);
+		df_assert_le(1, $count = $c->count()); /** @var int $count */
 		if (!$count) {
 			df_error("No Mediaclip order found for the Magento order %s.", ikf_eti($oid));
 		}
