@@ -51,7 +51,7 @@ class OrderStatusUpdateEndpoint extends \Df\Framework\Action {
 			L::l($e->j());
 			if (!df_my_local()) {
 				df_sentry_extra($this, 'Event', $e->a());
-				df_sentry($this, "{$e->oidI()}: $s");
+				//df_sentry($this, "{$e->oidI()}: $s");
 			}
 			if ('AvailableForDownload' === $s) {
 				\Inkifi\Mediaclip\H\AvailableForDownload::p();
