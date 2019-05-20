@@ -77,7 +77,7 @@ class RenewMediaclipToken extends Action {
 				 * »
 				 */
 				$r = ['redirectUrl' => df_customer_url_h()->getLoginUrl()];
-				df_sentry($this, 'renew-token: absent');
+				//df_sentry($this, 'renew-token: absent');
 			}
 			else {
 				/**
@@ -98,7 +98,7 @@ class RenewMediaclipToken extends Action {
 				 * @uses \Mangoit\MediaclipHub\Helper\Data::RenewToken() will correct out token.
 				 */
 				$s->setMediaClipToken($r = mc_h()->RenewToken($req));
-				df_sentry($this, 'renew-token: OK', ['extra' => ['old' => $t, 'new' => $r]]);
+				//df_sentry($this, 'renew-token: OK', ['extra' => ['old' => $t, 'new' => $r]]);
 			}
 		}
 		catch (\Exception $e) {
