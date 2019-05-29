@@ -12,7 +12,11 @@ class AddToCart extends \Magento\Framework\App\Action\Action {
 	 */
 	function execute() {
 		try {
-			$projectId = $this->getRequest()->getParam('projectId');
+			/** @var string|null $projectId */
+			if (!($projectId = $this->getRequest()->getParam('projectId')))  {
+				// 2019-05-29 https://log.mage2.pro/inkifi/mangoit/issues/302
+				df_error('Invalid request: the `projectId` parameter is absent.');
+			}
 			$quote = df_cart()->getQuote();
 			$addToCart = true;
 			foreach ($quote->getAllVisibleItems() as $qi) { /** @var QI $qi */
@@ -90,7 +94,10 @@ class AddToCart extends \Magento\Framework\App\Action\Action {
 			}
 			if ($addToCart) {
 				$mediaClipProject = $this->getMediaClipProject($projectId);
-				$pid = $mediaClipProject->getStoreProductId();
+				if (!($pid = $mediaClipProject->getStoreProductId())) {
+					// 2019-05-29 https://log.mage2.pro/inkifi/mangoit/issues/302
+					df_error('The project is not linked to a product: ' . $projectId);
+				}
 				/**
 				 * 2019-05-15
 				 * 1) «Make the Mediaclip's «Get Price» endpoint compatible
