@@ -59,8 +59,7 @@ class OrderStatusUpdateEndpoint extends \Df\Framework\Action {
 			$r = 'OK';
 		}
 		catch (\Exception $e) {
-    		// 2019-05-17 https://doc.mediaclip.ca/hub/store-endpoints#replying-with-errors
-    		df_response_code(500);
+    		df_500(); // 2019-05-17 https://doc.mediaclip.ca/hub/store-endpoints#replying-with-errors
     		$r = ['code' => 500, 'message' => df_ets($e)];
 			df_log($e, $this);
 			if (df_my_local()) {

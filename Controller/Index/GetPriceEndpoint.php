@@ -67,7 +67,7 @@ class GetPriceEndpoint extends \Df\Framework\Action {
 			$r = ['price' => ['original' => $this->getPriceHtml($price)]];
 		}
 		catch (\Exception $e) {
-			df_response_code(500);
+			df_500();
 			$r = ['error' => df_ets($e)];
 			df_log($e, $this);
 			if (df_my_local()) {
