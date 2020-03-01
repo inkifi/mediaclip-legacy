@@ -1,5 +1,7 @@
 <?php
+
 namespace Mangoit\MediaclipHub\Controller\Index;
+
 use Magento\Framework\Exception\LocalizedException as LE;
 use Magento\Sales\Model\Convert\Order as OC;
 use Magento\Sales\Model\Order as O;
@@ -7,6 +9,7 @@ use Magento\Sales\Model\Order\Item as OI;
 use Magento\Sales\Model\Order\Shipment;
 use Magento\Sales\Model\Order\Shipment\Item as SI;
 use Magento\Sales\Model\Order\Shipment\Track;
+
 class OneflowResponse extends \Magento\Framework\App\Action\Action {
 	/**          
 	 * 2018-12-28
@@ -14,8 +17,11 @@ class OneflowResponse extends \Magento\Framework\App\Action\Action {
 	 * @throws LE
 	 */
 	function execute() {
+
 		$json = file_get_contents('php://input');
+
 		ikf_logger('oneflow_status')->info($json);
+
 		/**
 		 * 2018-12-28 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 		 * "Improve MediaClip module for Magento 2: handle shipping notifications for the US store":
@@ -47,8 +53,10 @@ class OneflowResponse extends \Magento\Framework\App\Action\Action {
 				"OrderStatus": "Shipped"
 			}';
 		} */
+
 		$json = preg_replace('#"Carrier":\s*(\w+)#', '"Carrier": "$1",', $json);
 		$req = json_decode($json, true);
+
 		/**
 		 * 2019-01-03 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 		 * As you can see in the example above, for the US store, the status is «Shipped», not «shipped».
@@ -56,37 +64,101 @@ class OneflowResponse extends \Magento\Framework\App\Action\Action {
 		 * So I have added @uses strtolower() now.
 		 */
 		if (!empty($req) && isset($req['OrderStatus']) && 'shipped' === strtolower($req['OrderStatus'])) {
+
 			$oid = intval($req['SourceOrderId']); /** @var int $oid */
 			$o = df_new_om(O::class)->load($oid); /** @var O $o */
+
 			if (!$o->canShip()) {
 				throw new LE( __("You can't create an shipment."));
 			}
-			$oc = df_new_om(OC::class); /** @var OC $oc */
-			$shipment = $oc->toShipment($o); /** @var Shipment $shipment */
-			foreach ($o->getAllItems() AS $oi) { /** @var OI $oi */
+
+			$oc = df_new_om(OC::class);            /** @var OC $oc */
+			$shipment = $oc->toShipment($o);       /** @var Shipment $shipment */
+
+			foreach ($o->getAllItems() AS $oi) {   /** @var OI $oi */
+
 				if (!$oi->getQtyToShip() || $oi->getIsVirtual()) {
 					continue;
 				}
+
 				$qtyShipped = $oi->getQtyToShip();
 				$si = $oc->itemToShipmentItem($oi); /** @var SI $si */
 				$si->setQty($qtyShipped);
 				$shipment->addItem($si);
 			}
+
 			$shipment->register();
 			$o['is_in_process'] = true;
+
 			try {
 				$track = df_new_om(Track::class); /** @var Track $track */
+                                
+                                $trackingNumber = isset($req['TrackingNumber']) ? $req['TrackingNumber'] : null;
+                                $trackingResult = (strlen($trackingNumber) > 3) ? $trackingNumber : __('Untracked');
+
+                                $track->setNumber($trackingResult);
+                                $track->setTrackNumber($trackingResult);
+                                        
+                                //$trackingNumber = dfa($req, 'TrackingNumber');
+                                $carrier = null;
+
+                                if ($trackingNumber !== null && isset($req['Carrier'])) {
+
+                                    $carrier     = $req['Carrier'];
+                                    $trackingUrl = null;
+
+                                    if (preg_match('/royalmail/i', $carrier)) {
+                                        $trackingUrl = 'https://www.royalmail.com/track-your-item#/tracking-results/' . $trackingNumber;
+                                    }
+
+                                    else if (preg_match('/dhl/i', $carrier)) {
+                                        $trackingUrl = 'https://www.dhl.co.uk/content/gb/en/express/tracking.shtml?brand=DHL&AWB=' . $trackingNumber;
+                                    }
+
+                                    else if (preg_match('/fedex/i', $carrier)) {
+                                        $trackingUrl = 'https://www.fedex.com/apps/fedextrack/?action=track&trackingnumber=' . $trackingNumber;
+                                    }
+
+                                    else if (preg_match('/dpd/i', $carrier)) {
+                                        $trackingUrl = 'https://www.dpd.co.uk/content/how-can-we-help/index.jsp';
+                                    }
+
+                                    else if (preg_match('/usps/i', $carrier)) {
+                                        $trackingUrl = 'https://tools.usps.com/go/TrackConfirmAction?tLabels=' . $trackingNumber;
+                                        $track->setCarrierCode($carrier);
+                                        $track->setTitle('United States Postal Service');
+                                    }
+
+                                    else if (preg_match('/ups/i', $carrier)) {
+                                        $trackingUrl = 'http://wwwapps.ups.com/WebTracking/track?track=yes&trackNums=' . $trackingNumber;
+                                        $track->setCarrierCode($carrier);
+                                        $track->setTitle('United Parcel Service');
+                                                                            }
+
+                                    $trackingFinalUrl = $trackingUrl . $trackingNumber;
+
+                                    if ($trackingUrl !== null) {
+                                        $track->setTrackingUrl($trackingFinalUrl);
+                                        $track->setTracking($trackingFinalUrl);
+                                        $track->setUrl($trackingFinalUrl);
+                                    }
+                                }
+
 				if (!($carrier = dfa($req, 'Carrier'))) { /** @var string|null $carrier */
-					$track->setCarrierCode('OneFlow');
-					$track->setDescription('OneFlow');
-					$track->setTitle('Royal Mail');
-				}
+                                    $track->setCarrierCode('OneFlow');
+                                    $track->setDescription('OneFlow');
+
+                                    $trackingTitle = (substr($trackingNumber, 0, 2) == 'JD') ? 'DHL' : 'Royal Mail';
+                                    $track->setTitle($trackingTitle);
+                                }
 				else {
 					// 2019-01-05 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
 					// «Improve MediaClip module for Magento 2: add USPS shipping tracking URLs to emails»
 					// https://www.upwork.com/ab/f/contracts/21337553
 					$track->setDescription($carrier);
-					$track->setNumber(dfa($req, 'TrackingNumber'));
+					// $track->setNumber(dfa($req, 'TrackingNumber'));
+                                        // $track->setTrackNumber(dfa($req, 'TrackingNumber'));
+
 					if (df_contains($carrier, 'ups')) {
 						//track->setCarrierCode('ups');
 						$track->setCarrierCode($carrier);
@@ -112,9 +184,11 @@ class OneflowResponse extends \Magento\Framework\App\Action\Action {
 				if (!$track->getNumber()) {
 					$track->setNumber('N/A');
 				}
+
 				$shipment->addTrack($track);
 				$shipment->save();
 				$o->save();
+
 				df_mail_shipment($shipment);
 				$shipment->save();
 			} 
@@ -122,7 +196,7 @@ class OneflowResponse extends \Magento\Framework\App\Action\Action {
 				throw new LE(__($e->getMessage()));
 			}
 		}
-		die('45');
+		// die('45');
 		//$logger->info('Array Log'.print_r($myArrayVar, true));
 		//Mage::log($json, null, 'mediaclip_orders_download_shipment_status.log');
 	}
