@@ -1,0 +1,17 @@
+{
+	"name": "inkifi/mediaclip-legacy"
+	,"version": "1.0.0"
+	,"description": "An integration between mediaclip.ca and inkifi.com (Magento 2)"
+	,"type": "magento2-module"
+	,"homepage": "https://github.com/inkifi/mediaclip"
+	,"license": "MIT"
+	,"authors": [{
+		"name": "Dmitry Fedyuk"
+		,"email": "admin@mage2.pro"
+		,"homepage": "https://mage2.pro/users/dmitry_fedyuk"
+		,"role": "Developer"
+	}]
+	,"require": {"mage2pro/core": ">=6.4.0"}
+	,"autoload": {"files": ["registration.php"], "psr-4": {"Mangoit\\MediaclipHub\\": ""}}
+	,"keywords": ["Magento 2"]
+}
