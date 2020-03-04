@@ -11,13 +11,14 @@ class Projects extends \Magento\Framework\View\Element\Template
 		parent::__construct($context);
 	}
 
-
-    function  getProjects() 
-    {
+	/**
+	 * 2020-03-04
+	 * @return array
+	 * @throws \Exception
+	 */
+    function getProjects() {
         $hubHelper = mc_h();
-        $storeUserId = $hubHelper->getCustomerId();
-    	$projects = $hubHelper->getMediaClipProjects($storeUserId);
-        return $projects->projects;
+        return $hubHelper->getMediaClipProjects($hubHelper->getCustomerId());
     }
 
     function getProjectEditUrl($project_id){

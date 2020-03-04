@@ -728,40 +728,46 @@ final class Data extends \Magento\Framework\App\Helper\AbstractHelper {
 
 		return $userTokenInfo;
 	}
-	function getMediaClipProjects($storeUserId) {
-		// 2018-08-17 Dmitry Fedyuk
-		// «Force Mediaclip to use the relevant API credentials in the multi-store mode»
-		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/4
-		$service_url = S::s()->url().'/stores/'.S::s()->id().'/users/'.$storeUserId.'/projects/';
-		$curl = curl_init($service_url);
-		curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-		$authorization = $this->GetStoreAuthorizationHeader();
-		curl_setopt($curl, CURLOPT_HTTPHEADER, array(
-			'Accept: application/json',
-			'Authorization: ' . $authorization,
-		));
 
-		$curl_response = curl_exec($curl);
-
-		if ($curl_response === false) {
-			$info = curl_getinfo($curl);
-			curl_close($curl);
-			die('error occured during curl exec. Additioanl info: ' . var_export($info));
+	/**
+	 * 2020-03-04
+	 * @used-by \Mangoit\MediaclipHub\Block\Mediaclip\Projects::getProjects()
+	 * @used-by vendor/inkifi/mediaclip-legacy/view/frontend/templates/savedproject.phtml
+	 * @param int|null $userId
+	 * @return array
+	 */
+	function getMediaClipProjects($userId) { /** @vfar array $r */
+		if (!$userId) {
+			$r = [];
 		}
-
-		$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
-
-		curl_close($curl);
-
-		if ($httpCode != 200)
-		{
-			return array();
-			//self::ThrowHttpException("Error in the request made: ", $httpCode, $response);
+		else {
+			try {
+				// 2018-08-17 Dmitry Fedyuk
+				// «Force Mediaclip to use the relevant API credentials in the multi-store mode»
+				// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/4
+				$curl = curl_init(S::s()->url().'/stores/'.S::s()->id().'/users/'.$userId.'/projects/');
+				try {
+					curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+					curl_setopt($curl, CURLOPT_HTTPHEADER, [
+						'Accept: application/json', "Authorization: {$this->GetStoreAuthorizationHeader()}"
+					]);
+					$curl_response = curl_exec($curl);
+					if ($curl_response === false) {
+						$info = curl_getinfo($curl);
+						curl_close($curl);
+						die('error occured during curl exec. Additioanl info: ' . var_export($info));
+					}
+					$httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+					$r = 200 != $httpCode ? [] : df_eta(dfa(df_json_decode($curl_response), 'projects'));
+				}
+				finally {curl_close($curl);}
+			}
+			catch (\Exception $e) {
+				df_log_e($e);
+				throw $e;
+			}
 		}
-
-		$decoded = json_decode($curl_response);
-
-		return $decoded;
+		return $r;
 	}
 
 	function saveMediaclipOrder($postData){

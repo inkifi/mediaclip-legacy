@@ -1,22 +1,9 @@
-<?php //$projects = $this->getProjects();
-
-$objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-$hubHelper = mc_h();
-
-$customerSession = $objectManager->get('Magento\Customer\Model\Session');
-if($customerSession->isLoggedIn()) {
-   $storeUserId = $customerSession->getCustomer()->getId();
-}
-$projects = $hubHelper->getMediaClipProjects($storeUserId);
-$projects = $projects->projects;
-?>
-<?php if(empty($projects)): ?>
+<?php
+if (!($projects = mc_h()->getMediaClipProjects(df_customer_id()))): ?>
 <h4><?php echo __('No Projects Found.'); ?></h4>
 <?php else: ?>
-	
 	<?php $total = count($projects); ?>
     <p>Total <?php echo $total; ?> Records Found.</p>
-
     <?php $recordsPerPage = 20; ?>
 	<?php $projectsArray = array_chunk($projects, $recordsPerPage); ?>
     <?php $pages = count($projectsArray); ?>
@@ -32,7 +19,6 @@ $projects = $projects->projects;
     	}
     	?>
     </ul>
-
 	<?php $i = $j = 1; ?>
 	<?php foreach ($projectsArray as $value): ?>
 		<div style="display: none;" id="list<?php echo $i; ?>">
