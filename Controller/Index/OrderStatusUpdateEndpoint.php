@@ -29,6 +29,7 @@ use Inkifi\Mediaclip\H\Logger as L;
  *		}
  *	}
  * 2) https://doc.mediacliphub.com/hub/store-endpoints/status-update
+ * 2020-03-04 https://doc.mediacliphub.com/hub/store-endpoints/add-to-cart/
  */
 class OrderStatusUpdateEndpoint extends \Df\Framework\Action {
 	/**
