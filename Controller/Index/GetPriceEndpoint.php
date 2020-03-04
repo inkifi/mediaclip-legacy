@@ -1,6 +1,6 @@
 <?php
 namespace Mangoit\MediaclipHub\Controller\Index;
-use Df\Framework\W\Result\Json;
+use Df\Framework\W\Result\Json as J;
 use Inkifi\Mediaclip\Price;
 use Magento\Catalog\Model\Product as P;
 /**
@@ -19,63 +19,43 @@ class GetPriceEndpoint extends \Df\Framework\Action {
 	 * @used-by \Magento\Framework\App\Action\Action::dispatch():
 	 * 		$result = $this->execute();
 	 * https://github.com/magento/magento2/blob/2.2.1/lib/internal/Magento/Framework/App/Action/Action.php#L84-L125
-	 * @return Json
+	 * @return J
 	 */
-	function execute() {
-		/** @var array(string => mixed) $r */
-		try {
-			/**
-			 * 2019-05-15
-			 * https://doc.mediaclip.ca/hub/store-endpoints/get-price
-			 * A request:
-			 * {
-			 *		"storeData": {
-			 *			"userId": "70994"
-			 *		},
-			 *		"projectId": "bcd16e0f-241f-4294-a8a0-094b709ac53e",
-			 *		"properties": {
-			 *			"storeProductId": "80321"
-			 *		},
-			 *		"items": [
-			 *			{
-			 *				"productId": "$(package:inkifi/us-prints)/products/mini-prints",
-			 *				"plu": "US-INKIFI-MP",
-			 *				"quantity": 1,
-			 *				"properties": {
-			 *					"storeProductId": "80321"
-			 *				}
-			 *			}
-			 *		]
-			 *	}
-			 */
-			$req = df_json_decode(file_get_contents('php://input')); /** @var array(string => mixed) $req */
-			df_sentry_extra($this, 'Request', $req);
-			$pid = (int)$req['properties']['storeProductId']; /** @var int $pid */
-			$quantity = 1;
-			/**
-			 * 2019-05-15
-			 * 1) «Make the Mediaclip's «Get Price» endpoint compatible with the Magento 2 multistore mode»
-			 * https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/13
-			 * 2) https://magento.stackexchange.com/a/177164
-			 */
-			$p = df_product($pid, true); /** @var P $p */
-			$checkToAppendQty = $this->checkToAppendQty($p);
-			if ($checkToAppendQty) {
-				$quantity = $this->getProductQuantity($req['items']);
-			}
-			$price = Price::get($p, $req, $quantity);
-			$r = ['price' => ['original' => $this->getPriceHtml($price)]];
+	function execute() {return ikf_endpoint(function() {
+		/**
+		 * 2019-05-15
+		 * https://doc.mediaclip.ca/hub/store-endpoints/get-price
+		 * A request:
+		 * {
+		 *		"storeData": {"userId": "70994"},
+		 *		"projectId": "bcd16e0f-241f-4294-a8a0-094b709ac53e",
+		 *		"properties": {"storeProductId": "80321"},
+		 *		"items": [{
+		 *			"productId": "$(package:inkifi/us-prints)/products/mini-prints",
+		 *			"plu": "US-INKIFI-MP",
+		 *			"quantity": 1,
+		 *			"properties": {"storeProductId": "80321"}
+		 *		}]
+		 *	}
+		 */
+		$req = df_json_decode(file_get_contents('php://input')); /** @var array(string => mixed) $req */
+		df_sentry_extra($this, 'Request', $req);
+		$pid = (int)$req['properties']['storeProductId']; /** @var int $pid */
+		$quantity = 1;
+		/**
+		 * 2019-05-15
+		 * 1) «Make the Mediaclip's «Get Price» endpoint compatible with the Magento 2 multistore mode»
+		 * https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/13
+		 * 2) https://magento.stackexchange.com/a/177164
+		 */
+		$p = df_product($pid, true); /** @var P $p */
+		$checkToAppendQty = $this->checkToAppendQty($p);
+		if ($checkToAppendQty) {
+			$quantity = $this->getProductQuantity($req['items']);
 		}
-		catch (\Exception $e) {
-			df_500();
-			$r = ['error' => df_ets($e)];
-			df_log($e, $this);
-			if (df_my_local()) {
-				throw $e; // 2016-03-27 It is convenient for me to the the exception on the screen.
-			}
-		}
-		return Json::i($r);
-	}
+		$price = Price::get($p, $req, $quantity);
+		return ['price' => ['original' => $this->getPriceHtml($price)]];
+	});}
 
 	/**
 	 * 2019-05-14

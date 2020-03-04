@@ -1,5 +1,6 @@
 <?php
 namespace Mangoit\MediaclipHub\Controller\Index;
+use Df\Framework\W\Result\Json as J;
 use Mangoit\MediaclipHub\Model\Mediaclip as M;
 // 2019-04-17
 class AddToCartEndpoint extends \Magento\Framework\App\Action\Action {
@@ -27,12 +28,13 @@ class AddToCartEndpoint extends \Magento\Framework\App\Action\Action {
 	 *			}
 	 *		]
 	 *	}
+	 * @return J
 	 */
-	function execute() {
+	function execute() {return ikf_endpoint(function() {
 		$req = json_decode(file_get_contents('php://input'), true); /** @var array(string => mixed) $req */
 		$m = df_new_om(M::class); /** @var M $m */
 		$m->load($req['projectId'], 'project_id');
 		$m->setProjectDetails(json_encode($req));
 		$m->save();
-	}
+	});}
 }

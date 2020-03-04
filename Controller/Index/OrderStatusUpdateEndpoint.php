@@ -1,6 +1,6 @@
 <?php
 namespace Mangoit\MediaclipHub\Controller\Index;
-use Df\Framework\W\Result\Json;
+use Df\Framework\W\Result\Json as J;
 use Inkifi\Mediaclip\Event;
 use Inkifi\Mediaclip\H\Logger as L;
 /**
@@ -40,32 +40,18 @@ class OrderStatusUpdateEndpoint extends \Df\Framework\Action {
 	 * 		$result = $this->execute();
 	 * https://github.com/magento/magento2/blob/2.2.1/lib/internal/Magento/Framework/App/Action/Action.php#L84-L125
 	 * @see \Mangoit\MediaclipHub\Controller\Index\OneflowResponse::execute()
-	 * @return Json
+	 * @return J
 	 */
-    function execute() {
-    	/** @var array(string => mixed) $r */
-    	try {
-			$e = Event::s(); /** @var Event $ev */
-			$s = $e['status/value']; /** @var string $s */
-			L::l("Status: $s");
-			L::l($e->j());
-			if (!df_my_local()) {
-				df_sentry_extra($this, 'Event', $e->a());
-				//df_sentry($this, "{$e->oidI()}: $s");
-			}
-			if ('AvailableForDownload' === $s) {
-				\Inkifi\Mediaclip\H\AvailableForDownload::p();
-			}
-			$r = 'OK';
+    function execute() {return ikf_endpoint(function() {
+		$e = Event::s(); /** @var Event $ev */
+		$s = $e['status/value']; /** @var string $s */
+		L::l("Status: $s");
+		L::l($e->j());
+		if (!df_my_local()) {
+			df_sentry_extra($this, 'Event', $e->a());
 		}
-		catch (\Exception $e) {
-    		df_500(); // 2019-05-17 https://doc.mediaclip.ca/hub/store-endpoints#replying-with-errors
-    		$r = ['code' => 500, 'message' => df_ets($e)];
-			df_log($e, $this);
-			if (df_my_local()) {
-				throw $e; // 2016-03-27 It is convenient for me to the the exception on the screen.
-			}
+		if ('AvailableForDownload' === $s) {
+			\Inkifi\Mediaclip\H\AvailableForDownload::p();
 		}
-		return Json::i($r);
-    }
+	});}
 }

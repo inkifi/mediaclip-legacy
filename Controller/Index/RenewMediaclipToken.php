@@ -1,6 +1,6 @@
 <?php
 namespace Mangoit\MediaclipHub\Controller\Index;
-use Df\Framework\W\Result\Json;
+use Df\Framework\W\Result\Json as J;
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\Action\Action;
 use Mangoit\MediaclipHub\Session as mSession;
@@ -59,56 +59,50 @@ use Mangoit\MediaclipHub\Session as mSession;
 class RenewMediaclipToken extends Action {
 	/**
 	 * 2018-09-11
-	 * @return Json
+	 * @return J
 	 */
-	function execute() {
-		try {
-			$s = df_customer_session(); /** @var Session|mSession $s */
-			/** @var object|array(string => mixed) $r */
-			if (!($t = $s->getMediaClipToken())) { /** @var object|null $t */
-				/**
-				 * 2018-09-11
-				 * «If the user's session is no longer valid on your eCommerce website, redirect to login page.
-				 * If the store's session is not valid, return a redirect URL (e.g. the store's login page)
-				 * to force the user to re-login.
-				 * Do so by returning the following JSON:
-				 * 		{"redirectUrl": "http://store.example.com/login"}
-				 * https://doc.mediacliphub.com/pages/Getting%20Started/yourFirstIntegration.html#renew-token
-				 * »
-				 */
-				$r = ['redirectUrl' => df_customer_url_h()->getLoginUrl()];
-				//df_sentry($this, 'renew-token: absent');
-			}
-			else {
-				/**
-				 * 2018-09-11
-				 * «Read the POST body, which looks like this JSON:
-				 * 		{"token": "some-very-long-and-cryptic-token"}
-				 * »
-				 * https://doc.mediacliphub.com/pages/Getting%20Started/yourFirstIntegration.html#renew-token
-				 */
-				$req = json_decode(@file_get_contents('php://input')); /** @var object $req */
-				/**
-				 * 2019-05-13
-				 * It was the code here:
-				 *		if ($t->token !== $req->token) {
-				 *			df_error("Magento token: «{$t->token}», Mediaclip token: «{$req->token}».");
-				 *		}
-				 * I think we do not need to raise an exception here becaise
-				 * @uses \Mangoit\MediaclipHub\Helper\Data::RenewToken() will correct out token.
-				 */
-				$s->setMediaClipToken($r = mc_h()->RenewToken($req));
-				//df_sentry($this, 'renew-token: OK', ['extra' => ['old' => $t, 'new' => $r]]);
-			}
+	function execute() {return ikf_endpoint(function() {/** @var array(string => mixed) $r */
+		$s = df_customer_session(); /** @var Session|mSession $s */
+		/** @var object|array(string => mixed) $r */
+		if (!($t = $s->getMediaClipToken())) { /** @var object|null $t */
+			/**
+			 * 2018-09-11
+			 * «If the user's session is no longer valid on your eCommerce website, redirect to login page.
+			 * If the store's session is not valid, return a redirect URL (e.g. the store's login page)
+			 * to force the user to re-login.
+			 * Do so by returning the following JSON:
+			 * 		{"redirectUrl": "http://store.example.com/login"}
+			 * https://doc.mediacliphub.com/pages/Getting%20Started/yourFirstIntegration.html#renew-token
+			 * »
+			 */
+			$r = ['redirectUrl' => df_customer_url_h()->getLoginUrl()];
+			//df_sentry($this, 'renew-token: absent');
 		}
-		catch (\Exception $e) {
-			df_500();
-			$r = ['error' => df_ets($e)];
-			df_log($e, $this);
-			if (df_my_local()) {
-				throw $e; // 2016-03-27 It is convenient for me to the the exception on the screen.
-			}
+		else {
+			/**
+			 * 2018-09-11
+			 * «Read the POST body, which looks like this JSON:
+			 * 		{"token": "some-very-long-and-cryptic-token"}
+			 * »
+			 * https://doc.mediacliphub.com/pages/Getting%20Started/yourFirstIntegration.html#renew-token
+			 */
+			$req = json_decode(@file_get_contents('php://input')); /** @var object $req */
+			/**
+			 * 2019-05-13
+			 * It was the code here:
+			 *		if ($t->token !== $req->token) {
+			 *			df_error("Magento token: «{$t->token}», Mediaclip token: «{$req->token}».");
+			 *		}
+			 * I think we do not need to raise an exception here because
+			 * @uses \Mangoit\MediaclipHub\Helper\Data::RenewToken() will correct out token.
+			 * 2020-03-04
+			 * «The hub renew service will return a body.
+			 * You must return this body as-is as the response of your renew-token endpoint
+			 * (Your response should include the HTTP header Content-Type: "application/json").»
+			 * https://doc.mediaclip.ca/hub/getting-started/launching-designer/#renew-token-endpoint
+			 */
+			$s->setMediaClipToken($r = mc_h()->RenewToken($req));
 		}
-		return Json::i($r);
-	}
+		return $r;
+	});}
 }
