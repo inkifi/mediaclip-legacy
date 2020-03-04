@@ -1,28 +1,14 @@
 <?php
-
 namespace Mangoit\MediaclipHub\Block\Mediaclip;
-
-class Projects extends \Magento\Framework\View\Element\Template
-{
-	protected $_projects;
-
-	function __construct(\Magento\Framework\View\Element\Template\Context $context)
-	{
-		parent::__construct($context);
-	}
-
+class Projects extends \Magento\Framework\View\Element\Template  {
 	/**
-	 * 2020-03-04
-	 * @return array
-	 * @throws \Exception
+	 * 2020-03-04 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+	 * $project_id looks lik «8c3ffcb2-c451-465a-bf9a-fe1e5b3bc726»
+	 * @used-by vendor/inkifi/mediaclip-legacy/view/frontend/templates/savedproject.phtml
+	 * @param $project_id
+	 * @return string
 	 */
-    function getProjects() {
-        $hubHelper = mc_h();
-        return $hubHelper->getMediaClipProjects($hubHelper->getCustomerId());
-    }
-
-    function getProjectEditUrl($project_id){
-
+    function getProjectEditUrl($project_id) {
         $url = "javascript:void(0)";
         if ($project_id) {
         	$objectManager = \Magento\Framework\App\ObjectManager::getInstance();

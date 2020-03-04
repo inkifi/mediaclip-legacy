@@ -1,4 +1,5 @@
 <?php
+use Mangoit\MediaclipHub\Block\Mediaclip\Projects as B; /** @var B $block */
 if (!($projects = mc_h()->getMediaClipProjects(df_customer_id()))): ?>
 <h4><?php echo __('No Projects Found.'); ?></h4>
 <?php else: ?>
@@ -7,9 +8,7 @@ if (!($projects = mc_h()->getMediaClipProjects(df_customer_id()))): ?>
     <?php $recordsPerPage = 20; ?>
 	<?php $projectsArray = array_chunk($projects, $recordsPerPage); ?>
     <?php $pages = count($projectsArray); ?>
-
     <?php $class = '';//($class > 1) ? '' : 'no-display'; ?>
-
     <ul class="pagination pagination-lg <?php echo $class; ?>">
     	<?php
     	for ($i=1; $i <= $pages; $i++) {
@@ -23,16 +22,30 @@ if (!($projects = mc_h()->getMediaClipProjects(df_customer_id()))): ?>
 	<?php foreach ($projectsArray as $value): ?>
 		<div style="display: none;" id="list<?php echo $i; ?>">
 			<div id="projects-list" class="row">
-				<?php foreach ($value as $k => $v): ?>
-					<?php $projectUrl = $this->getProjectEditUrl($v->id); ?>
+				<?php foreach ($value as $k => $v) { /** @var array(string => string) $v */
+					/**
+					 * 2012-03-04 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+					 * 1) «Trying to get property of non-object
+					 * in vendor/inkifi/mediaclip-legacy/view/frontend/templates/savedproject.phtml on line 27»:
+					 * https://github.com/inkifi/mediaclip-legacy/issues/3
+					 * 2) $v looks like:
+					 * 	{
+					 *		"createdDateUtc": "2020-03-04T13:47:34.4000000Z",
+					 *		"id": "8c3ffcb2-c451-465a-bf9a-fe1e5b3bc726",
+					 *		"isShareable": false,
+					 *		"lastModifiedDateUtc": "2020-03-04T13:47:59.0070000Z",
+					 *		"urlThumb": "https://mc-hub-hubapi-web-use.azurewebsites.net/projects/..."
+					 * 	}
+					 */
+					$projectUrl = $block->getProjectEditUrl($v['id']); ?>
 					<div class="project-block">
 	                    <div class="thumbnail">
 	                        <a href="<?php echo $projectUrl; ?>" target="_blank">
-	                            <img class="img-rounded" src="<?php echo $v->urlThumb; ?>" alt="Project#<?php echo $j ?>" style="width:100%; height:150px">
+	                            <img class="img-rounded" src="<?= $v['id'] ?>" alt="Project#<?php echo $j ?>" style="width:100%; height:150px">
 	                        </a>
 	                    </div>
 	                </div>
-				<?php $j++; endforeach; ?>
+				<?php $j++; } ?>
 			</div>
 		</div>
 	<?php $i++; endforeach; ?>

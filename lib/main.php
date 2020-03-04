@@ -4,7 +4,6 @@ use Mangoit\MediaclipHub\Helper\Data as H;
  * 2018-09-11
  * @used-by \Mangoit\MediaclipHub\Block\Adminhtml\Product\Edit\Tab\ProductInformation::_prepareForm()
  * @used-by \Mangoit\MediaclipHub\Block\Cart\Item\Renderer::getProductUrl()
- * @used-by \Mangoit\MediaclipHub\Block\Mediaclip\Projects::getProjects()
  * @used-by \Mangoit\MediaclipHub\Controller\Adminhtml\Order\Download::execute()
  * @used-by \Mangoit\MediaclipHub\Controller\Cart\Add::execute()
  * @used-by \Mangoit\MediaclipHub\Controller\Index\Customizeproject::execute()

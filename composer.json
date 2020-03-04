@@ -1,6 +1,6 @@
 {
 	"name": "inkifi/mediaclip-legacy"
-	,"version": "1.0.3"
+	,"version": "1.0.4"
 	,"description": "An integration between mediaclip.ca and inkifi.com (Magento 2)"
 	,"type": "magento2-module"
 	,"homepage": "https://github.com/inkifi/mediaclip"

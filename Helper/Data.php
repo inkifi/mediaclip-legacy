@@ -731,7 +731,6 @@ final class Data extends \Magento\Framework\App\Helper\AbstractHelper {
 
 	/**
 	 * 2020-03-04
-	 * @used-by \Mangoit\MediaclipHub\Block\Mediaclip\Projects::getProjects()
 	 * @used-by vendor/inkifi/mediaclip-legacy/view/frontend/templates/savedproject.phtml
 	 * @param int|null $userId
 	 * @return array
