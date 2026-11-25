@@ -664,7 +664,7 @@ class UpgradeSchema implements UpgradeSchemaInterface {
 		}
 		if (version_compare($context->getVersion(), '1.0.7') < 0) {
 			$tableName = $setup->getTable('sales_order');
-			// 2019-04-03 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+			// 2019-04-03 Dmitry Fedyuk https://github.com/dmitrii-fediuk
 			// This column is never used.
 			$columns = [
 				'mediaclip_order_flag' => [
@@ -717,7 +717,7 @@ class UpgradeSchema implements UpgradeSchemaInterface {
 	}
 
 	/**
-	 * 2019-02-26 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+	 * 2019-02-26 Dmitry Fedyuk https://github.com/dmitrii-fediuk
 	 * @used-by upgrade()
 	 * @used-by \Inkifi\Mediaclip\Event::_areAllOIAvailableForDownload()
 	 * @used-by \Inkifi\Mediaclip\Event::isOIAvailableForDownload()
@@ -726,7 +726,7 @@ class UpgradeSchema implements UpgradeSchemaInterface {
 	const OI__ITEM_DOWNLOAD_STATUS = 'item_download_status';
 
 	/**
-	 * 2019-03-13 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+	 * 2019-03-13 Dmitry Fedyuk https://github.com/dmitrii-fediuk
 	 * @used-by ikf_product_printer()
 	 * @used-by upgrade()
 	 * @used-by \Inkifi\Mediaclip\Event::oiOfTheSameType()

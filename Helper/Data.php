@@ -376,7 +376,7 @@ final class Data extends \Magento\Framework\App\Helper\AbstractHelper {
 		date_default_timezone_set("UTC");
 
 		/**
-		 * 2019-03-02 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+		 * 2019-03-02 Dmitry Fedyuk https://github.com/dmitrii-fediuk
 		 * The «Trying to get property of non-object» error here means that
 		 * the Mediaclip API KEY is incorrect.
 		 * Mediaclip responds «Request must have a valid AppId authentication key and secret»
@@ -507,7 +507,7 @@ final class Data extends \Magento\Framework\App\Helper\AbstractHelper {
 			print_r($currentUserId);
 			print_r('$projectUserId=>');
 			print_r($projectUserId);die();*/
-			// 2018-11-26 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+			// 2018-11-26 Dmitry Fedyuk https://github.com/dmitrii-fediuk
 			// «Improve Mediaclip integration with Magento 2: fix the frontend reordering scenario»
 			// https://www.upwork.com/ab/f/contracts/21123596
 			// I have just added the `true ||` condition.

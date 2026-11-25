@@ -6,7 +6,7 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Sales\Model\Order as O;
 use Mangoit\MediaclipHub\Observer\CheckoutSuccess as CS;
 /**
- * 2018-06-26 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+ * 2018-06-26 Dmitry Fedyuk https://github.com/dmitrii-fediuk
  * "Prevent the «Pending Payment» orders from being sent to MediaClip Photobook in my Magento 2 store":
  * https://www.upwork.com/ab/f/contracts/20288301
  */

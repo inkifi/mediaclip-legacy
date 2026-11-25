@@ -19,7 +19,7 @@ class OneflowResponse extends \Magento\Framework\App\Action\Action {
 		$json = file_get_contents('php://input');
 		ikf_logger('oneflow_status')->info($json);
 		/**
-		 * 2018-12-28 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+		 * 2018-12-28 Dmitry Fedyuk https://github.com/dmitrii-fediuk
 		 * "Improve MediaClip module for Magento 2: handle shipping notifications for the US store":
 		 * https://www.upwork.com/ab/f/contracts/21253740
 		 * https://www.upwork.com/messages/rooms/room_33abff92763bac6bac92a394ada0f09c/story_54a27db7705e1c75e5964af8bad331dc
@@ -52,7 +52,7 @@ class OneflowResponse extends \Magento\Framework\App\Action\Action {
 		$json = preg_replace('#"Carrier":\s*(\w+)#', '"Carrier": "$1",', $json);
 		$req = json_decode($json, true);
 		/**
-		 * 2019-01-03 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+		 * 2019-01-03 Dmitry Fedyuk https://github.com/dmitrii-fediuk
 		 * As you can see in the example above, for the US store, the status is «Shipped», not «shipped».
 		 * https://www.upwork.com/messages/rooms/room_759684bcafe746240e5c091d3745e787/story_243ee6d47456e76732d9bb4c80ae869e
 		 * So I have added @uses strtolower() now.
@@ -121,7 +121,7 @@ class OneflowResponse extends \Magento\Framework\App\Action\Action {
 				$track->setTitle($trackingTitle);
 			}
 			else {
-				// 2019-01-05 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+				// 2019-01-05 Dmitry Fedyuk https://github.com/dmitrii-fediuk
 				// «Improve MediaClip module for Magento 2: add USPS shipping tracking URLs to emails»
 				// https://www.upwork.com/ab/f/contracts/21337553
 				$track->setDescription($carrier);
@@ -135,7 +135,7 @@ class OneflowResponse extends \Magento\Framework\App\Action\Action {
 				}
 			}
 			/**
-			 * 2019-01-30 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+			 * 2019-01-30 Dmitry Fedyuk https://github.com/dmitrii-fediuk
 			 * https://github.com/Inkifi-Connect/Media-Clip-Inkifi/blob/4d3325d8/Controller/Index/OneflowResponse.php#L48-L52
 			 * «The US shipping emails are working well now.
 			 * But since this was implemented the UK store shipping emails have stopped working.

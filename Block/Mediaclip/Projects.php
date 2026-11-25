@@ -2,7 +2,7 @@
 namespace Mangoit\MediaclipHub\Block\Mediaclip;
 class Projects extends \Magento\Framework\View\Element\Template  {
 	/**
-	 * 2020-03-04 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+	 * 2020-03-04 Dmitry Fedyuk https://github.com/dmitrii-fediuk
 	 * $project_id looks lik «8c3ffcb2-c451-465a-bf9a-fe1e5b3bc726»
 	 * @used-by vendor/inkifi/mediaclip-legacy/view/frontend/templates/savedproject.phtml
 	 * @param $project_id

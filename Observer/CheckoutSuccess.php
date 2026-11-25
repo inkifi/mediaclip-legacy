@@ -17,7 +17,7 @@ use Mangoit\MediaclipHub\Helper\Data as mHelper;
 use Mangoit\MediaclipHub\Model\Orders as mOrder;
 use Mangoit\MediaclipHub\Model\Supplier as mSupplier;
 /**
- * 2018-06-26 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+ * 2018-06-26 Dmitry Fedyuk https://github.com/dmitrii-fediuk
  * "Prevent the «Pending Payment» orders from being sent to MediaClip Photobook in my Magento 2 store":
  * https://www.upwork.com/ab/f/contracts/20288301
  */
@@ -47,7 +47,7 @@ final class CheckoutSuccess implements ObserverInterface {
 	 */
     static function post(O $o) {
         $om = OM::getInstance(); /** @var OM $om */
-		// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+		// 2018-08-16 Dmitry Fedyuk https://github.com/dmitrii-fediuk
 		// «Modify orders numeration for Mediaclip»
 		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
         $oidE = ikf_ite($o); /** @var int $oidE */
@@ -62,7 +62,7 @@ final class CheckoutSuccess implements ObserverInterface {
 		}
 		$i = 1;
 		$order_item_details = [];
-		// 2018-07-04 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+		// 2018-07-04 Dmitry Fedyuk https://github.com/dmitrii-fediuk
 		// The `$item_supplier_id` variable should be defined outside of the loop
 		// because it is used outside of the loop below.
 		$item_supplier_id = [];
@@ -134,7 +134,7 @@ final class CheckoutSuccess implements ObserverInterface {
 				$order_ship_to['address']['phone'] = $phone;
 			}
 			/**
-			 * 2018-07-04 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+			 * 2018-07-04 Dmitry Fedyuk https://github.com/dmitrii-fediuk
 			 * The previous code was: `if (!empty($item_supplier_id)) {`
 			 * This code is wrong because if `$item_supplier_id` is an empty array
 			 * then `!empty($item_supplier_id)` returns `true`,
@@ -142,10 +142,10 @@ final class CheckoutSuccess implements ObserverInterface {
 			 */
 			if ($item_supplier_id) {
 				if (
-					// 2018-07-04 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+					// 2018-07-04 Dmitry Fedyuk https://github.com/dmitrii-fediuk
 					//isset($order_item_details[0]['supplierId'])
 					//&& $order_item_details[0]['supplierId']['value'] == 'OneFlowCloud'
-					// 2018-10-30 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+					// 2018-10-30 Dmitry Fedyuk https://github.com/dmitrii-fediuk
 					'OneFlowCloud' === @$item_supplier_id['value']
 				) {
 					$carrierIdentifier_carrier['domain'] = 'alias';
@@ -193,7 +193,7 @@ final class CheckoutSuccess implements ObserverInterface {
 			$contact_details['idReference']['identifier'] = $customer_id;
 			$contact_details['idReference']['domain'] = 'storeUserId';
 			$order_contact = $contact_details;
-			// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+			// 2018-08-16 Dmitry Fedyuk https://github.com/dmitrii-fediuk
 			// «Modify orders numeration for Mediaclip»
 			// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
 			$order_details['orderID'] = $oidE;
@@ -205,7 +205,7 @@ final class CheckoutSuccess implements ObserverInterface {
 			$mediaClipOrderRequest['orderRequestHeader'] = $order_details;
 			$mediaClipOrderRequest['itemOut'] = $order_item_details;
 			/**
-			 * 2018-10-30 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+			 * 2018-10-30 Dmitry Fedyuk https://github.com/dmitrii-fediuk
 			 * «Log all requests for the OneFlow on-demand print API»
 			 * https://www.upwork.com/ab/f/contracts/20996991
 			 * https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/8
@@ -214,7 +214,7 @@ final class CheckoutSuccess implements ObserverInterface {
 				//isset($order_item_details)
 				//&& isset($order_item_details[0]['supplierId'])
 				//&& 'OneFlowCloud' === $order_item_details[0]['supplierId']['value']
-					// 2018-10-30 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+					// 2018-10-30 Dmitry Fedyuk https://github.com/dmitrii-fediuk
 				$item_supplier_id && 'OneFlowCloud' === @$item_supplier_id['value']
 			) {
 				df_report("oneflow/request-$oidE.json", df_json_encode($mediaClipOrderRequest));
@@ -235,7 +235,7 @@ final class CheckoutSuccess implements ObserverInterface {
 				$f_MEDIACLIP_ORDER_DETAILS = mOrder::F__MEDIACLIP_ORDER_DETAILS; 				
 				/** @var string $f_MEDIACLIP_ORDER_ID */
 				$f_MEDIACLIP_ORDER_ID = mOrder::F__MEDIACLIP_ORDER_ID;
-// 2018-08-16 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+// 2018-08-16 Dmitry Fedyuk https://github.com/dmitrii-fediuk
 // «Modify orders numeration for Mediaclip»
 // https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/1
 $sql =

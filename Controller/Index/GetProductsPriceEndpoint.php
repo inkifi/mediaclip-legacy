@@ -20,7 +20,7 @@ class GetProductsPriceEndpoint extends Action {
 		$obj = json_decode($json, true);
 		$this->logger->info('$obj=>productpriceEndpoint');
 		/**
-		 * 2018-07-29 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+		 * 2018-07-29 Dmitry Fedyuk https://github.com/dmitrii-fediuk
 		 * «Notice: Array to string conversion»
 		 * The previous code was:
 		 * 		$this->logger->info($obj);

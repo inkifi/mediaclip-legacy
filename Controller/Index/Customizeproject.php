@@ -32,7 +32,7 @@ class Customizeproject extends Action
     function execute()
     {
 		/**
-		 * 2018-07-30 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+		 * 2018-07-30 Dmitry Fedyuk https://github.com/dmitrii-fediuk
 		 * The previous code was:
 		 * 		$tokenObj = $this->_objectManager->get('Magento\Customer\Model\Session');
 		 * 		if ($tokenObj->getMediaClipToken()) {

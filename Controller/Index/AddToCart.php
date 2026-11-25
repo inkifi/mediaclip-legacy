@@ -179,7 +179,7 @@ class AddToCart extends \Magento\Framework\App\Action\Action {
 			}
 		}
 		catch (\Exception $e) {df_log($e, $this);}
-		// 2019-05-08 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+		// 2019-05-08 Dmitry Fedyuk https://github.com/dmitrii-fediuk
 		// «Fix the Mediaclip edit cart scenario for the US store»
 		// https://github.com/Inkifi-Connect/Media-Clip-Inkifi/issues/12
 		$this->getResponse()->setRedirect(df_url('checkout/cart/index'));

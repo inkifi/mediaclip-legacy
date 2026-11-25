@@ -17,7 +17,7 @@ class Add extends \Magento\Checkout\Controller\Cart\Add {
 			if (!$product) {
 				return $this->goBack();
 			}
-			// 2019-09-04 Dmitry Fedyuk https://www.upwork.com/fl/mage2pro
+			// 2019-09-04 Dmitry Fedyuk https://github.com/dmitrii-fediuk
 			// «Port a Shopify / React.js product designer app to Magento 2»:
 			// https://www.upwork.com/ab/f/contracts/22344597
 			if (ikf_is_mediaclip_product($product)) {
